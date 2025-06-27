@@ -1,3 +1,6 @@
+using condogestcet97.web.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace condogestcet97.web
 {
     public class Program
@@ -8,6 +11,11 @@ namespace condogestcet97.web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<DataContextCondominium>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CondominiumConnection"));
+            });
 
             var app = builder.Build();
 
