@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using condogestcet97.web.Data;
 
@@ -10,9 +11,11 @@ using condogestcet97.web.Data;
 namespace condogestcet97.web.Migrations
 {
     [DbContext(typeof(DataContextCondominium))]
-    partial class DataContextCondominiumModelSnapshot : ModelSnapshot
+    [Migration("20250627142907_Add_Apartments_Table")]
+    partial class Add_Apartments_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

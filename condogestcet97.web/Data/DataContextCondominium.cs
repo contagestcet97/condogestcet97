@@ -8,6 +8,8 @@ namespace condogestcet97.web.Data
 
         public DbSet<Condo> Condos { get; set; }
 
+        public DbSet<Apartment> Apartments { get; set; }
+
         public DataContextCondominium(DbContextOptions<DataContextCondominium> options) : base(options)
         {
 

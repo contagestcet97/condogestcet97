@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Api\" />
-    <Folder Include="Data\Repositories\IRepositories\" />
-    <Folder Include="Helpers\IHelpers\" />
   </ItemGroup>
 
   <ItemGroup>
