@@ -31,6 +31,23 @@
         </nav>
     </header>
     <div class="container">
+
+        <!-- INÍCIO: Dropdown de navegação de testes (remover após integração com frontend) -->
+        <div class="alert alert-warning mt-2 mb-2">
+            [TESTE] Menu de navegação para CRUDs das entidades. <strong>Frontend: substituir após merge.</strong>
+        </div>
+        <div class="mb-3">
+            <select class="form-select" onchange="if(this.value) window.location.href=this.value;">
+                <option value="">-- Ir para CRUD de... --</option>
+                <option value="@Url.Action("Index", "Company")">UserCompany</option>
+                <option value="@Url.Action("Index", "User")">Users</option>
+                <option value="@Url.Action("Index", "Role")">Roles</option>
+                <option value="@Url.Action("Index", "Company", new { area = "" })">Companies</option>
+                <!-- Adicionar mais opções conforme seja necessario mais à frente no projeto -->
+            </select>
+        </div>
+        <!-- FIM: Dropdown de navegação de testes -->
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
