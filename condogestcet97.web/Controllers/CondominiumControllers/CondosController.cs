@@ -125,7 +125,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _condoRepository.ExistAsync(model.Id))
+                    if (!await _condoRepository.ExistAsync(model.CondoId))
                     {
                         return new NotFoundViewResult("CondoNotFound");
                     }

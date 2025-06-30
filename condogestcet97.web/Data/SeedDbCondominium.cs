@@ -48,6 +48,28 @@ namespace condogestcet97.web.Data
                 await _context.SaveChangesAsync();
             }
 
+            if (!_context.Incidents.Any())
+            {
+                var condo = _context.Condos.FirstOrDefault(a => a.Id == 1); 
+                
+                if (condo != null)
+                {
+                    Incident incident = new Incident
+                    {
+                          NotifierId = "fakeUser",
+                          Title = "Burst water pipe",
+                          Description = "Water pipe in the corridor on floor 4 burst and flooded. Water entered several flats.",
+                          Condo = condo,
+                          Date = DateTime.Now,
+                          IsResolved = false,
+                    };
+
+                    _context.Incidents.Add(incident);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
 
         }
 

@@ -10,6 +10,8 @@ namespace condogestcet97.web.Data
 
         public DbSet<Apartment> Apartments { get; set; }
 
+        public DbSet<Incident> Incidents { get; set; }
+
         public DataContextCondominium(DbContextOptions<DataContextCondominium> options) : base(options)
         {
 

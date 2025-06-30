@@ -12,6 +12,7 @@ using condogestcet97.web.Helpers;
 using System.Diagnostics;
 using condogestcet97.web.Models;
 using condogestcet97.web.Helpers.IHelpers;
+using condogestcet97.web.Data.Repositories.IRepositories;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
@@ -20,13 +21,17 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         private readonly DataContextCondominium _context;
         private readonly IApartmentRepository _apartmentRepository;
         private readonly ICondiminiumsConverterHelper _converterHelper;
+        private readonly ICondoRepository _condoRepository;
 
         public ApartmentsController(DataContextCondominium context,
-            IApartmentRepository apartmentRepository, ICondiminiumsConverterHelper converterHelper)
+            IApartmentRepository apartmentRepository,
+            ICondiminiumsConverterHelper converterHelper,
+            ICondoRepository condoRepository)
         {
             _context = context;
             _apartmentRepository = apartmentRepository;
             _converterHelper = converterHelper;
+            _condoRepository = condoRepository;
         }
 
         // GET: Apartments
@@ -68,19 +73,29 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ApartmentViewModel model)
         {
-            var apartment = _converterHelper.ToApartment(model, true);
 
-            try
+            if (ModelState.IsValid)
             {
-                await _apartmentRepository.CreateAsync(apartment);
+                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
+
+                if (condo != null)
+                {
+
+                    var apartment = _converterHelper.ToApartment(model, true, condo);
+
+                    try
+                    {
+                        await _apartmentRepository.CreateAsync(apartment);
 
 
-                return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index));
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.ToString());
+                    }
+                }
             }
 
             return View(model);
@@ -115,25 +130,31 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var apartment = _converterHelper.ToApartment(model, false);
+                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
 
-                    await _apartmentRepository.UpdateAsync(apartment);
-                }
-                catch (DbUpdateConcurrencyException)
+                if (condo != null)
                 {
-                    if (!await _apartmentRepository.ExistAsync(model.Id))
+                    try
                     {
-                        return new NotFoundViewResult("ApartmentNotFound");
+                        var apartment = _converterHelper.ToApartment(model, false, condo);
+
+                        await _apartmentRepository.UpdateAsync(apartment);
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!await _apartmentRepository.ExistAsync(model.Id))
+                        {
+                            return new NotFoundViewResult("ApartmentNotFound");
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
 

@@ -11,8 +11,15 @@ namespace condogestcet97.web.Helpers.IHelpers
         CondoViewModel ToCondoViewModel(Condo condo);
 
 
-        Apartment ToApartment(ApartmentViewModel model, bool isNew);
+        Apartment ToApartment(ApartmentViewModel model, bool isNew, Condo condo);
 
         ApartmentViewModel ToApartmentViewModel(Apartment apartment);
+
+
+        Incident ToIncident(IncidentViewModel model, bool isNew, Apartment apartment, Condo condo);
+
+        IncidentViewModel ToIncidentViewModel(Incident incident);
+
     }
+
 }
