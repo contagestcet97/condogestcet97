@@ -4,5 +4,6 @@ namespace condogestcet97.web.Data.Repositories.IRepositories
 {
     public interface ICondoRepository : IGenericRepository<Condo>
     {
+        Task<Condo> GetByIdTrackedAsync(int id);
     }
 }

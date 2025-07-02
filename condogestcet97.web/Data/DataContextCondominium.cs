@@ -12,9 +12,14 @@ namespace condogestcet97.web.Data
 
         public DbSet<Incident> Incidents { get; set; }
 
+        public DbSet<Intervention> Interventions { get; set; }
+
+        public DbSet<Meeting> Meetings { get; set; }
+
         public DataContextCondominium(DbContextOptions<DataContextCondominium> options) : base(options)
         {
 
         }
+
     }
 }

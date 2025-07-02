@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using condogestcet97.web.Data;
 
@@ -11,9 +12,11 @@ using condogestcet97.web.Data;
 namespace condogestcet97.web.Migrations
 {
     [DbContext(typeof(DataContextCondominium))]
-    partial class DataContextCondominiumModelSnapshot : ModelSnapshot
+    [Migration("20250630150648_Add_Table_Interventions")]
+    partial class Add_Table_Interventions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,39 +154,10 @@ namespace condogestcet97.web.Migrations
                     b.ToTable("Interventions");
                 });
 
-            modelBuilder.Entity("condogestcet97.web.Data.Entities.Condominium.Meeting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CondoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Topic")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CondoId");
-
-                    b.ToTable("Meetings");
-                });
-
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Condominium.Apartment", b =>
                 {
                     b.HasOne("condogestcet97.web.Data.Entities.Condominium.Condo", "Condo")
-                        .WithMany("Apartments")
+                        .WithMany()
                         .HasForeignKey("CondoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -211,33 +185,12 @@ namespace condogestcet97.web.Migrations
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Condominium.Intervention", b =>
                 {
                     b.HasOne("condogestcet97.web.Data.Entities.Condominium.Incident", "Incident")
-                        .WithMany("Interventions")
+                        .WithMany()
                         .HasForeignKey("IncidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Incident");
-                });
-
-            modelBuilder.Entity("condogestcet97.web.Data.Entities.Condominium.Meeting", b =>
-                {
-                    b.HasOne("condogestcet97.web.Data.Entities.Condominium.Condo", "Condo")
-                        .WithMany()
-                        .HasForeignKey("CondoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Condo");
-                });
-
-            modelBuilder.Entity("condogestcet97.web.Data.Entities.Condominium.Condo", b =>
-                {
-                    b.Navigation("Apartments");
-                });
-
-            modelBuilder.Entity("condogestcet97.web.Data.Entities.Condominium.Incident", b =>
-                {
-                    b.Navigation("Interventions");
                 });
 #pragma warning restore 612, 618
         }

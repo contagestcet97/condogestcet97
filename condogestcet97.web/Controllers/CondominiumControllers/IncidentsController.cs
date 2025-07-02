@@ -83,11 +83,11 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 
                 if (model.ApartmentId != null)
                 {
-                    apartment = await _apartmentRepository.GetByIdAsync(model.ApartmentId.Value);
+                    apartment = await _apartmentRepository.GetByIdTrackedAsync(model.ApartmentId.Value);
                 }
 
-                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
-
+                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
+                    
                 if (condo != null)
                 {
                  
@@ -146,10 +146,10 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 
                 if (model.ApartmentId != null)
                 {
-                    apartment = await _apartmentRepository.GetByIdAsync(model.ApartmentId.Value);
+                    apartment = await _apartmentRepository.GetByIdTrackedAsync(model.ApartmentId.Value);
                 }
 
-                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
+                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
 
                 if (condo != null)
                 {

@@ -11,13 +11,13 @@ namespace condogestcet97.web.Data.Entities.Condominium
         [MaxLength(25)]
         public string Title { get; set; }
 
+        [Column(TypeName = "varchar(500)")]
+        [MaxLength(500)]
+        public string Description { get; set; }
+
         [Column(TypeName = "varchar(250)")]
         [MaxLength(250)]
         public string CompanyName { get; set; }
-
-        public string CompanyTelephone { get; set; }
-
-        public string CompanyEmail { get; set; }
 
         public DateTime Date { get; set; }
 

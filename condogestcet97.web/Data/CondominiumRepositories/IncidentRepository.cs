@@ -20,6 +20,13 @@ namespace condogestcet97.web.Data.CondominiumRepositories
             return _context.Incidents.Include(i => i.Condo);
         }
 
+        public Task<Incident> GetByIdTrackedAsync(int id)
+        {
+            return _context.Incidents
+                .Include(i => i.Condo)
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
         public override Task<Incident> GetByIdAsync(int id)
         {
             return _context.Incidents

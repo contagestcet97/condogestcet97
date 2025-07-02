@@ -95,5 +95,59 @@ namespace condogestcet97.web.Helpers
             };
 
         }
+
+        public Intervention ToIntervention(InterventionViewModel model, bool isNew, Incident incident)
+        {
+            return new Intervention
+            {
+                Id = isNew ? 0 : model.Id,
+                Title = model.Title,
+                Description = model.Description,
+                Date = model.Date,
+                CompanyName = model.CompanyName,
+                Incident = incident,
+                IsCompleted = model.IsCompleted,
+            };
+        }
+
+        public InterventionViewModel ToInterventionViewModel(Intervention intervention)
+        {
+            return new InterventionViewModel
+            {
+                Id = intervention.Id,
+                Title = intervention.Title,
+                Description = intervention.Description,
+                Date = intervention.Date,
+                CompanyName = intervention.CompanyName,
+                IncidentId = intervention.Incident.Id,
+                IsCompleted = intervention.IsCompleted,
+            };
+        }
+
+        public Meeting ToMeeting(MeetingViewModel model, bool isNew, Condo condo)
+        {
+            return new Meeting
+            {
+                Id = isNew ? 0 : model.Id,
+                Topic = model.Topic,
+                Type = model.Type,
+                Date = model.Date,
+                Condo = condo,
+            };
+        }
+
+        public MeetingViewModel ToMeetingViewModel(Meeting meeting)
+        {
+            return new MeetingViewModel
+            {
+                Id = meeting.Id,
+                Topic = meeting.Topic,
+                Type = meeting.Type,
+                Date = meeting.Date,
+                CondoId = meeting.Condo.Id
+            };
+        }
+
+
     }
 }

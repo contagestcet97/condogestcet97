@@ -3,8 +3,8 @@ using condogestcet97.web.Data.Repositories.IRepositories;
 
 namespace condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories
 {
-    public interface IApartmentRepository : IGenericRepository<Apartment>
+    public interface IMeetingRepository : IGenericRepository<Meeting>
     {
-        Task<Apartment> GetByIdTrackedAsync(int id);
+        Task<Meeting> GetByIdTrackedAsync(int id);
     }
 }

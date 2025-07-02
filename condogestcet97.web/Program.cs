@@ -22,8 +22,11 @@ namespace condogestcet97.web
             builder.Services.AddScoped<ICondoRepository, CondoRepository>();
             builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
             builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
+            builder.Services.AddScoped<IInterventionRepository, InterventionRepository>();
+            builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
             builder.Services.AddScoped<ICondiminiumsConverterHelper, CondominiumsConverterHelper>();
-                
+  
+
             builder.Services.AddDbContext<DataContextCondominium>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CondominiumConnection"));

@@ -5,6 +5,7 @@ namespace condogestcet97.web.Data.Entities.Condominium
 {
     public class Incident : IEntity
     {
+        [Display(Name = "Incident ID")]
         public int Id { get; set; }
 
         [Column(TypeName = "varchar(250)")]
@@ -26,5 +27,7 @@ namespace condogestcet97.web.Data.Entities.Condominium
         public Apartment? Apartment { get; set; }
 
         public Condo Condo { get; set; }
+
+        public ICollection<Intervention> Interventions { get; set; }
     }
 }

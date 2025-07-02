@@ -95,7 +95,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return NotFound();
             }
 
-            var condo = await _condoRepository.GetByIdAsync(id.Value);
+            var condo = await _condoRepository.GetByIdTrackedAsync(id.Value);
 
             if (condo == null)
             {
@@ -147,7 +147,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return new NotFoundViewResult("CondoNotFound");
             }
 
-            var condo = await _condoRepository.GetByIdAsync(id.Value);
+            var condo = await _condoRepository.GetByIdTrackedAsync(id.Value);  
 
 
             if (condo == null)
@@ -163,8 +163,8 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var condo = await _condoRepository.GetByIdAsync(id);
-
+            var condo = await _condoRepository.GetByIdTrackedAsync(id);
+                
             try
             {
                 await _condoRepository.DeleteAsync(condo);

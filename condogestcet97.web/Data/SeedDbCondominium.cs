@@ -60,11 +60,54 @@ namespace condogestcet97.web.Data
                           Title = "Burst water pipe",
                           Description = "Water pipe in the corridor on floor 4 burst and flooded. Water entered several flats.",
                           Condo = condo,
-                          Date = DateTime.Now,
+                          Date = DateTime.Now.Date.AddDays(-10).AddHours(15),
                           IsResolved = false,
                     };
 
                     _context.Incidents.Add(incident);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.Interventions.Any())
+            {
+                var incident = _context.Incidents.FirstOrDefault(i => i.Id == 1);
+
+                if (incident != null)
+                {
+                    Intervention intervention = new Intervention
+                    {
+                        Title = "Water cut off.",
+                        Description = "Water was completely cut off and a plumber has been scheduled to replace the burst pipe",
+                        CompanyName = "UrgentPlumber",
+                        Date = DateTime.Now,
+                        IsCompleted = true,
+                        Incident = incident
+                    };
+
+                    _context.Interventions.Add(intervention);
+                }
+
+                await _context.SaveChangesAsync();
+
+            }
+
+            if (!_context.Meetings.Any())
+            {
+                var condo = _context.Condos.FirstOrDefault(i => i.Id == 1);
+
+                if (condo != null)
+                {
+                    Meeting meeting = new Meeting
+                    {
+                        Topic = "New lift",
+                        Condo = condo,
+                        Type = MeetingType.InPerson,
+                        Date = DateTime.Now,
+                    };
+
+                    _context.Meetings.Add(meeting);
                 }
 
                 await _context.SaveChangesAsync();

@@ -10,5 +10,7 @@ namespace condogestcet97.web.Data.Entities.Condominium
         [Column(TypeName = "varchar(250)")]
         [MaxLength(250)]
         public string Address { get; set ; }
+
+        public ICollection<Apartment> Apartments { get; set ; }
     }
 }
