@@ -20,6 +20,7 @@ namespace condogestcet97.web
 
             builder.Services.AddScoped<SeedDbCondominium>();
             builder.Services.AddScoped<ICondoRepository, CondoRepository>();
+            builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
             builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
             builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
             builder.Services.AddScoped<IInterventionRepository, InterventionRepository>();

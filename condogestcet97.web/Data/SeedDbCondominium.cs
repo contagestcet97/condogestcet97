@@ -113,9 +113,59 @@ namespace condogestcet97.web.Data
                 await _context.SaveChangesAsync();
             }
 
+            if (!_context.Documents.Any())
+            {
+                var meeting = _context.Meetings.FirstOrDefault(m => m.Id == 1);
+                var intervention = _context.Interventions.FirstOrDefault(i => i.Id == 1);   
 
+                if (meeting != null && intervention != null)
+                {
+                    MeetingDocument meetingDocument1 = new MeetingDocument
+                    {
+                        Subject = "Attendance List",
+                        Description = "Attendance List",
+                        EmissionDate = DateTime.Now,
+                        Type = DocumentType.Meeting,
+                        Meeting = meeting,
+                    };
+
+                    _context.Documents.Add(meetingDocument1);
+
+                    MeetingDocument meetingDocument2 = new MeetingDocument
+                    {
+                        Subject = "Meeting Agenda",
+                        Description = "List of discussion topics",
+                        EmissionDate = DateTime.Now,
+                        Type = DocumentType.Meeting,
+                        Meeting = meeting,
+                    };
+
+                    _context.Add(meetingDocument2);
+
+                    InterventionDocument interventionDocument1 = new InterventionDocument
+                    {
+                        Subject = "Intervention Report",
+                        Description = "Report made by contractor",
+                        EmissionDate = DateTime.Now,
+                        Type = DocumentType.Intervention,
+                        Intervention = intervention
+                    };
+
+                    _context.Documents.Add(interventionDocument1);
+
+                    InterventionDocument interventionDocument2 = new InterventionDocument
+                    {
+                        Subject = "Residents communication",
+                        Description = "Printed document placed on wall in foyer",
+                        EmissionDate = DateTime.Now,
+                        Type = DocumentType.Intervention,
+                        Intervention = intervention
+                    };
+
+                    _context.Documents.Add(interventionDocument2);
+                }
+                await _context.SaveChangesAsync();
+            }
         }
-
-
     }
 }

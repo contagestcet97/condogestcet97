@@ -43,7 +43,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (id == null)
             {
-                return new NotFoundViewResult("interventionNotFound");
+                return new NotFoundViewResult("InterventionNotFound");
             }
 
             var intervention = await _interventionRepository.GetByIdAsync(id.Value);
@@ -51,7 +51,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             if (intervention == null)
             {
-                return new NotFoundViewResult("interventionNotFound");
+                return new NotFoundViewResult("InterventionNotFound");
             }
 
             return View(intervention);
@@ -73,7 +73,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             if (ModelState.IsValid)
             {
 
-                var incident = await _incidentRepository.GetByIdAsync(model.IncidentId);
+                var incident = await _incidentRepository.GetByIdTrackedAsync(model.IncidentId);
                 
 
                 if (incident != null)

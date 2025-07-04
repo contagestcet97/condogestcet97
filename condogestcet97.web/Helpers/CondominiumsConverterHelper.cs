@@ -48,6 +48,63 @@ namespace condogestcet97.web.Helpers
             };
         }
 
+        public Document ToDocument(DocumentViewModel model, bool isNew, Meeting? meeting, Intervention? intervention)
+        {
+            if (model.Type == DocumentType.Intervention)
+            {
+                return new InterventionDocument
+                {
+                    Id = isNew ? 0 : model.Id,
+                    Subject = model.Subject,
+                    Description = model.Description,
+                    EmissionDate = model.EmissionDate,
+                    Intervention = intervention,
+                    Type = DocumentType.Intervention
+                    
+                };
+            }
+
+            return new MeetingDocument
+            {
+                Id = isNew ? 0 : model.Id,
+                Subject = model.Subject,
+                Description = model.Description,
+                EmissionDate = model.EmissionDate,
+                Meeting = meeting,
+                Type = DocumentType.Meeting
+            };
+        }
+
+
+
+        public DocumentViewModel ToDocumentViewModelFromMeetingDoc(MeetingDocument document)
+        {
+            return new DocumentViewModel
+            {
+                Id = document.Id,
+                Subject = document.Subject,
+                Description = document.Description,
+                EmissionDate = document.EmissionDate,
+                Type = document.Type,
+                MeetingId = document.Meeting.Id,
+            };
+
+        }
+
+        public DocumentViewModel ToDocumentViewModelFromInterventionDoc(InterventionDocument document)
+        {
+            return new DocumentViewModel
+            {
+                Id = document.Id,
+                Subject = document.Subject,
+                Description = document.Description,
+                EmissionDate = document.EmissionDate,
+                Type = document.Type,
+                InterventionId = document.Intervention.Id,
+            };
+        }
+
+
         public Incident ToIncident(IncidentViewModel model, bool isNew, Apartment? apartment, Condo condo)
         {
             return new Incident

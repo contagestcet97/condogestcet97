@@ -27,6 +27,12 @@ namespace condogestcet97.web.Helpers.IHelpers
         Meeting ToMeeting(MeetingViewModel model, bool isNew, Condo condo);
 
         MeetingViewModel ToMeetingViewModel(Meeting meeting);
+
+        Document ToDocument(DocumentViewModel model, bool isNew, Meeting? meeting, Intervention? intervention);
+
+        DocumentViewModel ToDocumentViewModelFromMeetingDoc(MeetingDocument document);
+
+        DocumentViewModel ToDocumentViewModelFromInterventionDoc(InterventionDocument document);
     }
 
 }

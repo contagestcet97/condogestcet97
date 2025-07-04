@@ -14,6 +14,14 @@ namespace condogestcet97.web.Data.Repositories
             _context = context;
         }
 
+        public override Task<Condo> GetByIdAsync(int id)
+        {
+            return _context.Condos
+             .Include(c => c.Apartments)
+             .AsNoTracking()
+             .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
         public Task<Condo> GetByIdTrackedAsync(int id)
         {
             return _context.Condos

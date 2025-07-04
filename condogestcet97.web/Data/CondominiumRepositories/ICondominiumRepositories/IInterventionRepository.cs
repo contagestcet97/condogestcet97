@@ -5,5 +5,6 @@ namespace condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositori
 {
     public interface IInterventionRepository : IGenericRepository<Intervention>
     {
+        public Task<Intervention> GetByIdTrackedAsync(int id);
     }
 }

@@ -23,6 +23,14 @@ namespace condogestcet97.web.Data.CondominiumRepositories
         {
             return _context.Interventions
                 .Include(i => i.Incident)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public Task<Intervention> GetByIdTrackedAsync(int id)
+        {
+            return _context.Interventions
+                .Include(i => i.Incident)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
     }

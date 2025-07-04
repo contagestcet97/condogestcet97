@@ -1,4 +1,6 @@
-﻿using condogestcet97.web.Data.Entities.Condominium;
+﻿using System.Net.Sockets;
+using System.Reflection.Emit;
+using condogestcet97.web.Data.Entities.Condominium;
 using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data
@@ -16,10 +18,30 @@ namespace condogestcet97.web.Data
 
         public DbSet<Meeting> Meetings { get; set; }
 
+        public DbSet<Document> Documents { get; set; }
+
         public DataContextCondominium(DbContextOptions<DataContextCondominium> options) : base(options)
         {
 
+
+
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Document>()
+           .HasDiscriminator<string>("DocumentType")
+           .HasValue<MeetingDocument>("Meeting")
+           .HasValue<InterventionDocument>("Intervention");
+
+            foreach (var foreignKey in modelBuilder.Model
+             .GetEntityTypes()
+             .SelectMany(e => e.GetForeignKeys()))
+                    {
+                        foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+                    }
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

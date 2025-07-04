@@ -20,6 +20,14 @@ namespace condogestcet97.web.Data.CondominiumRepositories
             return _context.Incidents.Include(i => i.Condo);
         }
 
+        public override Task<Incident> GetByIdAsync(int id)
+        {
+            return _context.Incidents
+                .Include(i => i.Condo)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
         public Task<Incident> GetByIdTrackedAsync(int id)
         {
             return _context.Incidents
@@ -27,11 +35,6 @@ namespace condogestcet97.web.Data.CondominiumRepositories
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public override Task<Incident> GetByIdAsync(int id)
-        {
-            return _context.Incidents
-                .Include(i => i.Condo)
-                .FirstOrDefaultAsync(i => i.Id == id);
-        }
+
     }
 }

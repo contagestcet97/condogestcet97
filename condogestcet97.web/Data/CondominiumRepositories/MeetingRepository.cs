@@ -20,12 +20,6 @@ namespace condogestcet97.web.Data.CondominiumRepositories
             return _context.Meetings.Include(i => i.Condo);
         }
 
-        public Task<Meeting> GetByIdTrackedAsync(int id)
-        {
-            return _context.Meetings
-                .Include(i => i.Condo)
-                .FirstOrDefaultAsync(i => i.Id == id);
-        }
         public override Task<Meeting> GetByIdAsync(int id)
         {
             return _context.Meetings
@@ -33,6 +27,14 @@ namespace condogestcet97.web.Data.CondominiumRepositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
+
+        public Task<Meeting> GetByIdTrackedAsync(int id)
+        {
+            return _context.Meetings
+                .Include(i => i.Condo)
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
 
 
     }
