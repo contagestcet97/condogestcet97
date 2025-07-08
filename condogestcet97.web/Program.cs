@@ -1,4 +1,5 @@
 using condogestcet97.web.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web
@@ -16,6 +17,10 @@ namespace condogestcet97.web
             builder.Services.AddDbContext<DataContextUser>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Add Identity services to the container.
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<DataContextUser>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,6 +36,7 @@ namespace condogestcet97.web
 
             app.UseRouting();
 
+            app.UseAuthentication(); // adding authentication middleware before authorization middleware
             app.UseAuthorization();
 
             app.MapControllerRoute(

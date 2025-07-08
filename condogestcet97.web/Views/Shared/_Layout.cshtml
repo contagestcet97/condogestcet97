@@ -39,7 +39,6 @@
         <div class="mb-3">
             <select class="form-select" onchange="if(this.value) window.location.href=this.value;">
                 <option value="">-- Ir para CRUD de... --</option>
-                <option value="@Url.Action("Index", "Company")">UserCompany</option>
                 <option value="@Url.Action("Index", "User")">Users</option>
                 <option value="@Url.Action("Index", "Role")">Roles</option>
                 <option value="@Url.Action("Index", "Company", new { area = "" })">Companies</option>

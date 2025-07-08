@@ -1,21 +1,24 @@
 ﻿using condogestcet97.web.Data.Entities.Users;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace condogestcet97.web.Data
 {
-    public class DataContextUser : DbContext
+    public class DataContextUser : IdentityDbContext
     {
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<RoleClaim> RoleClaims { get; set; }
-        public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public new DbSet<User> Users { get; set; }
+        public new DbSet<Role> Roles { get; set; }
+        public new DbSet<UserRole> UserRoles { get; set; }
+        public new DbSet<RoleClaim> RoleClaims { get; set; }
+        public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Recovery> Recoveries { get; set; }
 
+
         public DataContextUser(DbContextOptions<DataContextUser> options)
-            : base(options)
+             : base(options)
         {
         }
 
@@ -88,7 +91,7 @@ namespace condogestcet97.web.Data
 
             // Role: Primary Key
             modelBuilder.Entity<Role>()
-                .HasKey(r => r.RoleId);
+                .HasKey(r => r.Id);
         }
     }
 }
