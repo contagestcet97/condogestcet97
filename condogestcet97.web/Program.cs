@@ -25,7 +25,8 @@ namespace condogestcet97.web
             builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
             builder.Services.AddScoped<IInterventionRepository, InterventionRepository>();
             builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
-            builder.Services.AddScoped<ICondiminiumsConverterHelper, CondominiumsConverterHelper>();
+            builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+            builder.Services.AddScoped<ICondominiumsConverterHelper, CondominiumsConverterHelper>();
   
 
             builder.Services.AddDbContext<DataContextCondominium>(options =>

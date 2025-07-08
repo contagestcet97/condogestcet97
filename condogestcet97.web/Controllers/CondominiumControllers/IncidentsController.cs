@@ -24,12 +24,12 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
     public class IncidentsController : Controller
     {
         private readonly IIncidentRepository _incidentRepository;
-        private readonly ICondiminiumsConverterHelper _converterHelper;
+        private readonly ICondominiumsConverterHelper _converterHelper;
         private readonly IApartmentRepository _apartmentRepository;
         private readonly ICondoRepository _condoRepository;
 
         public IncidentsController(IIncidentRepository incidentRepository,
-            ICondiminiumsConverterHelper converterHelper,
+            ICondominiumsConverterHelper converterHelper,
             IApartmentRepository apartmentRepository,
             ICondoRepository condoRepository)
         {
@@ -40,7 +40,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         }
 
         // GET: Incidents
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View(_incidentRepository.GetAll());
         }

@@ -17,7 +17,7 @@ namespace condogestcet97.web.Data.Repositories
         public override Task<Condo> GetByIdAsync(int id)
         {
             return _context.Condos
-             .Include(c => c.Apartments)
+             //.Include(c => c.Apartments)
              .AsNoTracking()
              .FirstOrDefaultAsync(i => i.Id == id);
         }
@@ -25,7 +25,7 @@ namespace condogestcet97.web.Data.Repositories
         public Task<Condo> GetByIdTrackedAsync(int id)
         {
             return _context.Condos
-             .Include(c => c.Apartments)
+             //.Include(c => c.Apartments)
              .FirstOrDefaultAsync(i => i.Id == id);
         }
     }

@@ -11,6 +11,6 @@ namespace condogestcet97.web.Data.Entities.Condominium
         [MaxLength(250)]
         public string Address { get; set ; }
 
-        public ICollection<Apartment> Apartments { get; set ; }
+        //public ICollection<Apartment> Apartments { get; set ; }
     }
 }

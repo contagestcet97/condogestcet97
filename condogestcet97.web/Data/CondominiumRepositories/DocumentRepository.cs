@@ -21,7 +21,6 @@ namespace condogestcet97.web.Data.CondominiumRepositories
                 .OfType<MeetingDocument>()
                 .AsNoTracking()
                 .Include(d => d.Meeting)
-                .ThenInclude(m => m.Condo)
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
 
@@ -29,12 +28,8 @@ namespace condogestcet97.web.Data.CondominiumRepositories
         {
             return await _context.Documents
                 .OfType<InterventionDocument>()
-                .AsNoTracking().               Include(d => d.Intervention)
-                    .ThenInclude(i => i.Incident)
-                        .ThenInclude(inc => inc.Condo)
-                .Include(d => d.Intervention)
-                    .ThenInclude(i => i.Incident)
-                        .ThenInclude(inc => inc.Apartment)
+                .AsNoTracking().               
+                Include(d => d.Intervention)
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
 
@@ -43,7 +38,6 @@ namespace condogestcet97.web.Data.CondominiumRepositories
             return await _context.Documents
                 .OfType<MeetingDocument>()
                 .Include(d => d.Meeting)
-                .ThenInclude(m => m.Condo)
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
 
@@ -52,30 +46,27 @@ namespace condogestcet97.web.Data.CondominiumRepositories
             return await _context.Documents
                 .OfType<InterventionDocument>()
                 .Include(d => d.Intervention)
-                    .ThenInclude(i => i.Incident)
-                        .ThenInclude(inc => inc.Condo)
-                .Include(d => d.Intervention)
-                    .ThenInclude(i => i.Incident)
-                        .ThenInclude(inc => inc.Apartment)
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        //public async Task<List<Document>> GetAllTrackedAsync()
-        //{
-        //    var meetingDocuments = await _context.Documents
-        //        .OfType<MeetingDocument>()
-        //        .Include(d => d.Meeting)
-        //        .ToListAsync();
+        public async Task<IEnumerable<Document>> GetAllAsync()
+        {
+            var meetingDocuments = (await _context.Documents
+                .OfType<MeetingDocument>()
+                .Include(d => d.Meeting)
+                .AsNoTracking()
+                .ToListAsync())
+                .Cast<Document>();
 
-        //    var interventionDocuments = await _context.Documents
-        //        .OfType<InterventionDocument>()
-        //        .Include(d => d.Intervention)
-        //        .ToListAsync();
+            var interventionDocuments = (await _context.Documents
+                .OfType<InterventionDocument>()
+                .Include(d => d.Intervention)
+                .AsNoTracking()
+                .ToListAsync())
+                .Cast<Document>();
 
-        //    return meetingDocuments.Cast<Document>()
-        //        .Concat(interventionDocuments.Cast<Document>())
-        //        .ToList();
-        //}
+            return meetingDocuments.Concat(interventionDocuments);
+        }
 
 
         public async Task<IEnumerable<Document>> GetAllTrackedAsync()
@@ -83,15 +74,12 @@ namespace condogestcet97.web.Data.CondominiumRepositories
             var meetingDocuments = (await _context.Documents
                 .OfType<MeetingDocument>()
                 .Include(d => d.Meeting)
-                .ThenInclude(m => m.Condo)
                 .ToListAsync())
                 .Cast<Document>();
 
             var interventionDocuments = (await _context.Documents
                 .OfType<InterventionDocument>()
                 .Include(d => d.Intervention)
-                .ThenInclude(m => m.Incident)
-                .ThenInclude(m => m.Condo)
                 .ToListAsync())
                 .Cast<Document>();
 

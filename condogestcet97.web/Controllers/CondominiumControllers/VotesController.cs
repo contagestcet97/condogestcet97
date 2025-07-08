@@ -9,81 +9,77 @@ using condogestcet97.web.Data;
 using condogestcet97.web.Data.Entities.Condominium;
 using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
 using condogestcet97.web.Helpers.IHelpers;
-using condogestcet97.web.Data.CondominiumRepositories;
 using condogestcet97.web.Helpers;
 using System.Diagnostics;
-using condogestcet97.web.Data.Repositories.IRepositories;
 using condogestcet97.web.Models;
+using condogestcet97.web.Data.CondominiumRepositories;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
-    public class MeetingsController : Controller
+    public class VotesController : Controller
     {
+        private readonly IVoteRepository _voteRepository;
         private readonly IMeetingRepository _meetingRepository;
-        private readonly ICondoRepository _condoRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
 
-        public MeetingsController(IMeetingRepository meetingRepository,
-            ICondominiumsConverterHelper condiminiumsConverterHelper,
-            ICondoRepository condoRepository)
-        {
+        public VotesController(IMeetingRepository meetingRepository, IVoteRepository voteRepository, ICondominiumsConverterHelper converterHelper)
+        {           
             _meetingRepository = meetingRepository;
-            _converterHelper = condiminiumsConverterHelper;
-            _condoRepository = condoRepository;
+            _voteRepository = voteRepository;
+            _converterHelper = converterHelper;
         }
 
-        // GET: Meetings
+        // GET: Votes
         public IActionResult Index()
         {
-            return View(_meetingRepository.GetAll());
+            return View(_voteRepository.GetAll());
         }
 
-        // GET: Meetings/Details/5
+        // GET: Votes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("MeetingnNotFound");
+                return new NotFoundViewResult("VoteNotFound");
             }
 
-            var meeting = await _meetingRepository.GetByIdAsync(id.Value);
+            var vote = await _voteRepository.GetByIdAsync(id.Value);
 
 
-            if (meeting == null)
+            if (vote == null)
             {
-                return new NotFoundViewResult("MeetingnNotFound");
+                return new NotFoundViewResult("VoteNotFound");
             }
 
-            return View(meeting);
+            return View(vote);
         }
 
-        // GET: Meetings/Create
+        // GET: Votes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Meetings/Create
+        // POST: Votes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MeetingViewModel model)
+        public async Task<IActionResult> Create(VoteViewModel model)
         {
-
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
 
-                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
+                var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId);
 
 
-                if (condo != null)
+                if (meeting != null)
                 {
-                    var meeting = _converterHelper.ToMeeting(model, false, condo);
+                    var vote = _converterHelper.ToVote(model, false, meeting);
 
                     try
                     {
-                        await _meetingRepository.CreateAsync(meeting);
+                        await _voteRepository.CreateAsync(vote);
 
 
                         return RedirectToAction(nameof(Index));
@@ -98,54 +94,53 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 }
 
             }
-            
             return View(model);
         }
 
-        // GET: Meetings/Edit/5
+        // GET: Votes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VoteNotFound");
             }
 
-            var meeting = await _meetingRepository.GetByIdAsync(id.Value);
+            var vote = await _voteRepository.GetByIdAsync(id.Value);
 
-            if (meeting == null)
+            if (vote == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VoteNotFound");
             }
 
-            var model = _converterHelper.ToMeetingViewModel(meeting);
+            var model = _converterHelper.ToVoteViewModel(vote);
 
             return View(model);
         }
 
-        // POST: Meetings/Edit/5
+        // POST: Votes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(MeetingViewModel model)
+        public async Task<IActionResult> Edit(VoteViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
+                var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId);
 
-                if (condo != null)
+                if (meeting != null)
                 {
                     try
                     {
-                        var meeting = _converterHelper.ToMeeting(model, false, condo);
+                        var vote = _converterHelper.ToVote(model, false, meeting);
 
-                        await _meetingRepository.UpdateAsync(meeting);
+                        await _voteRepository.UpdateAsync(vote);
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!await _meetingRepository.ExistAsync(model.Id))
+                        if (!await _voteRepository.ExistAsync(model.Id))
                         {
-                            return new NotFoundViewResult("InterventionNotFound");
+                            return new NotFoundViewResult("VoteNotFound");
                         }
                         else
                         {
@@ -159,35 +154,35 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             return View(model);
         }
 
-        // GET: Meetings/Delete/5
+        // GET: Votes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("MeetingNotFound");
+                return new NotFoundViewResult("VoteNotFound");
             }
 
-            var meeting = await _meetingRepository.GetByIdAsync(id.Value);
+            var vote = await _voteRepository.GetByIdAsync(id.Value);
 
 
-            if (meeting == null)
+            if (vote == null)
             {
-                return new NotFoundViewResult("MeetingNotFound");
+                return new NotFoundViewResult("VoteNotFound");
             }
 
-            return View(meeting);
+            return View(vote);
         }
 
-        // POST: Meetings/Delete/5
+        // POST: Votes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var meeting = await _meetingRepository.GetByIdAsync(id);
+            var vote = await _voteRepository.GetByIdAsync(id);
 
             try
             {
-                await _meetingRepository.DeleteAsync(meeting);
+                await _voteRepository.DeleteAsync(vote);
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
@@ -197,8 +192,8 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 {
                     var errorModel = new ErrorViewModel
                     {
-                        ErrorTitle = $"{meeting.Id} provavelmente está a ser usado!!",
-                        ErrorMessage = $"{meeting.Id} não pode ser apagado",
+                        ErrorTitle = $"{vote.Id} provavelmente está a ser usado!!",
+                        ErrorMessage = $"{vote.Id} não pode ser apagado",
                     };
 
                     return View("Error", errorModel);
@@ -208,10 +203,16 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return View("Error", new ErrorViewModel
                 {
                     ErrorTitle = "Erro de base de dados",
-                    ErrorMessage = "Ocorreu um erro inesperado ao tentar apagar o meeting."
+                    ErrorMessage = "Ocorreu um erro inesperado ao tentar apagar o vote."
                 });
+
             }
         }
+
+        //public IActionResult VoteNotFound()
+        //{
+        //    return View();
+        //}
 
     }
 }

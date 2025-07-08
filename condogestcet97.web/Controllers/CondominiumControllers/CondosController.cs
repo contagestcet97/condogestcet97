@@ -18,11 +18,11 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     public class CondosController : Controller
     {
         private readonly ICondoRepository _condoRepository;
-        private readonly ICondiminiumsConverterHelper _converterHelper;
+        private readonly ICondominiumsConverterHelper _converterHelper;
         
 
         public CondosController(ICondoRepository condoRepository,
-            ICondiminiumsConverterHelper condiminiumsConverterHelper)
+            ICondominiumsConverterHelper condiminiumsConverterHelper)
         {
             _condoRepository = condoRepository;
             _converterHelper = condiminiumsConverterHelper;

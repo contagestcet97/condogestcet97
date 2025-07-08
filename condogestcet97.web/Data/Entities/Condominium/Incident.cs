@@ -28,6 +28,6 @@ namespace condogestcet97.web.Data.Entities.Condominium
 
         public Condo Condo { get; set; }
 
-        public ICollection<Intervention> Interventions { get; set; }
+        //public ICollection<Intervention> Interventions { get; set; }
     }
 }

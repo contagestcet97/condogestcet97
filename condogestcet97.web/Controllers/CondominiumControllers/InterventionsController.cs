@@ -21,10 +21,10 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     public class InterventionsController : Controller
     {
         private readonly IIncidentRepository _incidentRepository;
-        private readonly ICondiminiumsConverterHelper _converterHelper;
+        private readonly ICondominiumsConverterHelper _converterHelper;
         private readonly IInterventionRepository _interventionRepository;
 
-        public InterventionsController(IIncidentRepository incidentRepository, ICondiminiumsConverterHelper condiminiumsConverterHelper,
+        public InterventionsController(IIncidentRepository incidentRepository, ICondominiumsConverterHelper condiminiumsConverterHelper,
             IInterventionRepository interventionRepository)
         {
             _incidentRepository = incidentRepository;   
@@ -33,7 +33,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         }
 
         // GET: Interventions
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View(_interventionRepository.GetAll());
         }

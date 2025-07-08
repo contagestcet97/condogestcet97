@@ -5,7 +5,7 @@ using condogestcet97.web.Models;
 
 namespace condogestcet97.web.Helpers
 {
-    public class CondominiumsConverterHelper : ICondiminiumsConverterHelper
+    public class CondominiumsConverterHelper : ICondominiumsConverterHelper
     {
         public Apartment ToApartment(ApartmentViewModel model, bool isNew, Condo condo)
         {
@@ -205,6 +205,32 @@ namespace condogestcet97.web.Helpers
             };
         }
 
+        public Vote ToVote(VoteViewModel model, bool isNew, Meeting meeting)
+        {
+            return new Vote
+            {
+                Id = isNew ? 0 : model.Id,
+                Description = model.Description,
+                VotesAbstained = model.VotesAbstained,
+                VotesAgainst = model.VotesAgainst,
+                VotesInFavour = model.VotesInFavour,
+                IsApproved = model.IsApproved,
+                Meeting = meeting
+            };
+        }
 
+        public VoteViewModel ToVoteViewModel(Vote vote)
+        {
+            return new VoteViewModel
+            {
+                Id = vote.Id,
+                MeetingId = vote.Meeting.Id,
+                Description = vote.Description,
+                VotesAbstained = vote.VotesAbstained,
+                VotesAgainst = vote.VotesAgainst,
+                VotesInFavour = vote.VotesInFavour,
+                IsApproved = vote.IsApproved,
+            };
+        }
     }
 }

@@ -4,7 +4,7 @@ using condogestcet97.web.Models;
 
 namespace condogestcet97.web.Helpers.IHelpers
 {
-    public interface ICondiminiumsConverterHelper
+    public interface ICondominiumsConverterHelper
     {
         Condo ToCondo(CondoViewModel model, bool isNew);
 
@@ -33,6 +33,10 @@ namespace condogestcet97.web.Helpers.IHelpers
         DocumentViewModel ToDocumentViewModelFromMeetingDoc(MeetingDocument document);
 
         DocumentViewModel ToDocumentViewModelFromInterventionDoc(InterventionDocument document);
+
+        Vote ToVote(VoteViewModel model, bool isNew, Meeting meeting);
+
+        VoteViewModel ToVoteViewModel(Vote vote);
     }
 
 }

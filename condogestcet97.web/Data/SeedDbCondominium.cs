@@ -166,6 +166,28 @@ namespace condogestcet97.web.Data
                 }
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.Votes.Any())
+            {
+                var meeting = _context.Meetings.FirstOrDefault(m => m.Id == 1);
+
+                if (meeting != null)
+                {
+                    Vote vote = new Vote
+                    {
+                        Description = "Vote on whether to install a lift in the building.",
+                        Meeting = meeting,
+                        VotesInFavour = 12,
+                        VotesAgainst = 10,
+                        VotesAbstained = 1,
+                        IsApproved = true,
+                    };
+
+                    _context.Votes.Add(vote);   
+                }
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

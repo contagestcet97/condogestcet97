@@ -20,12 +20,12 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     {
         private readonly DataContextCondominium _context;
         private readonly IApartmentRepository _apartmentRepository;
-        private readonly ICondiminiumsConverterHelper _converterHelper;
+        private readonly ICondominiumsConverterHelper _converterHelper;
         private readonly ICondoRepository _condoRepository;
 
         public ApartmentsController(DataContextCondominium context,
             IApartmentRepository apartmentRepository,
-            ICondiminiumsConverterHelper converterHelper,
+            ICondominiumsConverterHelper converterHelper,
             ICondoRepository condoRepository)
         {
             _context = context;
@@ -35,7 +35,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         }
 
         // GET: Apartments
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View(_apartmentRepository.GetAll());
         }
@@ -109,7 +109,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return new NotFoundViewResult("ApartmentNotFound");
             }
 
-            var apartment = await _apartmentRepository.GetByIdTrackedAsync(id.Value);
+            var apartment = await _apartmentRepository.GetByIdAsync(id.Value);
 
             if (apartment == null)
             {
@@ -130,7 +130,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
+                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
 
                 if (condo != null)
                 {

@@ -20,6 +20,8 @@ namespace condogestcet97.web.Data
 
         public DbSet<Document> Documents { get; set; }
 
+        public DbSet<Vote> Votes { get; set; }
+
         public DataContextCondominium(DbContextOptions<DataContextCondominium> options) : base(options)
         {
 

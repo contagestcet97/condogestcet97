@@ -22,11 +22,11 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         private readonly IDocumentRepository _documentRepository;
         private readonly IMeetingRepository _meetingRepository;
         private readonly IInterventionRepository _interventionRepository;
-        private readonly ICondiminiumsConverterHelper _converterHelper;
+        private readonly ICondominiumsConverterHelper _converterHelper;
 
         public DocumentsController(DataContextCondominium context,
             IDocumentRepository documentRepository,
-            ICondiminiumsConverterHelper converterHelper,
+            ICondominiumsConverterHelper converterHelper,
             IInterventionRepository interventionRepository,
             IMeetingRepository meetingRepository)
         {
@@ -39,7 +39,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         // GET: Documents
         public async Task<IActionResult> Index()
         {
-            return View(await _documentRepository.GetAllTrackedAsync());
+            return View(await _documentRepository.GetAllAsync());
         }
 
         // GET: Documents/Details/5
@@ -136,7 +136,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return new NotFoundViewResult("DocumentNotFound");
             }
 
-            var model = await ConvertToModel(id);
+            var model = await ConvertToSpecificModel(id);
 
             if (model == null)
             {
@@ -146,7 +146,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return View(model);
         }
 
-        private async Task<DocumentViewModel> ConvertToModel(int? id)
+        private async Task<DocumentViewModel> ConvertToSpecificModel(int? id)
         {
             DocumentViewModel model = null;
 
@@ -154,7 +154,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             if (document is MeetingDocument)
             {
-                MeetingDocument meetDocument = await _documentRepository.GetMeetDocTrackedAsync(document.Id);
+                MeetingDocument meetDocument = await _documentRepository.GetMeetDocAsync(document.Id);
 
                 if (meetDocument != null)
                 {
@@ -162,7 +162,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 }
             }
 
-            var interventionDocument = await _documentRepository.GetInterventionDocTrackedAsync(document.Id);
+            var interventionDocument = await _documentRepository.GetInterventionDocAsync(document.Id);
 
             if (interventionDocument != null)
             {

@@ -15,5 +15,7 @@ namespace condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositori
         Task<InterventionDocument> GetInterventionDocTrackedAsync(int id);
 
         Task<IEnumerable<Document>> GetAllTrackedAsync();
+
+        Task<IEnumerable<Document>> GetAllAsync();
     }
 }
