@@ -1,5 +1,5 @@
-﻿@model condogestcet97.web.Data.Entities.Users.User
-
+﻿@* @model condogestcet97.web.Data.Entities.Users.User *@
+@model condogestcet97.web.Data.ViewModels.User.UserCreateViewModel
 @{
     ViewData["Title"] = "Create";
 }
@@ -23,11 +23,6 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="TwoFAEnabled" class="control-label"></label>
                 <input asp-for="TwoFAEnabled" class="form-control" />
                 <span asp-validation-for="TwoFAEnabled" class="text-danger"></span>
@@ -38,9 +33,9 @@
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FiscalNumber" class="control-label"></label>

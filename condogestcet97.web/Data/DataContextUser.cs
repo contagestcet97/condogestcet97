@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data
 {
-    public class DataContextUser : IdentityDbContext
+    public class DataContextUser : IdentityDbContext<User, Role, int>
     {
-        public DbSet<Company> Companies { get; set; }
-        public new DbSet<User> Users { get; set; }
-        public new DbSet<Role> Roles { get; set; }
-        public new DbSet<UserRole> UserRoles { get; set; }
-        public new DbSet<RoleClaim> RoleClaims { get; set; }
-        public DbSet<UserCompany> UserCompanies { get; set; }
-        public DbSet<Token> Tokens { get; set; }
-        public DbSet<Recovery> Recoveries { get; set; }
+        public DbSet<Company> Companies { get; set; } // DbSet for Company entity, representing the companies in the system
+        //public DbSet<User> Users { get; set; } // IdentityDbContext already includes Users
+        //public DbSet<Role> Roles { get; set; } // IdentityDbContext already includes Roles
+        //public DbSet<UserRole> UserRoles { get; set; } // IdentityDbContext already includes UserRoles
+        //public DbSet<RoleClaim> RoleClaims { get; set; } // IdentityDbContext already includes RoleClaims
+        public DbSet<UserCompany> UserCompanies { get; set; } // DbSet for UserCompany entity, representing the many-to-many relationship between users and companies
+        public DbSet<Token> Tokens { get; set; } // DbSet for Token entity, representing authentication tokens for users
+        public DbSet<Recovery> Recoveries { get; set; } // DbSet for Recovery entity, representing recovery codes for two-factor authentication
 
 
         public DataContextUser(DbContextOptions<DataContextUser> options)
@@ -86,8 +86,8 @@ namespace condogestcet97.web.Data
                 .HasKey(c => c.Id);
 
             // User: Primary Key
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.Id);
+            //modelBuilder.Entity<User>()
+            //    .HasKey(u => u.Id);
 
             // Role: Primary Key
             modelBuilder.Entity<Role>()

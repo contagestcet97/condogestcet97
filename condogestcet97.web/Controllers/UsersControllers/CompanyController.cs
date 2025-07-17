@@ -42,7 +42,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         // GET: Company/Create
         public IActionResult Create()
         {
-            return View();
+            return View("~/Views/Users/Company/Create.cshtml");
         }
 
         // POST: Company/Create
