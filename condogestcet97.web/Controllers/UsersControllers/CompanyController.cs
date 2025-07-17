@@ -1,5 +1,6 @@
 ﻿using condogestcet97.web.Data;
 using condogestcet97.web.Data.Entities.Users;
+using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,16 +10,20 @@ namespace condogestcet97.web.Controllers.UsersControllers
     {
         private readonly DataContextUser _context;
 
-        public CompanyController(DataContextUser context)
+        private readonly ICompanyRepository _companyRepository;
+
+        public CompanyController(ICompanyRepository company)
         {
-            _context = context;
+            //_context = company.Context;
+            _companyRepository = company;
         }
 
         // GET: Company
         //lists all companies
         public async Task<IActionResult> Index()
         {
-            return View("~/Views/Users/Company/Index.cshtml", await _context.Companies.ToListAsync());
+            var companies = await _companyRepository.GetAllAsync();
+            return View("~/Views/Users/Company/Index.cshtml", companies);
         }
 
         // GET: Company/Details/5
@@ -29,8 +34,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = await _companyRepository.GetByIdAsync(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -46,16 +50,14 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // POST: Company/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Address,Phone,FiscalNumber")] Company company)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(company);
-                await _context.SaveChangesAsync();
+                await _companyRepository.AddAsync(company);
+                await _companyRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Users/Company/Create.cshtml", company);
@@ -69,7 +71,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _companyRepository.GetByIdAsync(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -78,8 +80,6 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // POST: Company/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,Phone,FiscalNumber")] Company company)
@@ -93,8 +93,8 @@ namespace condogestcet97.web.Controllers.UsersControllers
             {
                 try
                 {
-                    _context.Update(company);
-                    await _context.SaveChangesAsync();
+                    _companyRepository.Update(company);
+                    await _companyRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -135,13 +135,13 @@ namespace condogestcet97.web.Controllers.UsersControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _companyRepository.GetByIdAsync(id);
             if (company != null)
             {
-                _context.Companies.Remove(company);
+                _companyRepository.Delete(company);
             }
 
-            await _context.SaveChangesAsync();
+            await _companyRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

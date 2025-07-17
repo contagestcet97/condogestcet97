@@ -1,14 +1,18 @@
 using condogestcet97.web.Data;
 using condogestcet97.web.Data.Entities.Users;
+using condogestcet97.web.Data.Repositories.UserRepositories.Implementations;
+using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Data.Seed;
 using condogestcet97.web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace condogestcet97.web
 {
     public static class Program
     {
+
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +28,13 @@ namespace condogestcet97.web
             // Configure Entity Framework Core with SQL Server
             builder.Services.AddDbContext<DataContextUser>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Register the generic repository for dependency injection for basic CRUD operations
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            // register company repository for company-specific operations
+            builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+
 
             // register UserManager and RoleManager
             builder.Services.AddIdentity<User, Role>()

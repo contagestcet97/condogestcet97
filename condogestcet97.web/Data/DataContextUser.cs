@@ -16,7 +16,6 @@ namespace condogestcet97.web.Data
         public DbSet<Token> Tokens { get; set; } // DbSet for Token entity, representing authentication tokens for users
         public DbSet<Recovery> Recoveries { get; set; } // DbSet for Recovery entity, representing recovery codes for two-factor authentication
 
-
         public DataContextUser(DbContextOptions<DataContextUser> options)
              : base(options)
         {
