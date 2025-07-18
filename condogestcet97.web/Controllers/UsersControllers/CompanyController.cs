@@ -14,7 +14,6 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
         public CompanyController(ICompanyRepository company)
         {
-            //_context = company.Context;
             _companyRepository = company;
         }
 

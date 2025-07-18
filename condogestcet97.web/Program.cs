@@ -35,6 +35,8 @@ namespace condogestcet97.web
             // register company repository for company-specific operations
             builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
+            // register user repository for user-specific operations
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             // register UserManager and RoleManager
             builder.Services.AddIdentity<User, Role>()

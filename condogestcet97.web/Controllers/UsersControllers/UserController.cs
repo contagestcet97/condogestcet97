@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using condogestcet97.web.Data;
 using condogestcet97.web.Data.Entities.Users;
+using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Data.ViewModels.User;
 using condogestcet97.web.Data.ViewModels.UserViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -11,22 +11,25 @@ namespace condogestcet97.web.Controllers.UsersControllers
 {
     public class UserController : Controller
     {
-        private readonly DataContextUser _context;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(DataContextUser context, IMapper mapper, UserManager<User> userManager)
+        public UserController(
+            IMapper mapper,
+            UserManager<User> userManager,
+            IUserRepository userRepository)
         {
-            _context = context;
             _mapper = mapper;
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         // GET: User
         public async Task<IActionResult> Index()
         {
-
-            return View("~/Views/Users/User/Index.cshtml", await _context.Users.ToListAsync());
+            var users = await _userRepository.GetAllAsync();
+            return View("~/Views/Users/User/Index.cshtml", users);
         }
 
         // GET: User/Details/5
@@ -37,8 +40,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userRepository.GetByIdAsync(id.Value);
             if (user == null)
             {
                 return NotFound();
@@ -90,7 +92,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
             if (id == null)
                 return NotFound();
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userRepository.GetByIdAsync(id.Value);
             if (user == null)
                 return NotFound();
 
@@ -102,8 +104,6 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, UserEditViewModel vm)
@@ -113,7 +113,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
             if (ModelState.IsValid)
             {
-                var userDb = await _context.Users.FindAsync(id);
+                var userDb = await _userRepository.GetByIdAsync(id);
                 if (userDb == null)
                     return NotFound();
 
@@ -122,11 +122,11 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
                 try
                 {
-                    await _context.SaveChangesAsync();
+                    await _userRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(vm.Id))
+                    if (!await UserExists(vm.Id))
                     {
                         return NotFound();
                     }
@@ -150,8 +150,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userRepository.GetByIdAsync(id.Value);
             if (user == null)
             {
                 return NotFound();
@@ -165,19 +164,20 @@ namespace condogestcet97.web.Controllers.UsersControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                _userRepository.Delete(user);
             }
 
-            await _context.SaveChangesAsync();
+            await _userRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private async Task<bool> UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            var users = await _userRepository.GetAllAsync();
+            return users.Any(u => u.Id == id);
         }
     }
 }
