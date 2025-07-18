@@ -1,23 +1,23 @@
-﻿using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Users;
+﻿using condogestcet97.web.Data.Entities.Users;
+using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Controllers.UsersControllers
 {
     public class RoleController : Controller
     {
-        private readonly DataContextUser _context;
+        private readonly IRoleRepository _roleRepository;
 
-        public RoleController(DataContextUser context)
+        public RoleController(IRoleRepository roleRepository)
         {
-            _context = context;
+            _roleRepository = roleRepository;
         }
 
         // GET: Role
         public async Task<IActionResult> Index()
         {
-            return View("~/Views/Users/Role/Index.cshtml", await _context.Roles.ToListAsync());
+            var role = await _roleRepository.GetAllAsync();
+            return View("~/Views/Users/Role/Index.cshtml", role);
         }
 
         // GET: Role/Details/5
@@ -28,8 +28,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var role = await _roleRepository.GetByIdAsync(id.Value);
             if (role == null)
             {
                 return NotFound();
@@ -45,16 +44,14 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // POST: Role/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name")] Role role)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(role);
-                await _context.SaveChangesAsync();
+                await _roleRepository.AddAsync(role);
+                await _roleRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Users/Role/Create.cshtml", role);
@@ -68,7 +65,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _roleRepository.GetByIdAsync(id.Value);
             if (role == null)
             {
                 return NotFound();
@@ -77,20 +74,18 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // POST: Role/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name")] Role role)
         {
-            var roleToUpdate = await _context.Roles.FindAsync(id);
+            var roleToUpdate = await _roleRepository.GetByIdAsync(id);
             if (roleToUpdate == null)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
                 roleToUpdate.Name = role.Name;
-                await _context.SaveChangesAsync();
+                await _roleRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View("~/Views/Users/Role/Edit.cshtml", roleToUpdate);
@@ -105,8 +100,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var role = await _roleRepository.GetByIdAsync(id.Value);
             if (role == null)
             {
                 return NotFound();
@@ -120,19 +114,19 @@ namespace condogestcet97.web.Controllers.UsersControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _roleRepository.GetByIdAsync(id);
             if (role != null)
             {
-                _context.Roles.Remove(role);
+                _roleRepository.Delete(role);
             }
 
-            await _context.SaveChangesAsync();
+            await _roleRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RoleExists(int id)
         {
-            return _context.Roles.Any(e => e.Id == id);
+            return _roleRepository.GetByIdAsync(id) != null;
         }
     }
 }

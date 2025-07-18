@@ -3,9 +3,9 @@
 namespace condogestcet97.web.Data.Repositories.UserRepositories.Interfaces
 {
     /// <summary>
-    /// Interface for User repository that extends the generic repository.
+    /// Interface for Role repository that extends the generic repository.
     /// </summary>
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IRoleRepository : IGenericRepository<Role>
     {
     }
 }

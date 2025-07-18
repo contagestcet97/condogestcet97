@@ -38,6 +38,9 @@ namespace condogestcet97.web
             // register user repository for user-specific operations
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+            //register role repository for role-specific operations
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
             // register UserManager and RoleManager
             builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<DataContextUser>()
