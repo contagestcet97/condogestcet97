@@ -14,15 +14,18 @@ namespace condogestcet97.web.Controllers.UsersControllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
+        private readonly ICompanyRepository _companyRepository;
 
         public UserController(
             IMapper mapper,
             UserManager<User> userManager,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ICompanyRepository companyRepository)
         {
             _mapper = mapper;
             _userManager = userManager;
             _userRepository = userRepository;
+            _companyRepository = companyRepository;
         }
 
         // GET: User
@@ -50,9 +53,13 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // GET: User/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View("~/Views/Users/User/Create.cshtml");
+            var model = new UserCreateViewModel
+            {
+                AllCompanies = (await _companyRepository.GetAllAsync()).ToList()
+            };
+            return View("~/Views/Users/User/Create.cshtml", model);
         }
 
         // POST: User/Create
@@ -62,6 +69,13 @@ namespace condogestcet97.web.Controllers.UsersControllers
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(model.Password))
+                {
+                    ModelState.AddModelError(nameof(model.Password), "Password is required.");
+                    model.AllCompanies = (await _companyRepository.GetAllAsync()).ToList();
+                    return View("~/Views/Users/User/Create.cshtml", model);
+                }
+
                 var user = new User
                 {
                     UserName = model.Email,
@@ -83,6 +97,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
+            model.AllCompanies = (await _companyRepository.GetAllAsync()).ToList();
             return View("~/Views/Users/User/Create.cshtml", model);
         }
 
@@ -98,6 +113,9 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
             // using AutoMapper to map User entity to UserEditViewModel
             var vm = _mapper.Map<UserEditViewModel>(user);
+            // fetching all companies to populate the dropdown in the view
+            vm.AllCompanies = (await _companyRepository.GetAllAsync()).ToList();
+            vm.SelectedCompanyIds = user.UserCompanies.Select(uc => uc.CompanyId).ToList();
 
             return View("~/Views/Users/User/Edit.cshtml", vm);
 
@@ -123,6 +141,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 try
                 {
                     await _userRepository.SaveChangesAsync();
+                    await _userRepository.AssignCompaniesAsync(id, vm.SelectedCompanyIds);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -137,7 +156,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
+            vm.AllCompanies = (await _companyRepository.GetAllAsync()).ToList();
             return View("~/Views/Users/User/Edit.cshtml", vm);
         }
 
@@ -171,6 +190,35 @@ namespace condogestcet97.web.Controllers.UsersControllers
             }
 
             await _userRepository.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // GET: User/AssignCompanies/5
+        public async Task<IActionResult> AssignCompanies(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var allCompanies = await _companyRepository.GetAllAsync();
+            var selectedCompanyIds = user.UserCompanies.Select(uc => uc.CompanyId).ToList();
+
+            var vm = new UserCompanyAssignmentViewModel
+            {
+                UserId = id,
+                AllCompanies = allCompanies.ToList(),
+                SelectedCompanyIds = selectedCompanyIds
+            };
+
+            return View(vm);
+        }
+
+        // POST: User/AssignCompanies/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignCompanies(UserCompanyAssignmentViewModel vm)
+        {
+            await _userRepository.AssignCompaniesAsync(vm.UserId, vm.SelectedCompanyIds);
             return RedirectToAction(nameof(Index));
         }
 

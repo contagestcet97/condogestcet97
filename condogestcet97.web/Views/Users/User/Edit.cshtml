@@ -1,5 +1,4 @@
-﻿@* @model condogestcet97.web.Data.Entities.Users.User *@
-@model condogestcet97.web.Data.ViewModels.UserViewModels.UserEditViewModel
+﻿@model condogestcet97.web.Data.ViewModels.UserViewModels.UserEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -49,11 +48,28 @@
                 <input asp-for="FiscalNumber" class="form-control" />
                 <span asp-validation-for="FiscalNumber" class="text-danger"></span>
             </div>
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="EmailConfirmed" /> @Html.DisplayNameFor(model => model.EmailConfirmed)
                 </label>
             </div>
+
+            <div class="form-group">
+                <label>Assign companies</label>
+                @foreach (var company in Model.AllCompanies)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="SelectedCompanyIds"
+                               value="@company.Id"
+                        @(Model.SelectedCompanyIds != null && Model.SelectedCompanyIds.Contains(company.Id) ? "checked" : "") />
+                        <label class="form-check-label">@company.Name</label>
+                    </div>
+                }
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

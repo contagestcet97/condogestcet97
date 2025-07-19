@@ -1,6 +1,6 @@
-﻿using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Users;
+﻿using condogestcet97.web.Data.Entities.Users;
 using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
+using condogestcet97.web.Data.ViewModels.CompanyViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,8 +8,6 @@ namespace condogestcet97.web.Controllers.UsersControllers
 {
     public class CompanyController : Controller
     {
-        private readonly DataContextUser _context;
-
         private readonly ICompanyRepository _companyRepository;
 
         public CompanyController(ICompanyRepository company)
@@ -45,21 +43,30 @@ namespace condogestcet97.web.Controllers.UsersControllers
         // GET: Company/Create
         public IActionResult Create()
         {
-            return View("~/Views/Users/Company/Create.cshtml");
+            return View("~/Views/Users/Company/Create.cshtml", new CompanyCreateViewModel());
         }
 
         // POST: Company/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Address,Phone,FiscalNumber")] Company company)
+        public async Task<IActionResult> Create(CompanyCreateViewModel model)
         {
             if (ModelState.IsValid)
             {
+                // mapping the view model to the entity
+                var company = new Company
+                {
+                    Name = model.Name,
+                    Address = model.Address,
+                    Phone = model.Phone,
+                    FiscalNumber = model.FiscalNumber
+                };
+
                 await _companyRepository.AddAsync(company);
                 await _companyRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View("~/Views/Users/Company/Create.cshtml", company);
+            return View("~/Views/Users/Company/Create.cshtml", model);
         }
 
         // GET: Company/Edit/5
@@ -119,8 +126,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = await _companyRepository.GetByIdAsync(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -146,7 +152,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
         private bool CompanyExists(int id)
         {
-            return _context.Companies.Any(e => e.Id == id);
+            return _companyRepository.GetByIdAsync(id) != null;
         }
     }
 }

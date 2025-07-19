@@ -1,4 +1,6 @@
-﻿namespace condogestcet97.web.Data.ViewModels.UserViewModels
+﻿using condogestcet97.web.Data.Entities.Users;
+
+namespace condogestcet97.web.Data.ViewModels.UserViewModels
 {
     public class UserEditViewModel
     {
@@ -11,6 +13,10 @@
         public string? PhoneNumber { get; set; }
         public string? FiscalNumber { get; set; }
         public bool EmailConfirmed { get; set; }
+
+        public List<Company> AllCompanies { get; set; } = new();
+        public List<int> SelectedCompanyIds { get; set; } = new();
+
     }
 
 }

@@ -1,21 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 
 namespace condogestcet97.web.Data.Entities.Users
 {
-    public class User : IdentityUser<int> // Inherits from IdentityUser with int as the key type
+    public class User : IdentityUser<int> // Inherits from IdentityUser with int as the key type instead of string
     {
-        [Required]
-        [MaxLength(25)]
-        public string? Name { get; set; } // user name
+        public string? Name { get; set; }
 
         public bool? TwoFAEnabled { get; set; } = false; // Indicates if two-factor authentication is enabled -TODO
 
-        [MaxLength(250)]
-        public string? Address { get; set; } // User's address
+        public string? Address { get; set; }
 
-        [MaxLength(9)]
-        public string? FiscalNumber { get; set; } // Fiscal number for tax purposes
+        public string? FiscalNumber { get; set; }
 
         public ICollection<UserCompany> UserCompanies { get; set; } = new List<UserCompany>(); // Many-to-many relationship with Company
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>(); // Many-to-many relationship with Role
