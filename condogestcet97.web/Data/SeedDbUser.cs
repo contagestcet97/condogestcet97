@@ -42,7 +42,7 @@ namespace condogestcet97.web.Data.Seed
             }
 
             // seed Admin user
-            var adminEmail = "admin@admin.com";
+            var adminEmail = "spmmazb@gmail.com";
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {

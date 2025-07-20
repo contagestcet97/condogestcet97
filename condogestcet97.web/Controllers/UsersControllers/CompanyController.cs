@@ -1,4 +1,5 @@
-﻿using condogestcet97.web.Data.Entities.Users;
+﻿using AutoMapper;
+using condogestcet97.web.Data.Entities.Users;
 using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Data.ViewModels.CompanyViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,14 @@ namespace condogestcet97.web.Controllers.UsersControllers
     public class CompanyController : Controller
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly IMapper _mapper;
 
-        public CompanyController(ICompanyRepository company)
+        public CompanyController(
+            ICompanyRepository company,
+            IMapper mapper)
         {
             _companyRepository = company;
+            _mapper = mapper;
         }
 
         // GET: Company
@@ -20,16 +25,8 @@ namespace condogestcet97.web.Controllers.UsersControllers
         public async Task<IActionResult> Index()
         {
             var companies = await _companyRepository.GetAllAsync();
-
-            var vmList = companies.Select(c => new CompanyListViewModel
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Address = c.Address,
-                Phone = c.Phone,
-                FiscalNumber = c.FiscalNumber
-            }).ToList();
-
+            // using AutoMapper to map the list of companies to a list of view models. Refer to Services/CompanyProfile.cs for the mapping configuration.
+            var vmList = _mapper.Map<List<CompanyListViewModel>>(companies);
             return View("~/Views/Users/Company/Index.cshtml", vmList);
         }
 
@@ -47,7 +44,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            // Mapping the entity to the view model
+            // Mapping the entity to the view model - TODO use AutoMapper for this to avoid manual mapping
             var vm = new CompanyDetailsViewModel
             {
                 Id = company.Id,
@@ -73,7 +70,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         {
             if (ModelState.IsValid)
             {
-                // mapping the view model to the entity
+                // mapping the view model to the entity - TODO use AutoMapper for this to avoid manual mapping
                 var company = new Company
                 {
                     Name = model.Name,
@@ -175,7 +172,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            // using the companydetails view model for deletion confirmation
+            // using the companydetails view model for deletion confirmation - TODO use AutoMapper for this to avoid manual mapping
             var vm = new CompanyDetailsViewModel
             {
                 Id = company.Id,

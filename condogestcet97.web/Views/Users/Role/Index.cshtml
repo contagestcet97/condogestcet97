@@ -1,4 +1,4 @@
-﻿@model IEnumerable<condogestcet97.web.Data.Entities.Users.Role>
+﻿@model IEnumerable<condogestcet97.web.Data.ViewModels.RoleViewModels.RoleListViewModel>
 @using condogestcet97.web.Data.Entities.Users
 
 @{
@@ -14,8 +14,7 @@
     <thead>
         <tr>
             <th>
-                <!-- Use explicit type in lambda to avoid type inference error -->
-                @Html.DisplayNameFor((Role r) => r.Name)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>
         </tr>

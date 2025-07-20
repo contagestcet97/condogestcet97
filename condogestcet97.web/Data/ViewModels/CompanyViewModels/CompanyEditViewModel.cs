@@ -12,13 +12,13 @@ namespace condogestcet97.web.Data.ViewModels.CompanyViewModels
         [MaxLength(25, ErrorMessage = "Name cannot exceed 25 characters.")]
         public string? Name { get; set; }
 
-        [MaxLength(250, ErrorMessage = "Address cannot exceed 250 characters.")]
+        [MaxLength(100, ErrorMessage = "Address cannot exceed 100 characters.")]
         public string? Address { get; set; }
 
-        [MaxLength(13, ErrorMessage = "Phone number cannot exceed 13 characters.")]
+        [MaxLength(15, ErrorMessage = "Phone number cannot exceed 15 characters.")]
         public string? Phone { get; set; }
 
-        [MaxLength(9, ErrorMessage = "Fiscal number cannot exceed 9 characters.")]
+        [MaxLength(18, ErrorMessage = "Fiscal number cannot exceed 18 characters.")]
         public string? FiscalNumber { get; set; }
     }
 }

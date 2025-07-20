@@ -10,11 +10,15 @@ namespace condogestcet97.web.Services
         {
             //Automapper needs to be configured for bi-directional mapping or else it will only map in one direction.
 
-            // mapping between UserEditViewModel and User
-            CreateMap<UserEditViewModel, User>();
+            //// mapping between UserEditViewModel and User
+            //CreateMap<UserEditViewModel, User>();
 
-            // mapping between User and UserEditViewModel
-            CreateMap<User, UserEditViewModel>();
+            //// mapping between User and UserEditViewModel
+            //CreateMap<User, UserEditViewModel>();
+
+            // this mapping works for both directions
+            CreateMap<User, UserEditViewModel>().ReverseMap();
+
         }
     }
 }
