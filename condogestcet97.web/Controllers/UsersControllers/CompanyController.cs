@@ -20,7 +20,17 @@ namespace condogestcet97.web.Controllers.UsersControllers
         public async Task<IActionResult> Index()
         {
             var companies = await _companyRepository.GetAllAsync();
-            return View("~/Views/Users/Company/Index.cshtml", companies);
+
+            var vmList = companies.Select(c => new CompanyListViewModel
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Address = c.Address,
+                Phone = c.Phone,
+                FiscalNumber = c.FiscalNumber
+            }).ToList();
+
+            return View("~/Views/Users/Company/Index.cshtml", vmList);
         }
 
         // GET: Company/Details/5
@@ -37,7 +47,17 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            return View("~/Views/Users/Company/Details.cshtml", company);
+            // Mapping the entity to the view model
+            var vm = new CompanyDetailsViewModel
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Address = company.Address,
+                Phone = company.Phone,
+                FiscalNumber = company.FiscalNumber
+            };
+
+            return View("~/Views/Users/Company/Details.cshtml", vm);
         }
 
         // GET: Company/Create
@@ -82,21 +102,44 @@ namespace condogestcet97.web.Controllers.UsersControllers
             {
                 return NotFound();
             }
-            return View("~/Views/Users/Company/Edit.cshtml", company);
+
+            // Mapping the entity to the view model - TODO use AutoMapper for this to avoid manual mapping
+            var vm = new CompanyEditViewModel
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Address = company.Address,
+                Phone = company.Phone,
+                FiscalNumber = company.FiscalNumber
+            };
+
+            return View("~/Views/Users/Company/Edit.cshtml", vm);
         }
 
         // POST: Company/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Address,Phone,FiscalNumber")] Company company)
+        public async Task<IActionResult> Edit(int id, CompanyEditViewModel vm)
         {
-            if (id != company.Id)
+            if (id != vm.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var company = await _companyRepository.GetByIdAsync(id);
+                if (company == null)
+                {
+                    return NotFound();
+                }
+
+                // map viewModel back to entity - TODO use AutoMapper for this to avoid manual mapping
+                company.Name = vm.Name;
+                company.Address = vm.Address;
+                company.Phone = vm.Phone;
+                company.FiscalNumber = vm.FiscalNumber;
+
                 try
                 {
                     _companyRepository.Update(company);
@@ -110,12 +153,12 @@ namespace condogestcet97.web.Controllers.UsersControllers
                     }
                     else
                     {
-                        throw;
+                        return StatusCode(500, "An error occurred while updating the company. Please try again later.");
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View("~/Views/Users/Company/Edit.cshtml", company);
+            return View("~/Views/Users/Company/Edit.cshtml", vm);
         }
 
         // GET: Company/Delete/5
@@ -132,7 +175,17 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            return View("~/Views/Users/Company/Delete.cshtml", company);
+            // using the companydetails view model for deletion confirmation
+            var vm = new CompanyDetailsViewModel
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Address = company.Address,
+                Phone = company.Phone,
+                FiscalNumber = company.FiscalNumber
+            };
+
+            return View("~/Views/Users/Company/Delete.cshtml", vm);
         }
 
         // POST: Company/Delete/5
