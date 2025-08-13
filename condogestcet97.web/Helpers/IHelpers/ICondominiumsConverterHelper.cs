@@ -10,17 +10,16 @@ namespace condogestcet97.web.Helpers.IHelpers
 
         CondoViewModel ToCondoViewModel(Condo condo);
 
-
-        Apartment ToApartment(ApartmentViewModel model, bool isNew, Condo condo);
+        Apartment ToApartment(ApartmentViewModel model, bool isNew);
 
         ApartmentViewModel ToApartmentViewModel(Apartment apartment);
 
 
-        Incident ToIncident(IncidentViewModel model, bool isNew, Apartment apartment, Condo condo);
+        Incident ToIncident(IncidentViewModel model, bool isNew);
 
         IncidentViewModel ToIncidentViewModel(Incident incident);
 
-        Intervention ToIntervention(InterventionViewModel model, bool isNew, Incident incident);
+        Intervention ToIntervention(InterventionViewModel model, bool isNew);
 
         InterventionViewModel ToInterventionViewModel(Intervention intervention);
 
@@ -28,13 +27,13 @@ namespace condogestcet97.web.Helpers.IHelpers
 
         MeetingViewModel ToMeetingViewModel(Meeting meeting);
 
-        Document ToDocument(DocumentViewModel model, bool isNew, Meeting? meeting, Intervention? intervention);
+        Document ToDocument(DocumentViewModel model, bool isNew);
 
         DocumentViewModel ToDocumentViewModelFromMeetingDoc(MeetingDocument document);
 
         DocumentViewModel ToDocumentViewModelFromInterventionDoc(InterventionDocument document);
 
-        Vote ToVote(VoteViewModel model, bool isNew, Meeting meeting);
+        Vote ToVote(VoteViewModel model, bool isNew);
 
         VoteViewModel ToVoteViewModel(Vote vote);
     }

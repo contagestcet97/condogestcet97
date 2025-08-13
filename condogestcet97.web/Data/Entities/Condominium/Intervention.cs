@@ -23,6 +23,8 @@ namespace condogestcet97.web.Data.Entities.Condominium
 
         public bool IsCompleted { get; set; }
 
-        public Incident Incident { get; set; }
+        public int IncidentId { get; set; }
+
+        public Incident? Incident { get; set; }
     }
 }

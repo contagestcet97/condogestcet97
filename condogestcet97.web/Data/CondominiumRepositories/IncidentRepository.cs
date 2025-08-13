@@ -24,6 +24,7 @@ namespace condogestcet97.web.Data.CondominiumRepositories
         {
             return _context.Incidents
                 .Include(i => i.Condo)
+                .Include(i => i.Apartment)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
@@ -32,6 +33,7 @@ namespace condogestcet97.web.Data.CondominiumRepositories
         {
             return _context.Incidents
                 .Include(i => i.Condo)
+                .Include(i => i.Apartment)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 

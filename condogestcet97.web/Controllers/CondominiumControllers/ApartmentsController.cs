@@ -18,20 +18,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 {
     public class ApartmentsController : Controller
     {
-        private readonly DataContextCondominium _context;
         private readonly IApartmentRepository _apartmentRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
-        private readonly ICondoRepository _condoRepository;
 
-        public ApartmentsController(DataContextCondominium context,
-            IApartmentRepository apartmentRepository,
-            ICondominiumsConverterHelper converterHelper,
-            ICondoRepository condoRepository)
+        public ApartmentsController(IApartmentRepository apartmentRepository,
+            ICondominiumsConverterHelper converterHelper)
         {
-            _context = context;
             _apartmentRepository = apartmentRepository;
             _converterHelper = converterHelper;
-            _condoRepository = condoRepository;
         }
 
         // GET: Apartments
@@ -76,12 +70,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             if (ModelState.IsValid)
             {
-                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
+                //var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
 
-                if (condo != null)
-                {
+                //if (condo != null)
+                //{
 
-                    var apartment = _converterHelper.ToApartment(model, true, condo);
+                    //var apartment = _converterHelper.ToApartment(model, true, condo);
+
+                var apartment = _converterHelper.ToApartment(model, true);
 
                     try
                     {
@@ -95,9 +91,8 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                     {
                         Debug.WriteLine(ex.ToString());
                     }
-                }
+                
             }
-
             return View(model);
         }
 
@@ -130,13 +125,13 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
+                //var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
 
-                if (condo != null)
-                {
+                //if (condo != null)
+                //{
                     try
                     {
-                        var apartment = _converterHelper.ToApartment(model, false, condo);
+                        var apartment = _converterHelper.ToApartment(model, false);
 
                         await _apartmentRepository.UpdateAsync(apartment);
                     }
@@ -152,7 +147,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                         }
                     }
                     return RedirectToAction(nameof(Index));
-                }
+                
             }
 
             return View(model);

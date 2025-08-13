@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Data.Repositories.IRepositories;
-using condogestcet97.web.Helpers.IHelpers;
+﻿using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
 using condogestcet97.web.Helpers;
-using condogestcet97.web.Data.CondominiumRepositories;
-using condogestcet97.web.Data.Repositories;
-using System.Diagnostics;
+using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
     public class InterventionsController : Controller
     {
-        private readonly IIncidentRepository _incidentRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
         private readonly IInterventionRepository _interventionRepository;
 
-        public InterventionsController(IIncidentRepository incidentRepository, ICondominiumsConverterHelper condiminiumsConverterHelper,
+        public InterventionsController(ICondominiumsConverterHelper condiminiumsConverterHelper,
             IInterventionRepository interventionRepository)
         {
-            _incidentRepository = incidentRepository;   
             _interventionRepository = interventionRepository;
             _converterHelper = condiminiumsConverterHelper;
         }
@@ -73,28 +61,27 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             if (ModelState.IsValid)
             {
 
-                var incident = await _incidentRepository.GetByIdTrackedAsync(model.IncidentId);
-                
+                //var incident = await _incidentRepository.GetByIdTrackedAsync(model.IncidentId);
 
-                if (incident != null)
+
+                //if (incident != null)
+                //{
+                var intervention = _converterHelper.ToIntervention(model, false);
+
+                try
                 {
-                    var intervention = _converterHelper.ToIntervention(model, false, incident);
-
-                    try
-                    {
-                        await _interventionRepository.CreateAsync(intervention);
+                    await _interventionRepository.CreateAsync(intervention);
 
 
-                        return RedirectToAction(nameof(Index));
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.ToString());
-                    }
                     return RedirectToAction(nameof(Index));
 
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+                return RedirectToAction(nameof(Index));
+
             }
 
             return View(model);
@@ -129,31 +116,29 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                var incident = await _incidentRepository.GetByIdAsync(model.IncidentId);
+                //var incident = await _incidentRepository.GetByIdAsync(model.IncidentId);
 
-                if (incident != null)
+                //if (incident != null)
+                //{
+                try
                 {
-                    try
-                    {
-                        var intervention = _converterHelper.ToIntervention(model, false, incident);
+                    var intervention = _converterHelper.ToIntervention(model, false);
 
-                        await _interventionRepository.UpdateAsync(intervention);
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!await _interventionRepository.ExistAsync(model.Id))
-                        {
-                            return new NotFoundViewResult("InterventionNotFound");
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
+                    await _interventionRepository.UpdateAsync(intervention);
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _interventionRepository.ExistAsync(model.Id))
+                    {
+                        return new NotFoundViewResult("InterventionNotFound");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-
             return View(model);
         }
 

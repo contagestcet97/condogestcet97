@@ -7,7 +7,9 @@ namespace condogestcet97.web.Data.Entities.Condominium
     {
         public int Id { get ; set ; }
 
-        public Condo Condo { get; set ; }
+        public Condo? Condo { get; set ; }
+
+        public int CondoId { get; set ; }
 
         [Required]
         [Column(TypeName = "varchar(4)")]

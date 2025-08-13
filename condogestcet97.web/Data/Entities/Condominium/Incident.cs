@@ -24,9 +24,11 @@ namespace condogestcet97.web.Data.Entities.Condominium
 
         public bool IsResolved { get; set; }
 
+        public int? ApartmentId { get; set; }
         public Apartment? Apartment { get; set; }
 
-        public Condo Condo { get; set; }
+        public int CondoId { get; set; }   
+        public Condo? Condo { get; set; }
 
         //public ICollection<Intervention> Interventions { get; set; }
     }

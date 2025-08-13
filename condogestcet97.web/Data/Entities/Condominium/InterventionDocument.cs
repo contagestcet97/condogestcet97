@@ -4,6 +4,8 @@
     {
         public override DocumentType Type { get; set; } = DocumentType.Intervention;
 
-        public Intervention Intervention { get; set; }
+        public int InterventionId { get; set; }
+
+        public Intervention? Intervention { get; set; }
     }
 }

@@ -14,10 +14,6 @@ using condogestcet97.web.Data.Repositories;
 using condogestcet97.web.Helpers;
 using System.Diagnostics;
 using condogestcet97.web.Models;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Helpers.IHelpers;
-using condogestcet97.web.Models;
-using condogestcet97.web.Data.CondominiumRepositories;
 
 namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 {
@@ -25,18 +21,13 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
-        private readonly IApartmentRepository _apartmentRepository;
-        private readonly ICondoRepository _condoRepository;
 
         public IncidentsController(IIncidentRepository incidentRepository,
-            ICondominiumsConverterHelper converterHelper,
-            IApartmentRepository apartmentRepository,
-            ICondoRepository condoRepository)
+            ICondominiumsConverterHelper converterHelper)
         {
             _converterHelper = converterHelper;
             _incidentRepository = incidentRepository;
-            _apartmentRepository = apartmentRepository;
-            _condoRepository = condoRepository;
+
         }
 
         // GET: Incidents
@@ -50,7 +41,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         {
             if (id == null)
             {
-                return new NotFoundViewResult("incidentNotFound");
+                return new NotFoundViewResult("IncidentNotFound");
             }
 
             var incident = await _incidentRepository.GetByIdAsync(id.Value);
@@ -58,7 +49,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 
             if (incident == null)
             {
-                return new NotFoundViewResult("incidentNotFound");
+                return new NotFoundViewResult("IncidentNotFound");
             }
 
             return View(incident);
@@ -79,19 +70,8 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         {
             if (ModelState.IsValid)
             {
-                Apartment apartment = null;
-
-                if (model.ApartmentId != null)
-                {
-                    apartment = await _apartmentRepository.GetByIdTrackedAsync(model.ApartmentId.Value);
-                }
-
-                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
-                    
-                if (condo != null)
-                {
-                 
-                        var incident = _converterHelper.ToIncident(model, false, apartment, condo);
+                
+                        var incident = _converterHelper.ToIncident(model, true);
 
                         try
                         {
@@ -107,8 +87,8 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
                         }
                         return RedirectToAction(nameof(Index));
                     
-                }
             }
+            
             return View(model); 
         }
             
@@ -142,20 +122,9 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         {
             if (ModelState.IsValid)
             {
-                Apartment apartment = null;
-
-                if (model.ApartmentId != null)
-                {
-                    apartment = await _apartmentRepository.GetByIdTrackedAsync(model.ApartmentId.Value);
-                }
-
-                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
-
-                if (condo != null)
-                {
                     try
                     {
-                        var incident = _converterHelper.ToIncident(model, false, apartment, condo);
+                        var incident = _converterHelper.ToIncident(model, false);
 
                         await _incidentRepository.UpdateAsync(incident);
                     }
@@ -163,7 +132,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
                     {
                         if (!await _incidentRepository.ExistAsync(model.Id))
                         {
-                            return new NotFoundViewResult("incidentNotFound");
+                            return new NotFoundViewResult("IncidentNotFound");
                         }
                         else
                         {
@@ -172,7 +141,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
                     }
                     return RedirectToAction(nameof(Index));
                 }
-            }
+            
 
             return View(model);
         }
@@ -182,7 +151,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         {
             if (id == null)
             {
-                return new NotFoundViewResult("incidentNotFound");
+                return new NotFoundViewResult("IncidentNotFound");
             }
 
             var incident = await _incidentRepository.GetByIdAsync(id.Value);
@@ -190,7 +159,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 
             if (incident == null)
             {
-                return new NotFoundViewResult("incidentNotFound");
+                return new NotFoundViewResult("IncidentNotFound");
             }
 
             return View(incident);

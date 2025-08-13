@@ -20,20 +20,15 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     public class DocumentsController : Controller
     {
         private readonly IDocumentRepository _documentRepository;
-        private readonly IMeetingRepository _meetingRepository;
-        private readonly IInterventionRepository _interventionRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
 
         public DocumentsController(DataContextCondominium context,
             IDocumentRepository documentRepository,
-            ICondominiumsConverterHelper converterHelper,
-            IInterventionRepository interventionRepository,
-            IMeetingRepository meetingRepository)
+            ICondominiumsConverterHelper converterHelper)
         {
             _documentRepository = documentRepository;
             _converterHelper = converterHelper;
-            _interventionRepository = interventionRepository;
-            _meetingRepository = meetingRepository; 
+
         }
 
         // GET: Documents
@@ -91,7 +86,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             if (ModelState.IsValid)
             {
 
-                var document = await GetMeetingOrInterventionDocument(model);
+                var document = GetMeetingOrInterventionDocument(model);
 
                     try
                     {
@@ -110,20 +105,20 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             return View(model);
         }
-        private async Task<Document> GetMeetingOrInterventionDocument(DocumentViewModel model)
+        private Document GetMeetingOrInterventionDocument(DocumentViewModel model)
         {
             if (model.Type == DocumentType.Meeting)
             {
-                var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId.Value);
+                //var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId.Value);
 
-                var meetingDocument = _converterHelper.ToDocument(model, true, meeting, null);
+                var meetingDocument = _converterHelper.ToDocument(model, true);
 
                 return meetingDocument;
             }
 
-            var intervention = await _interventionRepository.GetByIdTrackedAsync(model.InterventionId.Value);
+            //var intervention = await _interventionRepository.GetByIdTrackedAsync(model.InterventionId.Value);
 
-            var interventionDocument = _converterHelper.ToDocument(model, true, null, intervention);
+            var interventionDocument = _converterHelper.ToDocument(model, true);
 
             return interventionDocument;
         }
@@ -183,13 +178,10 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     
             if (ModelState.IsValid)
             {
-
-                var meeting = await GetMeeting(model);
-                var intervention = await GetIntervention(model);
-              
+             
                     try
                     {
-                        var document = _converterHelper.ToDocument(model, false, meeting, intervention);
+                        var document = _converterHelper.ToDocument(model, false);
 
                         await _documentRepository.UpdateAsync(document);
                     }
@@ -209,33 +201,6 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             }
             return View();
         }
-
-        private async Task<Meeting?> GetMeeting(DocumentViewModel model)
-        {
-            Meeting? meeting = null;
-
-            if (model.MeetingId != null)
-            {
-                meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId.Value);
-            }
-
-            return meeting;
-        }
-
-        private async Task<Intervention?> GetIntervention(DocumentViewModel model)
-        {
-            Intervention? intervention = null;
-
-            if (model.InterventionId != null)
-            {
-                intervention = await _interventionRepository.GetByIdTrackedAsync(model.InterventionId.Value);
-            }
-
-            return intervention;
-        }
-
-
-
 
         // GET: Documents/Delete/5
         public async Task<IActionResult> Delete(int? id)

@@ -7,12 +7,23 @@ namespace condogestcet97.web.Helpers
 {
     public class CondominiumsConverterHelper : ICondominiumsConverterHelper
     {
-        public Apartment ToApartment(ApartmentViewModel model, bool isNew, Condo condo)
+        //public Apartment ToApartment(ApartmentViewModel model, bool isNew, Condo condo)
+        //{
+        //    return new Apartment
+        //    {
+        //        Id = isNew ? 0 : model.Id,
+        //        Condo = condo,
+        //        Flat = model.Flat,
+        //        Divisions = model.Divisions
+        //    };
+        //}
+
+        public Apartment ToApartment(ApartmentViewModel model, bool isNew)
         {
             return new Apartment
             {
                 Id = isNew ? 0 : model.Id,
-                Condo = condo,
+                CondoId = model.CondoId,
                 Flat = model.Flat,
                 Divisions = model.Divisions
             };
@@ -20,14 +31,16 @@ namespace condogestcet97.web.Helpers
 
         public ApartmentViewModel ToApartmentViewModel(Apartment apartment)
         {
-            return new ApartmentViewModel
-            {
-                Id = apartment.Id,
-                CondoId = apartment.Condo.Id,
-                CondoAddress = apartment.Condo.Address,
-                Flat = apartment.Flat,
-                Divisions = apartment.Divisions
-            };
+
+                return new ApartmentViewModel
+                {
+                    Id = apartment.Id,
+                    CondoId = apartment.CondoId,
+                    CondoAddress = apartment.Condo.Address,
+                    Flat = apartment.Flat,
+                    Divisions = apartment.Divisions
+                };
+            
         }
 
         public Condo ToCondo(CondoViewModel model, bool isNew)
@@ -48,7 +61,7 @@ namespace condogestcet97.web.Helpers
             };
         }
 
-        public Document ToDocument(DocumentViewModel model, bool isNew, Meeting? meeting, Intervention? intervention)
+        public Document ToDocument(DocumentViewModel model, bool isNew)
         {
             if (model.Type == DocumentType.Intervention)
             {
@@ -58,9 +71,9 @@ namespace condogestcet97.web.Helpers
                     Subject = model.Subject,
                     Description = model.Description,
                     EmissionDate = model.EmissionDate,
-                    Intervention = intervention,
+                    InterventionId = model.InterventionId.Value,
                     Type = DocumentType.Intervention
-                    
+
                 };
             }
 
@@ -70,7 +83,7 @@ namespace condogestcet97.web.Helpers
                 Subject = model.Subject,
                 Description = model.Description,
                 EmissionDate = model.EmissionDate,
-                Meeting = meeting,
+                MeetingId = model.MeetingId.Value,
                 Type = DocumentType.Meeting
             };
         }
@@ -86,7 +99,7 @@ namespace condogestcet97.web.Helpers
                 Description = document.Description,
                 EmissionDate = document.EmissionDate,
                 Type = document.Type,
-                MeetingId = document.Meeting.Id,
+                MeetingId = document.MeetingId,
             };
 
         }
@@ -100,12 +113,12 @@ namespace condogestcet97.web.Helpers
                 Description = document.Description,
                 EmissionDate = document.EmissionDate,
                 Type = document.Type,
-                InterventionId = document.Intervention.Id,
+                InterventionId = document.InterventionId,
             };
         }
 
 
-        public Incident ToIncident(IncidentViewModel model, bool isNew, Apartment? apartment, Condo condo)
+        public Incident ToIncident(IncidentViewModel model, bool isNew)
         {
             return new Incident
             {
@@ -115,8 +128,8 @@ namespace condogestcet97.web.Helpers
                 Description = model.Description,
                 Date = model.Date,
                 IsResolved = model.IsResolved,
-                Apartment = apartment,
-                Condo = condo
+                ApartmentId = model.ApartmentId,
+                CondoId = model.CondoId
             };
         }
 
@@ -133,7 +146,7 @@ namespace condogestcet97.web.Helpers
                     Date = incident.Date,
                     IsResolved = incident.IsResolved,
                     ApartmentFlat = incident.Apartment.Flat,
-                    CondoId = incident.Condo.Id,
+                    CondoId = incident.CondoId,
                     ApartmentId = incident.Apartment.Id,
                     CondoAddress = incident.Condo.Address,
                 };
@@ -147,13 +160,13 @@ namespace condogestcet97.web.Helpers
                 Description = incident.Description,
                 Date = incident.Date,
                 IsResolved = incident.IsResolved,
-                CondoId = incident.Condo.Id,
+                CondoId = incident.CondoId,
                 CondoAddress = incident.Condo.Address,
             };
 
         }
 
-        public Intervention ToIntervention(InterventionViewModel model, bool isNew, Incident incident)
+        public Intervention ToIntervention(InterventionViewModel model, bool isNew)
         {
             return new Intervention
             {
@@ -162,7 +175,7 @@ namespace condogestcet97.web.Helpers
                 Description = model.Description,
                 Date = model.Date,
                 CompanyName = model.CompanyName,
-                Incident = incident,
+                IncidentId = model.IncidentId,
                 IsCompleted = model.IsCompleted,
             };
         }
@@ -176,7 +189,7 @@ namespace condogestcet97.web.Helpers
                 Description = intervention.Description,
                 Date = intervention.Date,
                 CompanyName = intervention.CompanyName,
-                IncidentId = intervention.Incident.Id,
+                IncidentId = intervention.IncidentId,
                 IsCompleted = intervention.IsCompleted,
             };
         }
@@ -205,7 +218,7 @@ namespace condogestcet97.web.Helpers
             };
         }
 
-        public Vote ToVote(VoteViewModel model, bool isNew, Meeting meeting)
+        public Vote ToVote(VoteViewModel model, bool isNew)
         {
             return new Vote
             {
@@ -215,7 +228,7 @@ namespace condogestcet97.web.Helpers
                 VotesAgainst = model.VotesAgainst,
                 VotesInFavour = model.VotesInFavour,
                 IsApproved = model.IsApproved,
-                Meeting = meeting
+                MeetingId = model.MeetingId
             };
         }
 
@@ -224,7 +237,7 @@ namespace condogestcet97.web.Helpers
             return new VoteViewModel
             {
                 Id = vote.Id,
-                MeetingId = vote.Meeting.Id,
+                MeetingId = vote.MeetingId,
                 Description = vote.Description,
                 VotesAbstained = vote.VotesAbstained,
                 VotesAgainst = vote.VotesAgainst,

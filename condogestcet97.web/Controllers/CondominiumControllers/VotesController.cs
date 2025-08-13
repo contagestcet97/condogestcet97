@@ -1,30 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Helpers.IHelpers;
+﻿using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
 using condogestcet97.web.Helpers;
-using System.Diagnostics;
+using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
-using condogestcet97.web.Data.CondominiumRepositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
     public class VotesController : Controller
     {
         private readonly IVoteRepository _voteRepository;
-        private readonly IMeetingRepository _meetingRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
 
-        public VotesController(IMeetingRepository meetingRepository, IVoteRepository voteRepository, ICondominiumsConverterHelper converterHelper)
-        {           
-            _meetingRepository = meetingRepository;
+        public VotesController(IVoteRepository voteRepository, ICondominiumsConverterHelper converterHelper)
+        {
             _voteRepository = voteRepository;
             _converterHelper = converterHelper;
         }
@@ -70,30 +60,25 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             if (ModelState.IsValid)
             {
 
-                var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId);
+                var vote = _converterHelper.ToVote(model, true);
 
-
-                if (meeting != null)
+                try
                 {
-                    var vote = _converterHelper.ToVote(model, false, meeting);
-
-                    try
-                    {
-                        await _voteRepository.CreateAsync(vote);
+                    await _voteRepository.CreateAsync(vote);
 
 
-                        return RedirectToAction(nameof(Index));
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.ToString());
-                    }
                     return RedirectToAction(nameof(Index));
 
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+                return RedirectToAction(nameof(Index));
 
             }
+
+
             return View(model);
         }
 
@@ -126,30 +111,26 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId);
-
-                if (meeting != null)
+                try
                 {
-                    try
-                    {
-                        var vote = _converterHelper.ToVote(model, false, meeting);
+                    var vote = _converterHelper.ToVote(model, false);
 
-                        await _voteRepository.UpdateAsync(vote);
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!await _voteRepository.ExistAsync(model.Id))
-                        {
-                            return new NotFoundViewResult("VoteNotFound");
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
+                    await _voteRepository.UpdateAsync(vote);
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _voteRepository.ExistAsync(model.Id))
+                    {
+                        return new NotFoundViewResult("VoteNotFound");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
+
 
             return View(model);
         }
@@ -208,11 +189,6 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             }
         }
-
-        //public IActionResult VoteNotFound()
-        //{
-        //    return View();
-        //}
 
     }
 }

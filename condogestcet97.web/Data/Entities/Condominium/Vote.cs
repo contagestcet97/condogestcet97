@@ -11,7 +11,8 @@ namespace condogestcet97.web.Data.Entities.Condominium
         [MaxLength(250)]
         public string Description { get; set; }
 
-        public Meeting Meeting { get; set; }
+        public int MeetingId { get; set; }
+        public Meeting? Meeting { get; set; }
 
         public bool IsApproved { get; set; }
 
