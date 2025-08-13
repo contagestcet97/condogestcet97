@@ -48,6 +48,8 @@
                 <input asp-for="FiscalNumber" class="form-control" />
                 <span asp-validation-for="FiscalNumber" class="text-danger"></span>
             </div>
+            <a asp-action="AssignManagedCompanies" asp-route-id="@Model.Id" class="btn btn-warning">Assign Managed Companies</a>
+
 
             <div class="form-group form-check">
                 <label class="form-check-label">

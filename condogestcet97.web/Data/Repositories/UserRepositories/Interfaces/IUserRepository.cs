@@ -14,5 +14,15 @@ namespace condogestcet97.web.Data.Repositories.UserRepositories.Interfaces
         /// <param name="companyIds"> A list of company IDs to assign to the user.</param>
         /// <returns></returns>
         Task AssignCompaniesAsync(int userId, List<int> companyIds);
+
+        /// <summary>
+        /// Assigns a list of companies to a user as a manager.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="companyIds"></param>
+        /// <returns></returns>
+        Task AssignManagedCompaniesAsync(int userId, List<int> companyIds);
+        Task<List<Company>> GetManagedCompaniesAsync(int userId);
+
     }
 }

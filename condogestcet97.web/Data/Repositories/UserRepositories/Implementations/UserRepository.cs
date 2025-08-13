@@ -36,6 +36,44 @@ namespace condogestcet97.web.Data.Repositories.UserRepositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Assigns a list of companies to a user as a manager.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="companyIds"></param>
+        /// <returns></returns>
+        public async Task AssignManagedCompaniesAsync(int userId, List<int> companyIds)
+        {
+            var user = await _context.Users
+                .Include(u => u.ManagedCompanies)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null) return;
+
+            user.ManagedCompanies.Clear();
+
+            foreach (var companyId in companyIds)
+            {
+                user.ManagedCompanies.Add(new UserCompanyManager { UserId = userId, CompanyId = companyId });
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Retrieves a list of companies managed by a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<Company>> GetManagedCompaniesAsync(int userId)
+        {
+            return await _context.UserCompanyManagers
+                .Where(ucm => ucm.UserId == userId)
+                .Select(ucm => ucm.Company)
+                .ToListAsync();
+        }
+
+
     }
 
 }

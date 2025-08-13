@@ -3,36 +3,43 @@ using condogestcet97.web.Data.Entities.Users;
 using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Data.ViewModels.User;
 using condogestcet97.web.Data.ViewModels.UserViewModels;
+using condogestcet97.web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Controllers.UsersControllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IEmailServices _emailServices;
 
         public UserController(
             IMapper mapper,
             UserManager<User> userManager,
             IUserRepository userRepository,
-            ICompanyRepository companyRepository)
+            ICompanyRepository companyRepository,
+            IEmailServices emailServices)
         {
             _mapper = mapper;
             _userManager = userManager;
             _userRepository = userRepository;
             _companyRepository = companyRepository;
+            _emailServices = emailServices;
         }
 
         // GET: User
         public async Task<IActionResult> Index()
         {
             var users = await _userRepository.GetAllAsync();
-            return View("~/Views/Users/User/Index.cshtml", users);
+            var vmList = _mapper.Map<List<UserListViewModel>>(users);
+            return View("~/Views/Users/User/Index.cshtml", vmList);
         }
 
         // GET: User/Details/5
@@ -49,7 +56,8 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            return View("~/Views/Users/User/Details.cshtml", user);
+            var vm = _mapper.Map<UserDetailsViewModel>(user);
+            return View("~/Views/Users/User/Details.cshtml", vm);
         }
 
         // GET: User/Create
@@ -69,27 +77,20 @@ namespace condogestcet97.web.Controllers.UsersControllers
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrWhiteSpace(model.Password))
-                {
-                    ModelState.AddModelError(nameof(model.Password), "Password is required.");
-                    model.AllCompanies = (await _companyRepository.GetAllAsync()).ToList();
-                    return View("~/Views/Users/User/Create.cshtml", model);
-                }
+                var user = _mapper.Map<User>(model);
+                user.UserName = model.Email; // UserManager needs the UserName to be set
 
-                var user = new User
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Name = model.Name,
-                    TwoFAEnabled = model.TwoFAEnabled,
-                    Address = model.Address,
-                    PhoneNumber = model.PhoneNumber,
-                    FiscalNumber = model.FiscalNumber,
-                    EmailConfirmed = false
-                };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
+                    // send confirmation email
+                    await _emailServices.SendEmailAsync(
+                       user.Email,
+                       "Welcome to the system",
+                       $"Hello {user.Name},<br>Your account has been created successfully."
+                   );
+
                     return RedirectToAction(nameof(Index));
                 }
                 foreach (var error in result.Errors)
@@ -175,7 +176,8 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            return View("~/Views/Users/User/Delete.cshtml", user);
+            var vm = _mapper.Map<UserDeleteViewModel>(user);
+            return View("~/Views/Users/User/Delete.cshtml", vm);
         }
 
         // POST: User/Delete/5
@@ -186,6 +188,12 @@ namespace condogestcet97.web.Controllers.UsersControllers
             var user = await _userRepository.GetByIdAsync(id);
             if (user != null)
             {
+                //sending the user an email when deleting their account
+                await _emailServices.SendEmailAsync(
+                    user.Email,
+                    "Account Deletion Notification",
+                    $"Hello {user.Name},<br>Your account is deleted. If this was a mistake, please contact support."
+                );
                 _userRepository.Delete(user);
             }
 
@@ -221,6 +229,35 @@ namespace condogestcet97.web.Controllers.UsersControllers
             await _userRepository.AssignCompaniesAsync(vm.UserId, vm.SelectedCompanyIds);
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: User/AssignManagedCompanies/5
+        public async Task<IActionResult> AssignManagedCompanies(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var allCompanies = await _companyRepository.GetAllAsync();
+            var managedCompanyIds = user.ManagedCompanies.Select(ucm => ucm.CompanyId).ToList();
+
+            var vm = new UserManagedCompanyAssignmentViewModel
+            {
+                UserId = id,
+                AllCompanies = allCompanies.ToList(),
+                SelectedManagedCompanyIds = managedCompanyIds
+            };
+
+            return View(vm);
+        }
+
+        // POST: User/AssignManagedCompanies/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignManagedCompanies(UserManagedCompanyAssignmentViewModel vm)
+        {
+            await _userRepository.AssignManagedCompaniesAsync(vm.UserId, vm.SelectedManagedCompanyIds);
+            return RedirectToAction(nameof(Index));
+        }
+
 
         private async Task<bool> UserExists(int id)
         {

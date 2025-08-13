@@ -27,6 +27,7 @@ namespace condogestcet97.web.Data.Seed
 
             // Seed dummy company if it does not exist
             var dummyCompanyName = "Simao Company";
+
             var company = await dbContext.Companies.FirstOrDefaultAsync(c => c.Name == dummyCompanyName);
             if (company == null)
             {
@@ -48,7 +49,7 @@ namespace condogestcet97.web.Data.Seed
             {
                 adminUser = new User
                 {
-                    UserName = "admin",
+                    UserName = adminEmail, // Need to use the email as the username for Identity to login
                     Email = adminEmail,
                     Name = "Admin",
                     EmailConfirmed = true,
@@ -62,13 +63,13 @@ namespace condogestcet97.web.Data.Seed
             }
 
             // seed Employee user
-            var employeeEmail = "employee@company.com";
+            var employeeEmail = "contagestcet97@gmail.com"; // Change this to the desired employee email
             var employeeUser = await userManager.FindByEmailAsync(employeeEmail);
             if (employeeUser == null)
             {
                 employeeUser = new User
                 {
-                    UserName = "employee",
+                    UserName = employeeEmail, // Need to use the email as the username for Identity to login
                     Email = employeeEmail,
                     Name = "Employee",
                     EmailConfirmed = true,

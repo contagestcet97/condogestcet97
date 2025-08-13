@@ -2,10 +2,12 @@
 using condogestcet97.web.Data.Entities.Users;
 using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Data.ViewModels.RoleViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace condogestcet97.web.Controllers.UsersControllers
 {
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private readonly IRoleRepository _roleRepository;
@@ -108,7 +110,6 @@ namespace condogestcet97.web.Controllers.UsersControllers
             }
             return View("~/Views/Users/Role/Edit.cshtml", vm);
         }
-
 
         // GET: Role/Delete/5
         public async Task<IActionResult> Delete(int? id)

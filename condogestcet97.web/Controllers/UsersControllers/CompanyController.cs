@@ -2,11 +2,13 @@
 using condogestcet97.web.Data.Entities.Users;
 using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Data.ViewModels.CompanyViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Controllers.UsersControllers
 {
+    [Authorize(Roles = "Admin, Employee")]
     public class CompanyController : Controller
     {
         private readonly ICompanyRepository _companyRepository;
@@ -44,15 +46,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            // Mapping the entity to the view model - TODO use AutoMapper for this to avoid manual mapping
-            var vm = new CompanyDetailsViewModel
-            {
-                Id = company.Id,
-                Name = company.Name,
-                Address = company.Address,
-                Phone = company.Phone,
-                FiscalNumber = company.FiscalNumber
-            };
+            var vm = _mapper.Map<CompanyDetailsViewModel>(company);
 
             return View("~/Views/Users/Company/Details.cshtml", vm);
         }
@@ -70,15 +64,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         {
             if (ModelState.IsValid)
             {
-                // mapping the view model to the entity - TODO use AutoMapper for this to avoid manual mapping
-                var company = new Company
-                {
-                    Name = model.Name,
-                    Address = model.Address,
-                    Phone = model.Phone,
-                    FiscalNumber = model.FiscalNumber
-                };
-
+                var company = _mapper.Map<Company>(model);
                 await _companyRepository.AddAsync(company);
                 await _companyRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -100,16 +86,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            // Mapping the entity to the view model - TODO use AutoMapper for this to avoid manual mapping
-            var vm = new CompanyEditViewModel
-            {
-                Id = company.Id,
-                Name = company.Name,
-                Address = company.Address,
-                Phone = company.Phone,
-                FiscalNumber = company.FiscalNumber
-            };
-
+            var vm = _mapper.Map<CompanyEditViewModel>(company);
             return View("~/Views/Users/Company/Edit.cshtml", vm);
         }
 
@@ -131,11 +108,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                     return NotFound();
                 }
 
-                // map viewModel back to entity - TODO use AutoMapper for this to avoid manual mapping
-                company.Name = vm.Name;
-                company.Address = vm.Address;
-                company.Phone = vm.Phone;
-                company.FiscalNumber = vm.FiscalNumber;
+                _mapper.Map(vm, company);
 
                 try
                 {
@@ -172,15 +145,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
                 return NotFound();
             }
 
-            // using the companydetails view model for deletion confirmation - TODO use AutoMapper for this to avoid manual mapping
-            var vm = new CompanyDetailsViewModel
-            {
-                Id = company.Id,
-                Name = company.Name,
-                Address = company.Address,
-                Phone = company.Phone,
-                FiscalNumber = company.FiscalNumber
-            };
+            var vm = _mapper.Map<CompanyDeleteViewModel>(company);
 
             return View("~/Views/Users/Company/Delete.cshtml", vm);
         }
@@ -194,9 +159,8 @@ namespace condogestcet97.web.Controllers.UsersControllers
             if (company != null)
             {
                 _companyRepository.Delete(company);
+                await _companyRepository.SaveChangesAsync();
             }
-
-            await _companyRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

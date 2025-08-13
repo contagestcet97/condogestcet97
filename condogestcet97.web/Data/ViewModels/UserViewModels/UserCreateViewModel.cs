@@ -22,15 +22,15 @@ namespace condogestcet97.web.Data.ViewModels.User
         public bool TwoFAEnabled { get; set; }
 
         [Required(ErrorMessage = "Address is required.")]
-        [MaxLength(250, ErrorMessage = "Address cannot exceed 250 characters.")]
+        [MaxLength(100, ErrorMessage = "Address cannot exceed 100 characters.")]
         public string? Address { get; set; }
 
         [Required(ErrorMessage = "phone number is required.")]
-        [MaxLength(13, ErrorMessage = "Phone number cannot exceed 13 characters.")]
+        [MaxLength(15, ErrorMessage = "Phone number cannot exceed 15 characters.")]
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Fiscal number is required for tax purposes.")]
-        [MaxLength(10, ErrorMessage = "Fiscal number cannot exceed 10 characters.")]
+        [MaxLength(18, ErrorMessage = "Fiscal number cannot exceed 18 characters.")]
         public string? FiscalNumber { get; set; }
 
         public List<Company> AllCompanies { get; set; } = new();

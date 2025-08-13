@@ -12,7 +12,6 @@ namespace condogestcet97.web
 {
     public static class Program
     {
-
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -42,14 +41,30 @@ namespace condogestcet97.web
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
             // register UserManager and RoleManager
-            builder.Services.AddIdentity<User, Role>()
+            builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<DataContextUser>()
                 .AddDefaultTokenProviders();
-
 
             // Configure AutoMapper to map between ViewModels and Entities
             builder.Services.AddAutoMapper(typeof(UserProfile));
 
+            // Register EmailSettings from appsettings.json
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+            // Register email service for DI
+            builder.Services.AddScoped<IEmailServices, EmailServices>();
+
+            // asp net core Identity's IEmailSender (for confirmation, etc...):
+            builder.Services.AddScoped<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, EmailServices>();
+
+            // This redirects the user to the login page if they are not authenticated and indicates the correct path for access denied
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
+
+            // build is used to create the application instance after services are configured
             var app = builder.Build();
 
             #endregion
@@ -84,14 +99,30 @@ namespace condogestcet97.web
 
             #region Endpoints Configuration
 
+            // Middleware to handle 404 errors and redirect to a custom NotFoundPage
+            app.UseStatusCodePages(async context =>
+            {
+                if (context.HttpContext.Response.StatusCode == 404)
+                {
+                    // Asynchronously clear the response and redirect
+                    context.HttpContext.Response.Clear();
+                    context.HttpContext.Response.Redirect("/Home/NotFoundPage");
+                    await context.HttpContext.Response.CompleteAsync();
+                }
+            });
+
             //Endpoints for controllers
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            // Endpoints for Razor Pages
+            app.MapRazorPages();
+
             app.Run();
 
             #endregion
         }
+
     }
 }

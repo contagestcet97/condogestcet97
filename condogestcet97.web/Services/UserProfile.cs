@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using condogestcet97.web.Data.Entities.Users;
+using condogestcet97.web.Data.ViewModels.User;
 using condogestcet97.web.Data.ViewModels.UserViewModels;
 
 namespace condogestcet97.web.Services
@@ -16,9 +17,17 @@ namespace condogestcet97.web.Services
             //// mapping between User and UserEditViewModel
             //CreateMap<User, UserEditViewModel>();
 
-            // this mapping works for both directions
+
+            // this mapping works for both directions for editing
+            CreateMap<User, UserCreateViewModel>().ReverseMap();
+
             CreateMap<User, UserEditViewModel>().ReverseMap();
 
+            CreateMap<User, UserListViewModel>();
+
+            CreateMap<User, UserDetailsViewModel>();
+
+            CreateMap<User, UserDeleteViewModel>();
         }
     }
 }

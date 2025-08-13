@@ -20,5 +20,8 @@ namespace condogestcet97.web.Data.Entities.Users
         public string? FiscalNumber { get; set; }
 
         public ICollection<UserCompany> UserCompanies { get; set; } = new List<UserCompany>(); // Navigation property for many-to-many relationship with User
+
+        public ICollection<UserCompanyManager> Managers { get; set; } = new List<UserCompanyManager>(); // Navigation property for managers of the company
+
     }
 }

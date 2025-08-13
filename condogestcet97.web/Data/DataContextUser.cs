@@ -16,6 +16,10 @@ namespace condogestcet97.web.Data
         public DbSet<Token> Tokens { get; set; } // DbSet for Token entity, representing authentication tokens for users
         public DbSet<Recovery> Recoveries { get; set; } // DbSet for Recovery entity, representing recovery codes for two-factor authentication
 
+
+        public DbSet<UserCompanyManager> UserCompanyManagers { get; set; } // DbSet for UserCompanyManager entity, representing the many-to-many relationship between users and companies for managers
+
+
         public DataContextUser(DbContextOptions<DataContextUser> options)
              : base(options)
         {
@@ -84,13 +88,24 @@ namespace condogestcet97.web.Data
             modelBuilder.Entity<Company>()
                 .HasKey(c => c.Id);
 
-            // User: Primary Key
-            //modelBuilder.Entity<User>()
-            //    .HasKey(u => u.Id);
-
             // Role: Primary Key
             modelBuilder.Entity<Role>()
                 .HasKey(r => r.Id);
+
+
+            // UserCompanyManager: Composite Key for the many-to-many relationship between User and Company for managers
+            modelBuilder.Entity<UserCompanyManager>()
+                .HasKey(ucm => new { ucm.UserId, ucm.CompanyId });
+
+            modelBuilder.Entity<UserCompanyManager>()
+                .HasOne(ucm => ucm.User)
+                .WithMany(u => u.ManagedCompanies)
+                .HasForeignKey(ucm => ucm.UserId);
+
+            modelBuilder.Entity<UserCompanyManager>()
+                .HasOne(ucm => ucm.Company)
+                .WithMany(c => c.Managers)
+                .HasForeignKey(ucm => ucm.CompanyId);
         }
     }
 }

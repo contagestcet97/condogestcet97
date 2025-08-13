@@ -10,14 +10,14 @@ namespace condogestcet97.web.Services
         {
             //Automapper needs to be configured for bi-directional mapping or else it will only map in one direction.
 
-            //// mapping between CompanyListViewModel and Company
-            //CreateMap<CompanyListViewModel, Company>();
-
-            //// mapping between Company and CompanyListViewModel
-            //CreateMap<Company, CompanyListViewModel>();
-
             //mapping in both directions
-            CreateMap<Company, CompanyListViewModel>().ReverseMap();
+            CreateMap<Company, CompanyEditViewModel>().ReverseMap();
+            CreateMap<Company, CompanyCreateViewModel>().ReverseMap();
+
+            // mapping in one direction, only need to create/edit
+            CreateMap<Company, CompanyDetailsViewModel>();
+            CreateMap<Company, CompanyDeleteViewModel>();
+            CreateMap<Company, CompanyListViewModel>();
         }
     }
 }

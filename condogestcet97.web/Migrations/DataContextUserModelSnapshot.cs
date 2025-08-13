@@ -258,7 +258,9 @@ namespace condogestcet97.web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -272,7 +274,9 @@ namespace condogestcet97.web.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FiscalNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(18)
+                        .HasColumnType("nvarchar(18)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -281,7 +285,9 @@ namespace condogestcet97.web.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -339,6 +345,21 @@ namespace condogestcet97.web.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("UserCompanies");
+                });
+
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Users.UserCompanyManager", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "CompanyId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("UserCompanyManagers");
                 });
 
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Users.UserRole", b =>
@@ -459,6 +480,25 @@ namespace condogestcet97.web.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Users.UserCompanyManager", b =>
+                {
+                    b.HasOne("condogestcet97.web.Data.Entities.Users.Company", "Company")
+                        .WithMany("Managers")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("condogestcet97.web.Data.Entities.Users.User", "User")
+                        .WithMany("ManagedCompanies")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Users.UserRole", b =>
                 {
                     b.HasOne("condogestcet97.web.Data.Entities.Users.Role", "Role")
@@ -480,6 +520,8 @@ namespace condogestcet97.web.Migrations
 
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Users.Company", b =>
                 {
+                    b.Navigation("Managers");
+
                     b.Navigation("UserCompanies");
                 });
 
@@ -492,6 +534,8 @@ namespace condogestcet97.web.Migrations
 
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Users.User", b =>
                 {
+                    b.Navigation("ManagedCompanies");
+
                     b.Navigation("Recoveries");
 
                     b.Navigation("Tokens");
