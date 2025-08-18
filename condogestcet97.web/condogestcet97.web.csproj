@@ -10,6 +10,8 @@
     <Folder Include="Controllers\Api\" />
     <Folder Include="Helpers\IHelpers\" />
     <Folder Include="Migrations\" />
+	<Folder Include="wwwroot\font\brand\" />
+	<Folder Include="wwwroot\images\dashboard\" />
   </ItemGroup>
 
   <ItemGroup>
