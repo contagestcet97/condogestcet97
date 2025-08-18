@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body class="bg-dark text-light d-flex flex-column min-vh-100">
+<body class="bg-light text-dark d-flex flex-column min-vh-100">
     @* Loader *@
     @await Html.PartialAsync("_Loader")
 
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom border-secondary box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom border-secondary box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-people-roof fa-2xl" style="color: #e0efff;"></i><h3>CondoGest</h3></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-people-roof fa-2xl"></i><h3>CondoGest</h3></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,30 +25,29 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light active text-decoration-underline" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidade</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidade</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container flex-grow-1">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="mt-auto border-top footer text-light border-secondary">
+    <main class="flex-grow-1">
         <div class="container py-3">
-            &copy; 2025 - <a class="text-white" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fa-brands fa-facebook fa-lg" style="color: #e0efff;"> CondoGest</i></a>
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="mt-auto border-top footer text-dark border-secondary">
+        <div class="container py-3">
+            &copy; 2025 - <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fa-solid fa-circle-exclamation fa-lg"> CondoGest</i></a>
         </div>
     </footer>
+
     <script src="~/js/loader.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
