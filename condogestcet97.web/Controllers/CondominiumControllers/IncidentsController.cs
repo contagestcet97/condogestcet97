@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using condogestcet97.web.Data;
+using condogestcet97.web.Data.CondominiumRepositories;
+using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using condogestcet97.web.Data.Entities.Condominium;
+using condogestcet97.web.Data.Repositories;
+using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Helpers;
+using condogestcet97.web.Helpers.IHelpers;
+using condogestcet97.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using condogestcet97.web.Data.Repositories.IRepositories;
-using condogestcet97.web.Helpers.IHelpers;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Data.Repositories;
-using condogestcet97.web.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using condogestcet97.web.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 {
@@ -21,13 +22,18 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
+        private readonly ICondoRepository _condoRepository;
+        private readonly IApartmentRepository _apartmentRepository;
 
         public IncidentsController(IIncidentRepository incidentRepository,
-            ICondominiumsConverterHelper converterHelper)
+            ICondominiumsConverterHelper converterHelper,
+            ICondoRepository condoRepository,
+            IApartmentRepository apartmentRepository)
         {
             _converterHelper = converterHelper;
             _incidentRepository = incidentRepository;
-
+            _condoRepository = condoRepository;
+            _apartmentRepository = apartmentRepository;
         }
 
         // GET: Incidents
@@ -58,7 +64,21 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         // GET: Incidents/Create
         public IActionResult Create()
         {
-            return View();
+
+            var model = new IncidentViewModel
+            {
+                Date = DateTime.Now,
+
+                Condos = _condoRepository.GetAll()
+                 .Select(m => new SelectListItem
+                 {
+                     Value = m.Id.ToString(),
+                     Text = m.Address
+                 })
+                 .ToList(),
+            };
+
+            return View(model);
         }
 
         // POST: Incidents/Create
@@ -110,6 +130,23 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
 
             var model = _converterHelper.ToIncidentViewModel(incident);
 
+            model.Condos = _condoRepository.GetAll()
+             .Select(m => new SelectListItem
+             {
+                 Value = m.Id.ToString(),
+                 Text = m.Address
+             })
+             .ToList();
+
+
+            model.Apartments = _apartmentRepository.GetAll()
+                     .Where(a => a.CondoId == incident.CondoId)
+                     .Select(a => new SelectListItem
+                     {
+                         Value = a.Id.ToString(),
+                         Text = a.Flat
+                     }).ToList();
+           
             return View(model);
         }
 
@@ -198,6 +235,18 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
                     ErrorMessage = "Ocorreu um erro inesperado ao tentar apagar o incident."
                 });
             }
+        }
+
+        [HttpGet]
+        public JsonResult GetApartmentsByCondo(int condoId)
+        {
+            var apartments = _apartmentRepository
+                .GetAll()
+                .Where(a => a.CondoId == condoId)
+                .Select(a => new { a.Id, a.Flat }) 
+                .ToList();
+
+            return Json(apartments);
         }
 
     }

@@ -32,26 +32,24 @@
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="CondoId" class="control-label"></label>
-                <input asp-for="CondoId" class="form-control" />
+                <label asp-for="CondoId" class="control-label">Select condo</label>
+                <select asp-for="CondoId" asp-items="Model.Condos" class="form-control" id="CondoSelect">
+                    <option value="">Select a condo</option>
+                </select>
                 <span asp-validation-for="CondoId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="CondoAddress" class="control-label"></label>
-                <input asp-for="CondoAddress" class="form-control" />
-                <span asp-validation-for="CondoAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApartmentId" class="control-label"></label>
-                <input asp-for="ApartmentId" class="form-control" />
+                <label asp-for="ApartmentId" class="control-label">Select apartment</label>
+                <select asp-for="ApartmentId" asp-items="Model.Apartments" class="form-control" id="ApartmentSelect" disabled>
+                    <option value="">Select an apartment</option>
+                </select>
                 <span asp-validation-for="ApartmentId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ApartmentFlat" class="control-label"></label>
-                <input asp-for="ApartmentFlat" class="form-control" />
-                <span asp-validation-for="ApartmentFlat" class="text-danger"></span>
-            </div>
+
+
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsResolved" /> @Html.DisplayNameFor(model => model.IsResolved)
@@ -70,4 +68,31 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.getElementById("CondoSelect").addEventListener("change", function () {
+            var condoId = this.value;
+            var apartmentSelect = document.getElementById("ApartmentSelect");
+
+            apartmentSelect.innerHTML = '<option value="">Select an apartment</option>';
+
+            if (condoId) {
+
+                apartmentSelect.disabled = false;
+
+                fetch(`/Incidents/GetApartmentsByCondo?condoId=${condoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (apartment) {
+                            var option = document.createElement("option");
+                            option.value = apartment.id;
+                            option.text = apartment.flat; 
+                            apartmentSelect.add(option);
+                        });
+                    });
+            } else {
+                apartmentSelect.disabled = true; 
+            }
+        });
+    </script>
 }

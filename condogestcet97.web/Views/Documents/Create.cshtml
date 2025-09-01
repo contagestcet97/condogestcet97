@@ -22,24 +22,26 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmissionDate" class="control-label"></label>
-                <input asp-for="EmissionDate" class="form-control" />
-                <span asp-validation-for="EmissionDate" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="EmissionDate" />
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
+                <select asp-for="Type" class="form-control" id="TypeSelect">
+                    <option value="">-- Select Type --</option>
+                    <option value="Meeting">Meeting</option>
+                    <option value="Intervention">Intervention</option>
+                </select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" id="MeetingGroup" style="display:none;">
                 <label asp-for="MeetingId" class="control-label"></label>
-                <input asp-for="MeetingId" class="form-control" />
+                <select asp-for="MeetingId" asp-items="Model.Meetings" class="form-control"></select>
                 <span asp-validation-for="MeetingId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" id="InterventionGroup" style="display:none;">
                 <label asp-for="InterventionId" class="control-label"></label>
-                <input asp-for="InterventionId" class="form-control" />
+                <select asp-for="InterventionId" asp-items="Model.Interventions" class="form-control"></select>
                 <span asp-validation-for="InterventionId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -55,4 +57,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function toggleDropdown() {
+            var type = document.getElementById("TypeSelect").value;
+            document.getElementById("MeetingGroup").style.display = (type === "Meeting") ? "block" : "none";
+            document.getElementById("InterventionGroup").style.display = (type === "Intervention") ? "block" : "none";
+        }
+
+        document.getElementById("TypeSelect").addEventListener("change", toggleDropdown);
+
+        toggleDropdown();
+    </script>
 }

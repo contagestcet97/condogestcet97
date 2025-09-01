@@ -38,8 +38,10 @@
                 <span asp-validation-for="VotesAbstained" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MeetingId" class="control-label"></label>
-                <input asp-for="MeetingId" class="form-control" />
+                <label asp-for="MeetingId" class="control-label">Select meeting</label>
+                <select asp-for="MeetingId" asp-items="Model.Meetings" class="form-control" id="MeetingSelect">
+                    <option value="">Select a meeting</option>
+                </select>
                 <span asp-validation-for="MeetingId" class="text-danger"></span>
             </div>
             <div class="form-group">

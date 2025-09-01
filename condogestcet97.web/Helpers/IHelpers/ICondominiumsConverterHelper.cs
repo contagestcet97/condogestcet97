@@ -23,7 +23,7 @@ namespace condogestcet97.web.Helpers.IHelpers
 
         InterventionViewModel ToInterventionViewModel(Intervention intervention);
 
-        Meeting ToMeeting(MeetingViewModel model, bool isNew, Condo condo);
+        Meeting ToMeeting(MeetingViewModel model, bool isNew);
 
         MeetingViewModel ToMeetingViewModel(Meeting meeting);
 

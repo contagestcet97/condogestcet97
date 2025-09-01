@@ -19,12 +19,15 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     public class ApartmentsController : Controller
     {
         private readonly IApartmentRepository _apartmentRepository;
+        private readonly ICondoRepository _condoRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
 
-        public ApartmentsController(IApartmentRepository apartmentRepository,
+
+        public ApartmentsController(IApartmentRepository apartmentRepository, ICondoRepository condoRepository,
             ICondominiumsConverterHelper converterHelper)
         {
             _apartmentRepository = apartmentRepository;
+            _condoRepository = condoRepository;
             _converterHelper = converterHelper;
         }
 
@@ -57,6 +60,8 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         // GET: Apartments/Create
         public IActionResult Create()
         {
+            ViewBag.Condos = _condoRepository.GetComboCondos();
+
             return View();
         }
 
@@ -70,12 +75,6 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             if (ModelState.IsValid)
             {
-                //var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
-
-                //if (condo != null)
-                //{
-
-                    //var apartment = _converterHelper.ToApartment(model, true, condo);
 
                 var apartment = _converterHelper.ToApartment(model, true);
 
@@ -125,10 +124,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                //var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
 
-                //if (condo != null)
-                //{
                     try
                     {
                         var apartment = _converterHelper.ToApartment(model, false);

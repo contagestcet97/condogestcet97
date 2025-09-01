@@ -34,8 +34,10 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IncidentId" class="control-label"></label>
-                <input asp-for="IncidentId" class="form-control" readonly />
+                <label asp-for="IncidentId" class="control-label">Select incident</label>
+                <select asp-for="IncidentId" asp-items="Model.Incidents" class="form-control" id="CondoSelect">
+                    <option value="">Select an incident</option>
+                </select>
                 <span asp-validation-for="IncidentId" class="text-danger"></span>
             </div>
             <div class="form-group form-check">

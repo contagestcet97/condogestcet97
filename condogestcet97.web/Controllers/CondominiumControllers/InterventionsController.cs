@@ -1,8 +1,10 @@
 ﻿using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using condogestcet97.web.Data.Entities.Condominium;
 using condogestcet97.web.Helpers;
 using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -12,12 +14,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     {
         private readonly ICondominiumsConverterHelper _converterHelper;
         private readonly IInterventionRepository _interventionRepository;
+        private readonly IIncidentRepository _incidentRepository;
 
         public InterventionsController(ICondominiumsConverterHelper condiminiumsConverterHelper,
-            IInterventionRepository interventionRepository)
+            IInterventionRepository interventionRepository, IIncidentRepository incidentRepository)
         {
             _interventionRepository = interventionRepository;
             _converterHelper = condiminiumsConverterHelper;
+            _incidentRepository = incidentRepository;
         }
 
         // GET: Interventions
@@ -48,7 +52,20 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         // GET: Interventions/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new InterventionViewModel
+            {
+                Date = DateTime.Now.Date,
+
+                Incidents = _incidentRepository.GetAll()
+                .Select(m => new SelectListItem
+                {
+                    Value = m.Id.ToString(),
+                    Text = $"{m.Title} {m.Date}"
+                })
+                .ToList(),
+            };
+
+            return View(model);
         }
 
         // POST: Interventions/Create
@@ -61,12 +78,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             if (ModelState.IsValid)
             {
 
-                //var incident = await _incidentRepository.GetByIdTrackedAsync(model.IncidentId);
-
-
-                //if (incident != null)
-                //{
-                var intervention = _converterHelper.ToIntervention(model, false);
+                var intervention = _converterHelper.ToIntervention(model, true);
 
                 try
                 {
@@ -104,6 +116,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             var model = _converterHelper.ToInterventionViewModel(intervention);
 
+            model.Incidents = _incidentRepository.GetAll()
+                .Select(m => new SelectListItem
+                {
+                    Value = m.Id.ToString(),
+                    Text = $"{m.Title} {m.Date}"
+                })
+                .ToList();
+
             return View(model);
         }
 
@@ -116,10 +136,6 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                //var incident = await _incidentRepository.GetByIdAsync(model.IncidentId);
-
-                //if (incident != null)
-                //{
                 try
                 {
                     var intervention = _converterHelper.ToIntervention(model, false);

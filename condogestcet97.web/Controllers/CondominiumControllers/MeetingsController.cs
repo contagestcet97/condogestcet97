@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using condogestcet97.web.Data.Entities.Condominium;
+using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Helpers;
+using condogestcet97.web.Helpers.IHelpers;
+using condogestcet97.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Helpers.IHelpers;
-using condogestcet97.web.Data.CondominiumRepositories;
-using condogestcet97.web.Helpers;
 using System.Diagnostics;
-using condogestcet97.web.Data.Repositories.IRepositories;
-using condogestcet97.web.Models;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
@@ -24,8 +18,7 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         private readonly ICondominiumsConverterHelper _converterHelper;
 
         public MeetingsController(IMeetingRepository meetingRepository,
-            ICondominiumsConverterHelper condiminiumsConverterHelper,
-            ICondoRepository condoRepository)
+            ICondominiumsConverterHelper condiminiumsConverterHelper, ICondoRepository condoRepository)
         {
             _meetingRepository = meetingRepository;
             _converterHelper = condiminiumsConverterHelper;
@@ -60,7 +53,20 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         // GET: Meetings/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new MeetingViewModel
+            {
+                Date = DateTime.Now,
+
+                Condos = _condoRepository.GetAll()
+                 .Select(m => new SelectListItem
+                 {
+                     Value = m.Id.ToString(),
+                     Text = m.Address
+                 })
+                 .ToList(),
+            };
+
+            return View(model);
         }
 
         // POST: Meetings/Create
@@ -71,34 +77,27 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         public async Task<IActionResult> Create(MeetingViewModel model)
         {
 
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
 
-                var condo = await _condoRepository.GetByIdTrackedAsync(model.CondoId);
+                var meeting = _converterHelper.ToMeeting(model, true);
 
-
-                if (condo != null)
+                try
                 {
-                    var meeting = _converterHelper.ToMeeting(model, false, condo);
-
-                    try
-                    {
-                        await _meetingRepository.CreateAsync(meeting);
+                    await _meetingRepository.CreateAsync(meeting);
 
 
-                        return RedirectToAction(nameof(Index));
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.ToString());
-                    }
                     return RedirectToAction(nameof(Index));
 
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+                return RedirectToAction(nameof(Index));
 
             }
-            
+
             return View(model);
         }
 
@@ -119,6 +118,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
 
             var model = _converterHelper.ToMeetingViewModel(meeting);
 
+            model.Condos = _condoRepository.GetAll()
+             .Select(m => new SelectListItem
+             {
+                 Value = m.Id.ToString(),
+                 Text = m.Address
+             })
+             .ToList();
+
             return View(model);
         }
 
@@ -131,30 +138,26 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (ModelState.IsValid)
             {
-                var condo = await _condoRepository.GetByIdAsync(model.CondoId);
-
-                if (condo != null)
+                try
                 {
-                    try
-                    {
-                        var meeting = _converterHelper.ToMeeting(model, false, condo);
+                    var meeting = _converterHelper.ToMeeting(model, false);
 
-                        await _meetingRepository.UpdateAsync(meeting);
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!await _meetingRepository.ExistAsync(model.Id))
-                        {
-                            return new NotFoundViewResult("InterventionNotFound");
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return RedirectToAction(nameof(Index));
+                    await _meetingRepository.UpdateAsync(meeting);
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _meetingRepository.ExistAsync(model.Id))
+                    {
+                        return new NotFoundViewResult("InterventionNotFound");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
+
 
             return View(model);
         }

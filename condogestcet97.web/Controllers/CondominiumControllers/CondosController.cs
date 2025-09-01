@@ -68,20 +68,23 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CondoViewModel model)
         {
-            
-            var condo = _converterHelper.ToCondo(model, true);
 
-            try
+            if (ModelState.IsValid)
             {
-                await _condoRepository.CreateAsync(condo);
+                var condo = _converterHelper.ToCondo(model, true);
+
+                try
+                {
+                    await _condoRepository.CreateAsync(condo);
 
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
             }
 
             return View(model);

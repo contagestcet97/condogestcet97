@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using condogestcet97.web.Data.Entities.Condominium;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using condogestcet97.web.Data.Entities.Condominium;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace condogestcet97.web.Models
 {
@@ -8,6 +9,7 @@ namespace condogestcet97.web.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Notifier Id")]
         public string NotifierId { get; set; }
 
         public string Title { get; set; }
@@ -17,14 +19,20 @@ namespace condogestcet97.web.Models
 
         public DateTime Date { get; set; }
 
+        [Display(Name = "Resolved")]
         public bool IsResolved { get; set; }
 
         public int? ApartmentId { get; set; }
 
+        [Display(Name = "Flat")]
         public string? ApartmentFlat {  get; set; }
 
         public int CondoId { get; set; }
 
-        public string CondoAddress { get; set; }
+        [Display(Name = "Address")]
+        public string? CondoAddress { get; set; }
+
+        public IEnumerable<SelectListItem>? Condos { get; set; }
+        public IEnumerable<SelectListItem>? Apartments { get; set; }
     }
 }

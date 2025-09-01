@@ -10,7 +10,8 @@ namespace condogestcet97.web.Models
 
         public int CondoId { get; set; }
 
-        public string CondoAddress { get; set; }
+
+        public string? CondoAddress { get; set; }
 
         public string Flat { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using condogestcet97.web.Data.Entities.Condominium;
 using condogestcet97.web.Data.Repositories.IRepositories;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data.Repositories
@@ -27,6 +28,24 @@ namespace condogestcet97.web.Data.Repositories
             return _context.Condos
              //.Include(c => c.Apartments)
              .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public IEnumerable<SelectListItem> GetComboCondos()
+        {
+            var list = _context.Condos.Select(a => new SelectListItem
+            {
+                Text = a.Address,
+                Value = a.Id.ToString()
+
+            }).OrderBy(l => l.Text).ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "(Select a condo...)",
+                Value = "0"
+            });
+
+            return list;
         }
     }
 }

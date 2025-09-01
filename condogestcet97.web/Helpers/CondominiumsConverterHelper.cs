@@ -7,16 +7,7 @@ namespace condogestcet97.web.Helpers
 {
     public class CondominiumsConverterHelper : ICondominiumsConverterHelper
     {
-        //public Apartment ToApartment(ApartmentViewModel model, bool isNew, Condo condo)
-        //{
-        //    return new Apartment
-        //    {
-        //        Id = isNew ? 0 : model.Id,
-        //        Condo = condo,
-        //        Flat = model.Flat,
-        //        Divisions = model.Divisions
-        //    };
-        //}
+ 
 
         public Apartment ToApartment(ApartmentViewModel model, bool isNew)
         {
@@ -194,7 +185,7 @@ namespace condogestcet97.web.Helpers
             };
         }
 
-        public Meeting ToMeeting(MeetingViewModel model, bool isNew, Condo condo)
+        public Meeting ToMeeting(MeetingViewModel model, bool isNew)
         {
             return new Meeting
             {
@@ -202,7 +193,7 @@ namespace condogestcet97.web.Helpers
                 Topic = model.Topic,
                 Type = model.Type,
                 Date = model.Date,
-                Condo = condo,
+                CondoId = model.CondoId,
             };
         }
 
@@ -214,7 +205,7 @@ namespace condogestcet97.web.Helpers
                 Topic = meeting.Topic,
                 Type = meeting.Type,
                 Date = meeting.Date,
-                CondoId = meeting.Condo.Id
+                CondoId = meeting.CondoId
             };
         }
 

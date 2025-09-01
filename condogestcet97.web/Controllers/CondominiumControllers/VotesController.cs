@@ -3,6 +3,7 @@ using condogestcet97.web.Helpers;
 using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -11,12 +12,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
     public class VotesController : Controller
     {
         private readonly IVoteRepository _voteRepository;
+        private readonly IMeetingRepository _meetingRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
 
-        public VotesController(IVoteRepository voteRepository, ICondominiumsConverterHelper converterHelper)
+        public VotesController(IVoteRepository voteRepository, ICondominiumsConverterHelper converterHelper, IMeetingRepository meetingRepository)
         {
             _voteRepository = voteRepository;
             _converterHelper = converterHelper;
+            _meetingRepository = meetingRepository;
         }
 
         // GET: Votes
@@ -47,7 +50,18 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         // GET: Votes/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new VoteViewModel
+            {
+                Meetings = _meetingRepository.GetAll().
+                Select(m => new SelectListItem
+                {
+                    Value = m.Id.ToString(),
+                    Text = $"{m.Topic} {m.Date}"
+                })
+                 .ToList(),
+            };
+
+            return View(model);
         }
 
         // POST: Votes/Create
@@ -98,6 +112,14 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
             }
 
             var model = _converterHelper.ToVoteViewModel(vote);
+
+            model.Meetings = _meetingRepository.GetAll().
+                Select(m => new SelectListItem
+                {
+                    Value = m.Id.ToString(),
+                    Text = $"{m.Topic} {m.Date}"
+                })
+                 .ToList();
 
             return View(model);
         }

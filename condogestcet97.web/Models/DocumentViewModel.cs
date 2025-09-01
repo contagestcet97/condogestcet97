@@ -1,6 +1,7 @@
 ﻿using condogestcet97.web.Data.Entities.Condominium;
-using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace condogestcet97.web.Models
 {
@@ -14,10 +15,14 @@ namespace condogestcet97.web.Models
 
         public DateTime EmissionDate { get; set; }
 
-        public DocumentType Type { get; set; }
+        public DocumentType? Type { get; set; }
 
+        [Display(Name = "Meeting")]
         public int? MeetingId { get; set; }
-
+        [Display(Name = "Intervention")]
         public int? InterventionId { get; set; }
+
+        public IEnumerable<SelectListItem>? Meetings { get; set; }
+        public IEnumerable<SelectListItem>? Interventions { get; set; }
     }
 }

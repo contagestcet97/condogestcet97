@@ -1,34 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using condogestcet97.web.Data;
+using condogestcet97.web.Data.CondominiumRepositories;
+using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using condogestcet97.web.Data.Entities.Condominium;
+using condogestcet97.web.Helpers;
+using condogestcet97.web.Helpers.IHelpers;
+using condogestcet97.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using System.Diagnostics;
-using condogestcet97.web.Models;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Helpers.IHelpers;
-using condogestcet97.web.Helpers;
 using Microsoft.Identity.Client;
+using NuGet.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
     public class DocumentsController : Controller
     {
         private readonly IDocumentRepository _documentRepository;
+        private readonly IMeetingRepository _meetingRepository;
+        private readonly IInterventionRepository _interventionRepository;
         private readonly ICondominiumsConverterHelper _converterHelper;
 
-        public DocumentsController(DataContextCondominium context,
-            IDocumentRepository documentRepository,
-            ICondominiumsConverterHelper converterHelper)
+        public DocumentsController(IDocumentRepository documentRepository,
+            ICondominiumsConverterHelper converterHelper,
+            IMeetingRepository meetingRepository,
+            IInterventionRepository interventionRepository)
         {
             _documentRepository = documentRepository;
             _converterHelper = converterHelper;
-
+            _meetingRepository = meetingRepository;
+            _interventionRepository = interventionRepository;
         }
 
         // GET: Documents
@@ -73,7 +79,29 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         // GET: Documents/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new DocumentViewModel
+            {
+                EmissionDate = DateTime.Now,
+                Type = null,
+
+                Meetings = _meetingRepository.GetAll()
+                             .Select(m => new SelectListItem
+                             {
+                                 Value = m.Id.ToString(),
+                                 Text = $"{m.Topic} ({m.Date:dd/MM/yyyy})"
+                             })
+                             .ToList(),
+
+                Interventions = _interventionRepository.GetAll()
+                             .Select(i => new SelectListItem
+                             {
+                                 Value = i.Id.ToString(),
+                                 Text = $"{i.Title} ({i.Date:dd/MM/yyyy})"
+                             })
+                             .ToList()
+            };
+
+            return View(model);
         }
 
         // POST: Documents/Create
@@ -83,6 +111,17 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DocumentViewModel model)
         {
+
+            if (model.Type == DocumentType.Meeting)
+            {
+                model.InterventionId = null;
+            }
+            else if (model.Type == DocumentType.Intervention)
+            {
+                model.MeetingId = null;
+            }
+
+
             if (ModelState.IsValid)
             {
 
@@ -109,14 +148,11 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
         {
             if (model.Type == DocumentType.Meeting)
             {
-                //var meeting = await _meetingRepository.GetByIdTrackedAsync(model.MeetingId.Value);
 
                 var meetingDocument = _converterHelper.ToDocument(model, true);
 
                 return meetingDocument;
             }
-
-            //var intervention = await _interventionRepository.GetByIdTrackedAsync(model.InterventionId.Value);
 
             var interventionDocument = _converterHelper.ToDocument(model, true);
 
@@ -138,7 +174,23 @@ namespace condogestcet97.web.Controllers.CondominiumControllers
                 return new NotFoundViewResult("DocumentNotFound");
             }
 
-                return View(model);
+            model.Meetings = _meetingRepository.GetAll()
+                             .Select(m => new SelectListItem
+                             {
+                                 Value = m.Id.ToString(),
+                                 Text = $"{m.Topic} ({m.Date:dd/MM/yyyy})"
+                             })
+                             .ToList();
+
+            model.Interventions = _interventionRepository.GetAll()
+                            .Select(i => new SelectListItem
+                            {
+                                Value = i.Id.ToString(),
+                                Text = $"{i.Title} ({i.Date:dd/MM/yyyy})"
+                            })
+                            .ToList();
+
+            return View(model);
         }
 
         private async Task<DocumentViewModel> ConvertToSpecificModel(int? id)

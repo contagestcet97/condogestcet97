@@ -5,6 +5,7 @@ namespace condogestcet97.web.Data.Entities.Condominium
 {
     public enum MeetingType
     {
+        [Display(Name = "In person")]
         InPerson,
         Online
     }
@@ -20,7 +21,8 @@ namespace condogestcet97.web.Data.Entities.Condominium
 
         public MeetingType Type { get; set; }
 
-        public Condo Condo { get; set; }
+        public int CondoId { get; set; }
+        public Condo? Condo { get; set; }
 
     }
 }
