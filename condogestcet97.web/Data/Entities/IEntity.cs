@@ -1,4 +1,4 @@
-﻿namespace condogestcet97.web.Data.Entities.Financial
+﻿namespace condogestcet97.web.Data.Entities
 {
     public interface IEntity
     {

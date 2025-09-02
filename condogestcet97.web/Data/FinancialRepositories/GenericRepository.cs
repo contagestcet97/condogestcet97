@@ -1,4 +1,4 @@
-﻿using condogestcet97.web.Data.Entities.Financial;
+﻿using condogestcet97.web.Data.Entities;
 using condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories;
 using Microsoft.EntityFrameworkCore;
 

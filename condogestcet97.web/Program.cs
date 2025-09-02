@@ -18,6 +18,8 @@ namespace condogestcet97.web
 
             builder.Services.AddTransient<SeedDbFinancial>();
             builder.Services.AddScoped<IQuotaRepository, QuotaRepository>();
+            builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<IFinancialConverterHelper, FinancialConverterHelper>();
             builder.Services.AddDbContext<DataContextFinancial>(options =>
             {

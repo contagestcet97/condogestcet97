@@ -15,5 +15,6 @@
         public decimal PaymentValue { get; set; }
 
         public int? CondoId { get; set; }
+
     }
 }

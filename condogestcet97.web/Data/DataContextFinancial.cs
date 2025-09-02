@@ -8,6 +8,10 @@ namespace condogestcet97.web.Data
     {
         public DbSet<Quota> Quotas { get; set; }
 
+        public DbSet<Expense> Expenses { get; set; }
+
+        public DbSet<Service> Services { get; set; }
+
         public DataContextFinancial(DbContextOptions<DataContextFinancial> options) : base(options)
         {
 
@@ -23,6 +27,15 @@ namespace condogestcet97.web.Data
             modelBuilder.Entity<Quota>()
                .Property(p => p.PaymentValue)
                .HasColumnType("decimal(18,2)");
+
+
+            modelBuilder.Entity<Expense>()
+               .Property(p => p.Amount)
+               .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Service>()
+           .Property(p => p.DefaultFee)
+           .HasColumnType("decimal(18,2)");
 
             base.OnModelCreating(modelBuilder);
         }
