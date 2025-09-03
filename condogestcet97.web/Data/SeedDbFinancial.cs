@@ -26,6 +26,7 @@ namespace condogestcet97.web.Data
                     PaymentValue = 24.99m,
                     IsPaid = false,
                     LateFee = 2.00m,
+                    CondoId = 1,
                 };
 
                 _context.Quotas.Add(quota);
@@ -104,6 +105,47 @@ namespace condogestcet97.web.Data
                     _context.Expenses.Add(expense);
                     _context.Expenses.Add(expense2);
                     _context.Expenses.Add(expense3);
+
+                }
+            }
+            await _context.SaveChangesAsync();
+
+            if (!_context.Invoices.Any())
+            {
+                var expense = _context.Quotas.FirstOrDefault(i => i.Id == 1);
+                var quota = _context.Quotas.FirstOrDefault(i => i.Id == 1);
+
+                if (expense != null)
+                {
+                    IncomingInvoice invoice = new IncomingInvoice
+                    {
+                        Description = "Fire and Flood annual insurance",
+                        DueDate = DateTime.Now.AddDays(15),
+                        IsPaid = false,
+                        SupplierContact = "lisboa@seguros.pt",
+                        TotalAmount = 120.00m,
+                        ExpenseId = expense.Id,
+                        SupplierName = "Seguros Portugal",
+                        Type = InvoiceType.Incoming
+
+                    };
+
+                    _context.Invoices.Add(invoice);
+
+                    OutgoingInvoice outgoingInvoice = new OutgoingInvoice
+                    {
+                        Description = "Quota payment August",
+                        DueDate = DateTime.Now.AddDays(4),
+                        IsPaid = false,
+                        TotalAmount = 40.00m,
+                        UserId = "test user",
+                        QuotaId = quota.Id,
+                        EmissionDate = DateTime.Now.AddDays(-2),
+                        Type = InvoiceType.Outgoing
+                    };
+
+                    _context.Invoices.Add(invoice);
+                    _context.Invoices.Add(outgoingInvoice);
 
                 }
             }

@@ -1,0 +1,134 @@
+﻿@using condogestcet97.web.Data.Entities.Financial
+@model IEnumerable<condogestcet97.web.Data.Entities.Financial.Invoice>
+
+@{
+    ViewData["Title"] = "Index";
+    var incomingInvoices = Model.Any(i => i is IncomingInvoice);
+    var outgoingInvoices = Model.Any(i => i is OutgoingInvoice);
+
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPaid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            @if (incomingInvoices)
+            {
+                <th>SupplierName</th>
+                <th>SupplierContact</th>
+                <th>Expense</th>
+                <th>CondoId</th>
+            }
+
+            @if (outgoingInvoices)
+            {
+                <th>CondoId</th>
+                <th>User</th>
+                <th>Quota</th>
+                <th>EmissionDate</th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPaid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+                @if (incomingInvoices)
+                {
+                    <td>
+                        @if (item is IncomingInvoice a)
+                        {
+                            @a.SupplierName
+                        }
+                    </td>
+                    <td>
+                        @if (item is IncomingInvoice b)
+                        {
+                            @b.SupplierContact
+                        }
+                    </td>
+                    <td>
+                        @if (item is IncomingInvoice c)
+                        {
+                            @c.Expense.Amount
+                        }
+                    </td>
+                    <td>
+                        @if (item is IncomingInvoice d)
+                        {
+                            @d.Expense.Quota.CondoId
+                        }
+                    </td>
+                }
+
+                @if (outgoingInvoices)
+                {
+                    <td>
+                        @if (item is OutgoingInvoice d)
+                        {
+                            @d.Quota?.CondoId
+                        }
+                    </td>
+                    <td>
+                        @if (item is OutgoingInvoice a)
+                        {
+                            @a.UserId
+                        }
+                    </td>
+                    <td>
+                        @if (item is OutgoingInvoice b)
+                        {
+                            @b.Quota.PaymentValue
+                        }
+                    </td>
+                    <td>
+                        @if (item is OutgoingInvoice c)
+                        {
+                            @c.EmissionDate
+                        }
+                    </td>
+
+                }
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

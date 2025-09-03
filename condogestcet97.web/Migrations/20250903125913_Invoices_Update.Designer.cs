@@ -12,8 +12,8 @@ using condogestcet97.web.Data;
 namespace condogestcet97.web.Migrations
 {
     [DbContext(typeof(DataContextFinancial))]
-    [Migration("20250902141713_Add-migration Expenses_And_Services")]
-    partial class AddmigrationExpenses_And_Services
+    [Migration("20250903125913_Invoices_Update")]
+    partial class Invoices_Update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,45 @@ namespace condogestcet97.web.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceType")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Invoices");
+
+                    b.HasDiscriminator<string>("InvoiceType").HasValue("Invoice");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.Quota", b =>
@@ -128,21 +167,84 @@ namespace condogestcet97.web.Migrations
                     b.ToTable("Services");
                 });
 
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.IncomingInvoice", b =>
+                {
+                    b.HasBaseType("condogestcet97.web.Data.Entities.Financial.Invoice");
+
+                    b.Property<int>("ExpenseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierContact")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.HasIndex("ExpenseId");
+
+                    b.HasDiscriminator().HasValue("Incoming");
+                });
+
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.OutgoingInvoice", b =>
+                {
+                    b.HasBaseType("condogestcet97.web.Data.Entities.Financial.Invoice");
+
+                    b.Property<DateTime>("EmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("QuotaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasIndex("QuotaId");
+
+                    b.HasDiscriminator().HasValue("Outgoing");
+                });
+
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.Expense", b =>
                 {
                     b.HasOne("condogestcet97.web.Data.Entities.Financial.Quota", "Quota")
                         .WithMany()
                         .HasForeignKey("QuotaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("condogestcet97.web.Data.Entities.Financial.Service", "Service")
                         .WithMany()
-                        .HasForeignKey("ServiceId");
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Quota");
 
                     b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.IncomingInvoice", b =>
+                {
+                    b.HasOne("condogestcet97.web.Data.Entities.Financial.Expense", "Expense")
+                        .WithMany()
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Expense");
+                });
+
+            modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.OutgoingInvoice", b =>
+                {
+                    b.HasOne("condogestcet97.web.Data.Entities.Financial.Quota", "Quota")
+                        .WithMany()
+                        .HasForeignKey("QuotaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Quota");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,6 +12,8 @@ namespace condogestcet97.web.Data
 
         public DbSet<Service> Services { get; set; }
 
+        public DbSet<Invoice> Invoices { get; set; }
+
         public DataContextFinancial(DbContextOptions<DataContextFinancial> options) : base(options)
         {
 
@@ -36,6 +38,24 @@ namespace condogestcet97.web.Data
             modelBuilder.Entity<Service>()
            .Property(p => p.DefaultFee)
            .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Invoice>()
+            .Property(p => p.TotalAmount)
+            .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Invoice>()
+           .HasDiscriminator<string>("InvoiceType")
+           .HasValue<IncomingInvoice>("Incoming")
+           .HasValue<OutgoingInvoice>("Outgoing");
+
+            foreach (var foreignKey in modelBuilder.Model
+             .GetEntityTypes()
+             .SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
+            base.OnModelCreating(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

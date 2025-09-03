@@ -16,5 +16,13 @@ namespace condogestcet97.web.Helpers.IHelpers
         Expense ToExpense(ExpenseViewModel model, bool isNew);
 
         ExpenseViewModel ToExpenseViewModel(Expense expense);
+
+        Invoice ToInvoice(InvoiceViewModel model, bool isNew);
+
+        InvoiceViewModel ToInvoiceViewModelFromIncomingInvoice(IncomingInvoice invoice);
+
+        InvoiceViewModel ToInvoiceViewModelFromOutgoingInvoice(OutgoingInvoice invoice);
+
+
     }
 }

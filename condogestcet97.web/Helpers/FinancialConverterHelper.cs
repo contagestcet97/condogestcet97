@@ -32,6 +32,69 @@ namespace condogestcet97.web.Helpers
             };
         }
 
+        public Invoice ToInvoice(InvoiceViewModel model, bool isNew)
+        {
+            if (model.InvoiceType == InvoiceType.Incoming)
+            {
+                return new IncomingInvoice
+                {
+                    Id = isNew ? 0 : model.Id,
+                    SupplierContact = model.SupplierContact,
+                    SupplierName = model.SupplierName,
+                    Description = model.Description,
+                    DueDate = model.DueDate,
+                    ExpenseId = model.ExpenseId.Value,
+                    IsPaid = model.IsPaid,
+                    TotalAmount = model.TotalAmount,
+                };
+            }
+
+            return new OutgoingInvoice
+            {
+                Id = model.Id,
+                Description = model.Description,
+                DueDate = model.DueDate,
+                EmissionDate = model.EmissionDate.Value,
+                IsPaid = model.IsPaid,
+                QuotaId = model.QuotaId,
+                TotalAmount = model.TotalAmount,
+                UserId = model.UserId,
+
+            };
+        }
+
+        public InvoiceViewModel ToInvoiceViewModelFromIncomingInvoice(IncomingInvoice invoice)
+        {
+            return new InvoiceViewModel
+            {
+                Id = invoice.Id,
+                Description =invoice.Description,
+                DueDate=invoice.DueDate,
+                ExpenseId = invoice.ExpenseId,
+                InvoiceType = InvoiceType.Incoming,
+                SupplierContact = invoice.SupplierContact,
+                SupplierName = invoice.SupplierName,
+                IsPaid =invoice.IsPaid,
+                TotalAmount =invoice.TotalAmount,
+            };
+        }
+
+        public InvoiceViewModel ToInvoiceViewModelFromOutgoingInvoice(OutgoingInvoice invoice)
+        {
+            return new InvoiceViewModel
+            {
+                Id = invoice.Id,
+                Description = invoice.Description,
+                DueDate = invoice.DueDate,
+                QuotaId = invoice.QuotaId,
+                UserId = invoice.UserId,
+                EmissionDate = invoice.EmissionDate,
+                InvoiceType = InvoiceType.Outgoing,
+                IsPaid = invoice.IsPaid,
+                TotalAmount = invoice.TotalAmount,
+            };
+        }
+
         public Quota ToQuota(QuotaViewModel model, bool isNew)
         {
             return new Quota
