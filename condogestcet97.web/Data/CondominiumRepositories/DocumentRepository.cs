@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data.CondominiumRepositories
 {
-    public class DocumentRepository : GenericRepository<Document>, IDocumentRepository
+    public class DocumentRepository : ConodominiumsGenericRepository<Document>, IDocumentRepository
     {
         private readonly DataContextCondominium _context;
 

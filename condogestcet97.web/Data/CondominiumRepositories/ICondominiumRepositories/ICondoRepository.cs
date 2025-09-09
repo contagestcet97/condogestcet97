@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace condogestcet97.web.Data.Repositories.IRepositories
 {
-    public interface ICondoRepository : IGenericRepository<Condo>
+    public interface ICondoRepository : ICondominiumsGenericRepository<Condo>
     {
         Task<Condo> GetByIdTrackedAsync(int id);
 

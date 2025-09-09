@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data.CondominiumRepositories
 {
-    public class VoteRepository : GenericRepository<Vote>, IVoteRepository
+    public class VoteRepository : ConodominiumsGenericRepository<Vote>, IVoteRepository
     {
         private readonly DataContextCondominium _context;
 

@@ -4,7 +4,7 @@ using condogestcet97.web.Data.Repositories.IRepositories;
 
 namespace condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories
 {
-    public interface IVoteRepository : IGenericRepository<Vote>
+    public interface IVoteRepository : ICondominiumsGenericRepository<Vote>
     {
         Task<Vote> GetByIdTrackedAsync(int id);
     }

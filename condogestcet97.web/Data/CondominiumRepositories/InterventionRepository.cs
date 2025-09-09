@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data.CondominiumRepositories
 {
-    public class InterventionRepository : GenericRepository<Intervention>, IInterventionRepository
+    public class InterventionRepository : ConodominiumsGenericRepository<Intervention>, IInterventionRepository
     {
 
         private readonly DataContextCondominium _context;

@@ -1,6 +1,6 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using condogestcet97.web.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace condogestcet97.web.Controllers;
 
@@ -18,6 +18,15 @@ public class HomeController : Controller
         return View();
     }
 
+    /// <summary>
+    /// Placeholder for the dashboard view.
+    /// </summary>
+    /// <returns></returns>
+    public IActionResult Dashboard()
+    {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();
@@ -28,4 +37,11 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    // not found page method
+    public IActionResult NotFoundPage()
+    {
+        return View("~/Views/Shared/NotFound.cshtml");
+    }
+
 }

@@ -1,0 +1,23 @@
+﻿@model condogestcet97.web.Data.ViewModels.User.UserCompanyAssignmentViewModel
+
+@{
+    ViewData["Title"] = "Assign Companies";
+}
+
+<h2>Assign Companies to User</h2>
+
+<form asp-action="AssignCompanies" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <div>
+        @foreach (var company in Model.AllCompanies)
+        {
+            <div>
+                <input type="checkbox" name="SelectedCompanyIds" value="@company.Id"
+                @(Model.SelectedCompanyIds.Contains(company.Id) ? "checked" : "") />
+                @company.Name
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

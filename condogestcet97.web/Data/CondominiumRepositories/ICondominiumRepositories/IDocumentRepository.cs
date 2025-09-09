@@ -3,7 +3,7 @@ using condogestcet97.web.Data.Repositories.IRepositories;
 
 namespace condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories
 {
-    public interface IDocumentRepository : IGenericRepository<Document>
+    public interface IDocumentRepository : ICondominiumsGenericRepository<Document>
     {
 
         Task<MeetingDocument> GetMeetDocAsync(int id);
