@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
+
 <body @* class="bg-light text-dark d-flex flex-column min-vh-100" *@>
     @* Loader *@
     @await Html.PartialAsync("_Loader")
@@ -19,11 +20,14 @@
             <a asp-controller="Home" asp-action="Index"><img src="~/images/brand/condogestLogoBlue.png" class="logo"></a>
             <ul>
                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Home" asp-action="Dashboard">Administration Menu</a></li>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                <li><a asp-controller="Home" asp-action="Dashboard">Administration Menu</a></li>   
+                }
                 <li><a asp-controller="Home" asp-action="Privacy">Contact Us</a></li>
                 <li><a asp-controller="Home" asp-action="Privacy">Privacy</a></li>
-                @await Html.PartialAsync("_LoginPartial")
             </ul>
+                @await Html.PartialAsync("_LoginPartial")
            @*  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom border-secondary box-shadow mb-3">
                 <div class="container">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-people-roof fa-2xl logo"></i><h3>CondoGest</h3></a>
