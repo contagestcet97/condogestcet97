@@ -4,12 +4,10 @@
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
-<h1>Dashboard</h1>
-
 <div class="text-center">
-    <h1 class="display-4">Welcome To the Dashboard</h1>
-	<h4 class="text-secondary">Manage your condo efficiently</h4>
-    <p>All of the desired options can be used by clicking the buttons beside this area or at top!</p>
-    <p>You can change your profile picture, chat with other members of the condo, see alerts for your current condo along side other options!</p>
-
+    <h2>Welcome to <span>CondoGest</span><br>A Simple and effective way to manage your condo</h2>
+    <p>To proceed, please use the buttons bellow in order to register on our portal and website! Or if you're a member, you can use the login button next to it!</p>
+    <a asp-controller="User" asp-action="Index">Users</a>
+    <a asp-controller="Company" asp-action="Index">Company</a>
+    <a asp-controller="Role" asp-action="Index">Role</a>
 </div>
