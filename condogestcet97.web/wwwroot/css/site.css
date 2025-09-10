@@ -1,5 +1,130 @@
 /* ===== Sticky Footer & Layout ===== */
-html, body {
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: inherit;
+    align-content: center;
+}
+
+    header .logo {
+        position: relative;
+        max-width: 80px;
+    }
+
+    header ul {
+        position: relative;
+        display: flex;
+    }
+
+        header ul li {
+            list-style: none;
+        }
+
+            header ul li a {
+                display: inline-block;
+                color: #333;
+                font-weight: 400;
+                margin-left: 40px;
+                text-decoration: none;
+            }
+
+.mainContent {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .mainContent .textBox {
+        position: relative;
+        max-width: 600px;
+
+    }
+
+        .mainContent .textBox h2 {
+            font-size: 4em;
+            color: #333;
+            line-height: 1.4em;
+            font-weight: 500;
+        }
+
+            .mainContent .textBox h2 span {
+                font-size: 1.2em;
+                color: #0078a8;
+                font-weight: 900;
+            }
+
+    .mainContent .textBox p {
+        color: #333;
+    }
+
+    .mainContent .textBox a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 8px 20px;
+        background: #0078a8;
+        color: #fff;
+        border-radius: 40px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-decoration: none;
+    }
+
+    .mainContent .imgBox {
+        width: 600px;
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 50px;
+        margin-top: 50px;
+    }
+
+        .mainContent .imgBox img {
+            max-width: 600px;
+        }
+
+.circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0078a8;
+    clip-path: circle(800px at right);
+}
+
+.footer {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+/*html, body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -12,16 +137,16 @@ body {
 }
 
 main {
-    flex: 1 0 auto; /* Main grows and pushes footer down */
-}
+    flex: 1 0 auto;*/ /* Main grows and pushes footer down */
+/*}
 
 .footer {
-    flex-shrink: 0; /* Prevent footer from shrinking */
-    position: relative;
-}
+    flex-shrink: 0;*/ /* Prevent footer from shrinking */
+    /*position: relative;
+}*/
 
 /* ===== General Styling ===== */
-a.navbar-brand {
+/*a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-word;
@@ -79,4 +204,4 @@ html {
 button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
-}
+}*/
