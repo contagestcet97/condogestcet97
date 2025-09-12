@@ -9,7 +9,7 @@ namespace condogestcet97.web.Data.Entities.Financial
 
         public decimal Amount { get; set ; }
 
-        public Quota Quota { get; set ; }
+        public Quota? Quota { get; set ; }
 
         public int QuotaId { get; set ; }
 

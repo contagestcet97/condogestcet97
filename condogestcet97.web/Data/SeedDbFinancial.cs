@@ -112,7 +112,7 @@ namespace condogestcet97.web.Data
 
             if (!_context.Invoices.Any())
             {
-                var expense = _context.Quotas.FirstOrDefault(i => i.Id == 1);
+                var expense = _context.Expenses.FirstOrDefault(i => i.Id == 1);
                 var quota = _context.Quotas.FirstOrDefault(i => i.Id == 1);
 
                 if (expense != null)
@@ -121,7 +121,7 @@ namespace condogestcet97.web.Data
                     {
                         Description = "Fire and Flood annual insurance",
                         DueDate = DateTime.Now.AddDays(15),
-                        IsPaid = false,
+                        IsPaid = true,
                         SupplierContact = "lisboa@seguros.pt",
                         TotalAmount = 120.00m,
                         ExpenseId = expense.Id,
@@ -136,11 +136,11 @@ namespace condogestcet97.web.Data
                     {
                         Description = "Quota payment August",
                         DueDate = DateTime.Now.AddDays(4),
-                        IsPaid = false,
+                        IsPaid = true,
                         TotalAmount = 40.00m,
-                        UserId = "test user",
+                        UserId = "Condo user1",
                         QuotaId = quota.Id,
-                        EmissionDate = DateTime.Now.AddDays(-2),
+                        EmissionDate = DateTime.Now.AddDays(-10),
                         Type = InvoiceType.Outgoing
                     };
 
@@ -149,6 +149,38 @@ namespace condogestcet97.web.Data
 
                 }
             }
+            await _context.SaveChangesAsync();
+
+            if (!_context.Payments.Any())
+            {
+                var invoice = _context.Invoices.FirstOrDefault(i => i.Id == 1);
+                var invoice2 = _context.Invoices.FirstOrDefault(i => i.Id == 2);
+
+                Payment payment = new Payment
+                {
+                    PaidDate = DateTime.Now.AddDays(-1),
+                    Amount = 120.00m,
+                    InvoiceId = invoice.Id,
+                    Method = "Visa",
+                    UserId = "CompanyName",
+                   
+                };
+
+                Payment payment2 = new Payment
+                {
+                    PaidDate = DateTime.Now.AddDays(-5),
+                    Amount = 40.00m,
+                    InvoiceId = invoice2.Id,
+                    Method = "Paypal",
+                    UserId = "Condo user1",
+                   
+                };
+
+                _context.Payments.Add(payment);
+                _context.Payments.Add(payment2);
+
+            }
+
             await _context.SaveChangesAsync();
         }
     }

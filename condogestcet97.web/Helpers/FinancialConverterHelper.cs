@@ -95,6 +95,32 @@ namespace condogestcet97.web.Helpers
             };
         }
 
+        public Payment ToPayment(PaymentViewModel model, bool isNew)
+        {
+            return new Payment
+            {
+                Id = isNew ? 0 : model.Id,
+                PaidDate = model.PaidDate,
+                Amount = model.Amount,
+                InvoiceId = model.InvoiceId,
+                Method = model.Method,
+                UserId = model.UserId,
+            };
+        }
+
+        public PaymentViewModel ToPaymentViewModel(Payment payment)
+        {
+            return new PaymentViewModel
+            {
+                Id = payment.Id,
+                PaidDate = payment.PaidDate,
+                Amount = payment.Amount,
+                InvoiceId = payment.InvoiceId,
+                Method = payment.Method,
+                UserId = payment.UserId,
+            };
+        }
+
         public Quota ToQuota(QuotaViewModel model, bool isNew)
         {
             return new Quota

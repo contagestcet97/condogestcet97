@@ -23,6 +23,10 @@ namespace condogestcet97.web.Helpers.IHelpers
 
         InvoiceViewModel ToInvoiceViewModelFromOutgoingInvoice(OutgoingInvoice invoice);
 
+        Payment ToPayment(PaymentViewModel model, bool isNew);
+
+        PaymentViewModel ToPaymentViewModel(Payment payment);
+
 
     }
 }
