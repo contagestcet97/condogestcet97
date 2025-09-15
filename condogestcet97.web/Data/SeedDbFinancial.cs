@@ -156,32 +156,54 @@ namespace condogestcet97.web.Data
                 var invoice = _context.Invoices.FirstOrDefault(i => i.Id == 1);
                 var invoice2 = _context.Invoices.FirstOrDefault(i => i.Id == 2);
 
-                Payment payment = new Payment
+                if (invoice != null && invoice2 != null)
                 {
-                    PaidDate = DateTime.Now.AddDays(-1),
-                    Amount = 120.00m,
-                    InvoiceId = invoice.Id,
-                    Method = "Visa",
-                    UserId = "CompanyName",
-                   
-                };
+                    Payment payment = new Payment
+                    {
+                        PaidDate = DateTime.Now.AddDays(-1),
+                        Amount = 120.00m,
+                        InvoiceId = invoice.Id,
+                        Method = "Visa",
+                        UserId = "CompanyName",
 
-                Payment payment2 = new Payment
-                {
-                    PaidDate = DateTime.Now.AddDays(-5),
-                    Amount = 40.00m,
-                    InvoiceId = invoice2.Id,
-                    Method = "Paypal",
-                    UserId = "Condo user1",
-                   
-                };
+                    };
 
-                _context.Payments.Add(payment);
-                _context.Payments.Add(payment2);
+                    Payment payment2 = new Payment
+                    {
+                        PaidDate = DateTime.Now.AddDays(-5),
+                        Amount = 40.00m,
+                        InvoiceId = invoice2.Id,
+                        Method = "Paypal",
+                        UserId = "Condo user1",
 
+                    };
+
+                    _context.Payments.Add(payment);
+                    _context.Payments.Add(payment2);
+                }
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
+            if (!_context.Receipts.Any())
+            {
+                var payment = _context.Payments.FirstOrDefault(i => i.Id == 2);
+
+                if (payment != null) 
+                {
+                    Receipt receipt = new Receipt
+                    {
+                        FiscalNumber = "345123678",
+                        PayeeName = "Carlos Moedas",
+                        PaymentId = payment.Id,
+                        Type = ReceiptType.Outgoing,
+                    };
+
+                    _context.Receipts.Add(receipt);
+                }
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

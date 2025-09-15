@@ -19,7 +19,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="QuotaId" class="control-label"></label>
-                <select asp-for="QuotaId" class ="form-control" asp-items="ViewBag.QuotaId"></select>
+                <select asp-for="QuotaId" class ="form-control" asp-items="Model.Quotas">
+                <option value="">Select a quota</option>
+                </select>
+                <span asp-validation-for="QuotaId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -33,8 +36,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="ServiceId" class="control-label"></label>
-                <select asp-for="ServiceId" class ="form-control" asp-items="ViewBag.ServiceId"></select>
-            </div>
+                <select asp-for="ServiceId" class ="form-control" asp-items="Model.Services">
+                    <option value="">Select a service</option>
+                </select>
+                <span asp-validation-for="ServiceId" class="text-danger"></span>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

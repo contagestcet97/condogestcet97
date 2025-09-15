@@ -1,4 +1,5 @@
 ﻿using condogestcet97.web.Data.Entities.Financial;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,5 +18,9 @@ namespace condogestcet97.web.Models
         public bool IsFullyPaid { get; set; }
 
         public int? ServiceId { get; set; }
+
+        public IEnumerable<SelectListItem>? Quotas { get; set;}
+        public IEnumerable<SelectListItem>? Services { get; set;}
+
     }
 }

@@ -15,6 +15,8 @@ namespace condogestcet97.web.Data
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
+        public DbSet<Receipt> Receipts { get; set; }
+
         public DataContextFinancial(DbContextOptions<DataContextFinancial> options) : base(options)
         {
 

@@ -166,21 +166,25 @@ namespace condogestcet97.web.Controllers.FinancialControllers
 
             var invoice = await _invoiceRepository.GetByIdAsync(id.Value);
 
-            if (invoice is IncomingInvoice)
+            if (invoice != null)
             {
-                IncomingInvoice inInvoice = await _invoiceRepository.GetInInvoiceAsync(invoice.Id);
 
-                if (inInvoice != null)
+                if (invoice is IncomingInvoice)
                 {
-                    return model = _converterHelper.ToInvoiceViewModelFromIncomingInvoice(inInvoice);
-                } 
-            }
+                    IncomingInvoice inInvoice = await _invoiceRepository.GetInInvoiceAsync(invoice.Id);
 
-            OutgoingInvoice outInvoice = await _invoiceRepository.GetOutInvoiceAsync(invoice.Id);
-            
-            if (outInvoice != null)
-            {
-                return model = _converterHelper.ToInvoiceViewModelFromOutgoingInvoice(outInvoice);
+                    if (inInvoice != null)
+                    {
+                        return model = _converterHelper.ToInvoiceViewModelFromIncomingInvoice(inInvoice);
+                    }
+                }
+
+                OutgoingInvoice outInvoice = await _invoiceRepository.GetOutInvoiceAsync(invoice.Id);
+
+                if (outInvoice != null)
+                {
+                    return model = _converterHelper.ToInvoiceViewModelFromOutgoingInvoice(outInvoice);
+                }
             }
 
             return model;

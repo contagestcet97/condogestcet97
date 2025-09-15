@@ -16,81 +16,74 @@ using System.Threading.Tasks;
 
 namespace condogestcet97.web.Controllers.FinancialControllers
 {
-    public class ExpensesController : Controller
+    public class ReceiptsController : Controller
     {
-        private readonly IExpenseRepository _expenseRepository;
-        private readonly IQuotaRepository _quotaRepository;
-        private readonly IServiceRepository _serviceRepository;
+        private readonly IReceiptRepository _receiptRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IFinancialConverterHelper _converterHelper;
 
-        public ExpensesController(IExpenseRepository ExpenseRepository, IFinancialConverterHelper converterHelper, IQuotaRepository quotaRepository, IServiceRepository serviceRepository)
+        public ReceiptsController(IReceiptRepository ReceiptRepository,
+            IFinancialConverterHelper converterHelper,
+            IPaymentRepository paymentRepository)
         {
-            _expenseRepository = ExpenseRepository;
+            _receiptRepository = ReceiptRepository;
             _converterHelper = converterHelper;
-            _quotaRepository = quotaRepository;
-            _serviceRepository = serviceRepository;
+            _paymentRepository = paymentRepository;
         }
 
-        // GET: Expenses
+        // GET: Receipts
         public async Task<IActionResult> Index()
         {
-            return View(_expenseRepository.GetAll());
+            return View(_receiptRepository.GetAll());
         }
 
-        // GET: Expenses/Details/5
+        // GET: Receipts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("ExpenseNotFound");
+                return new NotFoundViewResult("ReceiptNotFound");
             }
 
-            var Expense = await _expenseRepository.GetByIdAsync(id.Value);
+            var Receipt = await _receiptRepository.GetByIdAsync(id.Value);
 
 
-            if (Expense == null)
+            if (Receipt == null)
             {
-                return new NotFoundViewResult("ExpenseNotFound");
+                return new NotFoundViewResult("ReceiptNotFound");
             }
 
-            return View(Expense);
+            return View(Receipt);
         }
 
 
-        // GET: Expenses/Create
+        // GET: Receipts/Create
         public IActionResult Create()
         {
-            var model = new ExpenseViewModel
+            var model = new ReceiptViewModel
             {
-                Quotas = _quotaRepository.GetAll().Select(i => new SelectListItem
+                Payments = _paymentRepository.GetAll().Select(i => new SelectListItem
                 {
                     Value = i.Id.ToString(),
-                    Text = $"Condo: {i.CondoId} - Due date: {i.DueDate}" 
-                }),
-
-                Services = _serviceRepository.GetAll().Select(i => new SelectListItem
-                {
-                    Value = i.Id.ToString(),
-                    Text = $"{i.Id}: {i.Description} - {i.CompanyName}"
+                    Text = $"{i.Id}: {i.Amount}€ - {i.PaidDate}"
                 })
-
             };
-
+              
             return View(model);
         }
 
-        // POST: Expenses/Create
+        // POST: Receipts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ExpenseViewModel model)
+        public async Task<IActionResult> Create(ReceiptViewModel model)
         {
-            var Expense = _converterHelper.ToExpense(model, true);
+            var Receipt = _converterHelper.ToReceipt(model, true);
 
             try
             {
-                await _expenseRepository.CreateAsync(Expense);
+                await _receiptRepository.CreateAsync(Receipt);
 
 
                 return RedirectToAction(nameof(Index));
@@ -104,58 +97,52 @@ namespace condogestcet97.web.Controllers.FinancialControllers
             return View(model);
         }
 
-        // GET: Expenses/Edit/5
+        // GET: Receipts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("ExpenseNotFound");
+                return new NotFoundViewResult("ReceiptNotFound");
             }
 
-            var Expense = await _expenseRepository.GetByIdAsync(id.Value);
+            var Receipt = await _receiptRepository.GetByIdAsync(id.Value);
 
-            if (Expense == null)
+            if (Receipt == null)
             {
-                return new NotFoundViewResult("ExpenseNotFound");
+                return new NotFoundViewResult("ReceiptNotFound");
             }
 
-            var model = _converterHelper.ToExpenseViewModel(Expense);
+            var model = _converterHelper.ToReceiptViewModel(Receipt);
 
-            model.Quotas = _quotaRepository.GetAll().Select(i => new SelectListItem
+            model.Payments = _paymentRepository.GetAll().Select(i => new SelectListItem
             {
                 Value = i.Id.ToString(),
-                Text = $"Condo: {i.CondoId} - Due date: {i.DueDate}"
-            });
-
-            model.Services = _serviceRepository.GetAll().Select(i => new SelectListItem
-            {
-                Value = i.Id.ToString(),
-                Text = $"{i.Id}: {i.Description} - {i.CompanyName}"
+                Text = $"{i.Id}: {i.Amount}€ - {i.PaidDate}"
             });
 
             return View(model);
         }
 
-        // POST: Expenses/Edit/5
+        // POST: Receipts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ExpenseViewModel model)
+        public async Task<IActionResult> Edit(ReceiptViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var Expense = _converterHelper.ToExpense(model, false);
+                    var Receipt = _converterHelper.ToReceipt(model, false);
 
-                    await _expenseRepository.UpdateAsync(Expense);
+                    await _receiptRepository.UpdateAsync(Receipt);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _expenseRepository.ExistAsync(model.Id))
+                    if (!await _receiptRepository.ExistAsync(model.Id))
                     {
-                        return new NotFoundViewResult("ExpenseNotFound");
+                        return new NotFoundViewResult("ReceiptNotFound");
                     }
                     else
                     {
@@ -167,35 +154,35 @@ namespace condogestcet97.web.Controllers.FinancialControllers
             return View(model);
         }
 
-        // GET: Expenses/Delete/5
+        // GET: Receipts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("ExpenseNotFound");
+                return new NotFoundViewResult("ReceiptNotFound");
             }
 
-            var Expense = await _expenseRepository.GetByIdAsync(id.Value);
+            var Receipt = await _receiptRepository.GetByIdAsync(id.Value);
 
 
-            if (Expense == null)
+            if (Receipt == null)
             {
-                return new NotFoundViewResult("ExpenseNotFound");
+                return new NotFoundViewResult("ReceiptNotFound");
             }
 
-            return View(Expense);
+            return View(Receipt);
         }
 
-        // POST: Expenses/Delete/5
+        // POST: Receipts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var Expense = await _expenseRepository.GetByIdAsync(id);
+            var Receipt = await _receiptRepository.GetByIdAsync(id);
 
             try
             {
-                await _expenseRepository.DeleteAsync(Expense);
+                await _receiptRepository.DeleteAsync(Receipt);
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
@@ -205,8 +192,8 @@ namespace condogestcet97.web.Controllers.FinancialControllers
                 {
                     var errorModel = new ErrorViewModel
                     {
-                        ErrorTitle = $"{Expense.Id} provavelmente está a ser usado!!",
-                        ErrorMessage = $"{Expense.Id} não pode ser apagado",
+                        ErrorTitle = $"{Receipt.Id} provavelmente está a ser usado!!",
+                        ErrorMessage = $"{Receipt.Id} não pode ser apagado",
                     };
 
                     return View("Error", errorModel);
@@ -222,7 +209,7 @@ namespace condogestcet97.web.Controllers.FinancialControllers
             }
         }
 
-        public IActionResult ExpenseNotFound()
+        public IActionResult ReceiptNotFound()
         {
             return View();
         }

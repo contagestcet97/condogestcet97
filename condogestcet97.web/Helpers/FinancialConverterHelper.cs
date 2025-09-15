@@ -149,6 +149,30 @@ namespace condogestcet97.web.Helpers
             };
         }
 
+        public Receipt ToReceipt(ReceiptViewModel model, bool isNew)
+        {
+            return new Receipt
+            {
+                Id = isNew ? 0 : model.Id,
+                FiscalNumber = model.FiscalNumber,
+                PayeeName = model.PayeeName,
+                PaymentId = model.PaymentId,
+                Type = model.Type
+            };
+        }
+
+        public ReceiptViewModel ToReceiptViewModel(Receipt receipt)
+        {
+            return new ReceiptViewModel
+            {
+                Id = receipt.Id,
+                FiscalNumber = receipt.FiscalNumber,
+                PayeeName = receipt.PayeeName,
+                PaymentId = receipt.PaymentId,
+                Type = receipt.Type
+            };
+        }
+
         public Service ToService(ServiceViewModel model, bool isNew)
         {
             return new Service

@@ -27,6 +27,10 @@ namespace condogestcet97.web.Helpers.IHelpers
 
         PaymentViewModel ToPaymentViewModel(Payment payment);
 
+        Receipt ToReceipt(ReceiptViewModel model, bool isNew);
+
+        ReceiptViewModel ToReceiptViewModel(Receipt receipt);
+
 
     }
 }
