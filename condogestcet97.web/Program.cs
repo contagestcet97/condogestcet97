@@ -23,6 +23,7 @@ namespace condogestcet97.web
             builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
+            builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
             builder.Services.AddScoped<IFinancialConverterHelper, FinancialConverterHelper>();
             builder.Services.AddDbContext<DataContextFinancial>(options =>
             {

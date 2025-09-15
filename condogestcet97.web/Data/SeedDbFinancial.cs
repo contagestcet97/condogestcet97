@@ -163,7 +163,7 @@ namespace condogestcet97.web.Data
                         PaidDate = DateTime.Now.AddDays(-1),
                         Amount = 120.00m,
                         InvoiceId = invoice.Id,
-                        Method = "Visa",
+                        Method = "Visa/Mastercard",
                         UserId = "CompanyName",
 
                     };
@@ -204,6 +204,24 @@ namespace condogestcet97.web.Data
 
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.FinancialReports.Any()) 
+            {
+                FinancialReport financialReport = new FinancialReport
+                {
+                    StartDate = DateTime.Now.AddMonths(-9),
+                    EndDate = DateTime.Now.AddMonths(-6),
+                    ExpensesTotal = 2000.00m,
+                    RevenueTotal = 2400.00m,
+                    IsPdfSent = true,
+                };
+
+                _context.FinancialReports.Add(financialReport);
+
+                await _context.SaveChangesAsync();
+            
+            }
+
         }
     }
 }

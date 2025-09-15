@@ -17,6 +17,8 @@ namespace condogestcet97.web.Data
 
         public DbSet<Receipt> Receipts { get; set; }
 
+        public DbSet<FinancialReport> FinancialReports { get; set; }
+
         public DataContextFinancial(DbContextOptions<DataContextFinancial> options) : base(options)
         {
 
@@ -48,6 +50,14 @@ namespace condogestcet97.web.Data
 
             modelBuilder.Entity<Invoice>()
             .Property(p => p.TotalAmount)
+            .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<FinancialReport>()
+            .Property(p => p.RevenueTotal)
+            .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<FinancialReport>()
+            .Property(p => p.ExpensesTotal)
             .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Invoice>()

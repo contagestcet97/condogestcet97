@@ -31,6 +31,9 @@ namespace condogestcet97.web.Helpers.IHelpers
 
         ReceiptViewModel ToReceiptViewModel(Receipt receipt);
 
+        FinancialReport ToFinancialReport(FinancialReportViewModel model, bool isNew);
+
+        FinancialReportViewModel ToFinancialReportViewModel(FinancialReport receipt);
 
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace condogestcet97.web.Data.Entities.Financial
+﻿namespace condogestcet97.web.Models
 {
-    public class FinancialReport : IEntity
+    public class FinancialReportViewModel
     {
         public int Id { get; set; }
 
@@ -15,5 +15,6 @@
         public decimal RevenueTotal { get; set; }
 
         public decimal NetTotal => RevenueTotal - ExpensesTotal;
+
     }
 }

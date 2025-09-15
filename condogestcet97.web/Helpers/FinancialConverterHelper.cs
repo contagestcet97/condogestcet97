@@ -32,6 +32,33 @@ namespace condogestcet97.web.Helpers
             };
         }
 
+        public FinancialReport ToFinancialReport(FinancialReportViewModel model, bool isNew)
+        {
+            return new FinancialReport
+            {
+                Id = isNew ? 0 : model.Id,
+                EndDate = model.EndDate,
+                StartDate = model.StartDate,
+                IsPdfSent = model.IsPdfSent,
+                ExpensesTotal = model.ExpensesTotal,
+                RevenueTotal = model.RevenueTotal
+            };
+            
+        }
+
+        public FinancialReportViewModel ToFinancialReportViewModel(FinancialReport receipt)
+        {
+            return new FinancialReportViewModel
+            {
+                Id = receipt.Id,
+                StartDate = receipt.StartDate,
+                EndDate = receipt.EndDate,
+                ExpensesTotal = receipt.ExpensesTotal,
+                IsPdfSent = receipt.IsPdfSent,
+                RevenueTotal = receipt.RevenueTotal
+            };
+        }
+
         public Invoice ToInvoice(InvoiceViewModel model, bool isNew)
         {
             if (model.InvoiceType == InvoiceType.Incoming)
