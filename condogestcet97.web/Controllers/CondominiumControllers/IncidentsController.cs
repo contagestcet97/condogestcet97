@@ -4,6 +4,8 @@ using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
 using condogestcet97.web.Data.Entities.Condominium;
 using condogestcet97.web.Data.Repositories;
 using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Data.Repositories.UserRepositories.Implementations;
+using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
 using condogestcet97.web.Helpers;
 using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
@@ -24,16 +26,19 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         private readonly ICondominiumsConverterHelper _converterHelper;
         private readonly ICondoRepository _condoRepository;
         private readonly IApartmentRepository _apartmentRepository;
+        private readonly IUserRepository _userRepository;
 
         public IncidentsController(IIncidentRepository incidentRepository,
             ICondominiumsConverterHelper converterHelper,
             ICondoRepository condoRepository,
-            IApartmentRepository apartmentRepository)
+            IApartmentRepository apartmentRepository,
+            IUserRepository userRepository)
         {
             _converterHelper = converterHelper;
             _incidentRepository = incidentRepository;
             _condoRepository = condoRepository;
             _apartmentRepository = apartmentRepository;
+            _userRepository = userRepository;
         }
 
         // GET: Incidents
@@ -62,7 +67,7 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
         }
 
         // GET: Incidents/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
 
             var model = new IncidentViewModel
@@ -76,6 +81,13 @@ namespace incidentgestcet97.web.Controllers.incidentminiumControllers
                      Text = m.Address
                  })
                  .ToList(),
+
+                Users = (await _userRepository.GetAllAsync())
+                    .Select(u => new SelectListItem
+                    {
+                        Value = u.Id.ToString(),
+                        Text = u.Email
+                    })
             };
 
             return View(model);

@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using condogestcet97.web.Data;
+using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using condogestcet97.web.Data.Entities.Condominium;
+using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Helpers;
+using condogestcet97.web.Helpers.IHelpers;
+using condogestcet97.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
-using condogestcet97.web.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using condogestcet97.web.Models;
-using condogestcet97.web.Helpers.IHelpers;
-using condogestcet97.web.Data.Repositories.IRepositories;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
+    [Authorize]
     public class ApartmentsController : Controller
     {
         private readonly IApartmentRepository _apartmentRepository;

@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using condogestcet97.web.Data;
+using condogestcet97.web.Data.Entities.Condominium;
+using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Helpers;
+using condogestcet97.web.Helpers.IHelpers;
+using condogestcet97.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using condogestcet97.web.Data;
-using condogestcet97.web.Data.Entities.Condominium;
-using condogestcet97.web.Data.Repositories.IRepositories;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using condogestcet97.web.Models;
-using condogestcet97.web.Helpers;
-using condogestcet97.web.Helpers.IHelpers;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace condogestcet97.web.Controllers.CondominiumControllers
 {
+    [Authorize(Roles = "Admin")]
     public class CondosController : Controller
     {
         private readonly ICondoRepository _condoRepository;

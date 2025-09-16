@@ -34,5 +34,6 @@ namespace condogestcet97.web.Models
 
         public IEnumerable<SelectListItem>? Condos { get; set; }
         public IEnumerable<SelectListItem>? Apartments { get; set; }
+        public IEnumerable<SelectListItem>? Users { get; set; }
     }
 }
