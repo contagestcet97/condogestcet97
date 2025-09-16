@@ -3,7 +3,7 @@ using condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories;
 
 namespace condogestcet97.web.Data.FinancialRepositories
 {
-    public class ReceiptRepository : GenericRepository<Receipt>, IReceiptRepository
+    public class ReceiptRepository : FinancialGenericRepository<Receipt>, IReceiptRepository
     {
         private readonly DataContextFinancial _context;
 

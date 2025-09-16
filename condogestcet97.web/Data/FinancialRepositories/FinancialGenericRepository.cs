@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data.FinancialRepositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
+    public class FinancialGenericRepository<T> : IFinancialGenericRepository<T> where T : class, IEntity
     {
         private readonly DataContextFinancial _context;
 
-        public GenericRepository(DataContextFinancial context)
+        public FinancialGenericRepository(DataContextFinancial context)
         {
             _context = context;
         }

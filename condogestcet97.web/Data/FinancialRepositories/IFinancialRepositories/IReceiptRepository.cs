@@ -2,7 +2,7 @@
 
 namespace condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories
 {
-    public interface IReceiptRepository : IGenericRepository<Receipt>
+    public interface IReceiptRepository : IFinancialGenericRepository<Receipt>
     {
 
     }

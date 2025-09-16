@@ -2,7 +2,7 @@
 
 namespace condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories
 {
-    public interface IQuotaRepository : IGenericRepository<Quota>
+    public interface IQuotaRepository : IFinancialGenericRepository<Quota>
     {
     }
 }

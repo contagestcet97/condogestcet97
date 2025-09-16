@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Data.FinancialRepositories
 {
-    public class InvoiceRepository : GenericRepository<Invoice>, IInvoiceRepository
+    public class InvoiceRepository : FinancialGenericRepository<Invoice>, IInvoiceRepository
     {
         private readonly DataContextFinancial _context;
         public InvoiceRepository(DataContextFinancial context) : base(context)

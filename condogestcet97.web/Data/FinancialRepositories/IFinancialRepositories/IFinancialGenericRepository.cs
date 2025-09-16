@@ -1,6 +1,6 @@
 ﻿namespace condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories
 {
-    public interface IGenericRepository<T> where T : class
+    public interface IFinancialGenericRepository<T> where T : class
     {
         IQueryable<T> GetAll();
 

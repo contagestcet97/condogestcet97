@@ -49,7 +49,7 @@ namespace condogestcet97.web
                 options.UseSqlServer(builder.Configuration.GetConnectionString("FinancialConnection"));
             });
 
-            builder.Services.AddScoped<SeedDbCondominium>();
+            builder.Services.AddTransient<SeedDbCondominium>();
             builder.Services.AddTransient<SeedDbFinancial>();
 
             // Register the generic repository for dependency injection for basic CRUD operations
@@ -130,16 +130,12 @@ namespace condogestcet97.web
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var seeder = services.GetRequiredService<SeedDbCondominium>();
-                await seeder.SeedAsync();
-            }
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var seeder = services.GetRequiredService<SeedDbFinancial>();
-                await seeder.SeedAsync();
-            }
+                var condoSeeder = services.GetRequiredService<SeedDbCondominium>();
+                await condoSeeder.SeedAsync();
 
+                var financialSeeder = services.GetRequiredService<SeedDbFinancial>();
+                await financialSeeder.SeedAsync();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -2,7 +2,7 @@
 
 namespace condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories
 {
-    public interface IFinancialReportRepository : IGenericRepository<FinancialReport>
+    public interface IFinancialReportRepository : IFinancialGenericRepository<FinancialReport>
     {
     }
 }

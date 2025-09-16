@@ -3,7 +3,7 @@ using condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories;
 
 namespace condogestcet97.web.Data.FinancialRepositories
 {
-    public class ServiceRepository : GenericRepository<Service>, IServiceRepository
+    public class ServiceRepository : FinancialGenericRepository<Service>, IServiceRepository
     {
         private readonly DataContextFinancial _context;
         public ServiceRepository(DataContextFinancial context) : base(context)
