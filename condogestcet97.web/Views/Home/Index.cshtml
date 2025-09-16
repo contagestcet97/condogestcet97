@@ -1,8 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to CondoGest</h1>
+	<h4 class="text-secondary">A simple condo management system</h4>
+    <p> Please Use one of the following buttons to get started!</p>
+	<div class="d-flex justify-content-center">
+		<a class="btn btn-primary m-2" asp-area="" asp-controller="Home" asp-action="Dashboard">Login</a>
+		<a class="btn btn-secondary m-2" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+	</div>
 </div>

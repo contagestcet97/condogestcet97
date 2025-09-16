@@ -1,0 +1,72 @@
+﻿@model condogestcet97.web.Models.DocumentViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Document</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Subject" class="control-label"></label>
+                <input asp-for="Subject" class="form-control" />
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="EmissionDate" />
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <select asp-for="Type" class="form-control" id="TypeSelect">
+                    <option value="">-- Select Type --</option>
+                    <option value="Meeting">Meeting</option>
+                    <option value="Intervention">Intervention</option>
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" id="MeetingGroup" style="display:none;">
+                <label asp-for="MeetingId" class="control-label"></label>
+                <select asp-for="MeetingId" asp-items="Model.Meetings" class="form-control"></select>
+                <span asp-validation-for="MeetingId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" id="InterventionGroup" style="display:none;">
+                <label asp-for="InterventionId" class="control-label"></label>
+                <select asp-for="InterventionId" asp-items="Model.Interventions" class="form-control"></select>
+                <span asp-validation-for="InterventionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function toggleDropdown() {
+            var type = document.getElementById("TypeSelect").value;
+            document.getElementById("MeetingGroup").style.display = (type === "Meeting") ? "block" : "none";
+            document.getElementById("InterventionGroup").style.display = (type === "Intervention") ? "block" : "none";
+        }
+
+        document.getElementById("TypeSelect").addEventListener("change", toggleDropdown);
+
+        toggleDropdown();
+    </script>
+}

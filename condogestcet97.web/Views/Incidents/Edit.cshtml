@@ -1,0 +1,95 @@
+﻿@model condogestcet97.web.Models.IncidentViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Incident</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="NotifierId" class="control-label"></label>
+                <input asp-for="NotifierId" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CondoId" class="control-label">Select condo</label>
+                <select asp-for="CondoId" asp-items="Model.Condos" class="form-control" id="CondoSelect">
+                    <option value="">Select a condo</option>
+                </select>
+                <span asp-validation-for="CondoId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ApartmentId" class="control-label">Select apartment</label>
+                <select asp-for="ApartmentId" asp-items="Model.Apartments" class="form-control" id="ApartmentSelect">
+                    <option value="">Select an apartment</option>
+                </select>
+                <span asp-validation-for="ApartmentId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsResolved" /> @Html.DisplayNameFor(model => model.IsResolved)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.getElementById("CondoSelect").addEventListener("change", function () {
+            var condoId = this.value;
+            var apartmentSelect = document.getElementById("ApartmentSelect");
+
+            apartmentSelect.innerHTML = '<option value="">Select an apartment</option>';
+
+            if (condoId) {
+
+                apartmentSelect.disabled = false;
+
+                fetch(`/Incidents/GetApartmentsByCondo?condoId=${condoId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function (apartment) {
+                            var option = document.createElement("option");
+                            option.value = apartment.id;
+                            option.text = apartment.flat;
+                            apartmentSelect.add(option);
+                        });
+                    });
+            } else {
+                apartmentSelect.disabled = true;
+            }
+        });
+    </script>
+}
