@@ -1,4 +1,5 @@
 ﻿using condogestcet97.web.Data.Entities.Users;
+using System.Collections.Generic;
 
 namespace condogestcet97.web.Data.Repositories.UserRepositories.Interfaces
 {
@@ -24,5 +25,6 @@ namespace condogestcet97.web.Data.Repositories.UserRepositories.Interfaces
         Task AssignManagedCompaniesAsync(int userId, List<int> companyIds);
         Task<List<Company>> GetManagedCompaniesAsync(int userId);
 
+        Task<IEnumerable<User>> GetUsersByCondo(int condoId);
     }
 }

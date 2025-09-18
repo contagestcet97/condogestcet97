@@ -22,7 +22,7 @@ namespace condogestcet97.web.Models
 
         public int? ExpenseId { get; set; }
 
-        public string? UserId { get; set; }
+        public int? UserId { get; set; }
 
         public int? QuotaId { get; set; }
 

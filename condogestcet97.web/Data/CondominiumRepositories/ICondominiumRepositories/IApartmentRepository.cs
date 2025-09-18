@@ -6,5 +6,8 @@ namespace condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositori
     public interface IApartmentRepository : ICondominiumsGenericRepository<Apartment>
     {
         Task<Apartment> GetByIdTrackedAsync(int id);
+
+        Task<int> GetApartmentsCount(int condoId);
+
     }
 }

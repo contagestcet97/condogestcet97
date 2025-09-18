@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using condogestcet97.web.Data;
 
 #nullable disable
 
-namespace condogestcet97.web.Migrations
+namespace condogestcet97.web.Migrations.DataContextFinancialMigrations
 {
     [DbContext(typeof(DataContextFinancial))]
-    partial class DataContextFinancialModelSnapshot : ModelSnapshot
+    [Migration("20250918113034_UserIds_changed_to_Int")]
+    partial class UserIds_changed_to_Int
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,7 +148,7 @@ namespace condogestcet97.web.Migrations
                     b.Property<DateTime>("PaidDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -163,17 +166,11 @@ namespace condogestcet97.web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApartmentsCount")
-                        .HasColumnType("int");
-
                     b.Property<int>("CondoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("InvoicesSent")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
@@ -183,6 +180,9 @@ namespace condogestcet97.web.Migrations
 
                     b.Property<DateTime?>("PaidDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PaymentValue")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -301,7 +301,7 @@ namespace condogestcet97.web.Migrations
             modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.Expense", b =>
                 {
                     b.HasOne("condogestcet97.web.Data.Entities.Financial.Quota", "Quota")
-                        .WithMany("Expenses")
+                        .WithMany()
                         .HasForeignKey("QuotaId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -357,11 +357,6 @@ namespace condogestcet97.web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Quota");
-                });
-
-            modelBuilder.Entity("condogestcet97.web.Data.Entities.Financial.Quota", b =>
-                {
-                    b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618
         }

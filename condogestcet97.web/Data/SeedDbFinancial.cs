@@ -23,10 +23,12 @@ namespace condogestcet97.web.Data
                 {
                     DueDate = DateTime.Now.AddDays(10),
                     PaidDate = null,
-                    PaymentValue = 24.99m,
                     IsPaid = false,
                     LateFee = 2.00m,
                     CondoId = 1,
+                    ApartmentsCount = 1,
+                    InvoicesSent = true,
+     
                 };
 
                 _context.Quotas.Add(quota);
@@ -138,7 +140,7 @@ namespace condogestcet97.web.Data
                         DueDate = DateTime.Now.AddDays(4),
                         IsPaid = true,
                         TotalAmount = 40.00m,
-                        UserId = "Condo user1",
+                        UserId = 3,
                         QuotaId = quota.Id,
                         EmissionDate = DateTime.Now.AddDays(-10),
                         Type = InvoiceType.Outgoing
@@ -164,7 +166,6 @@ namespace condogestcet97.web.Data
                         Amount = 120.00m,
                         InvoiceId = invoice.Id,
                         Method = "Visa/Mastercard",
-                        UserId = "CompanyName",
 
                     };
 
@@ -174,7 +175,7 @@ namespace condogestcet97.web.Data
                         Amount = 40.00m,
                         InvoiceId = invoice2.Id,
                         Method = "Paypal",
-                        UserId = "Condo user1",
+                        UserId = 3,
 
                     };
 
@@ -194,7 +195,7 @@ namespace condogestcet97.web.Data
                     Receipt receipt = new Receipt
                     {
                         FiscalNumber = "345123678",
-                        PayeeName = "Carlos Moedas",
+                        PayeeName = "Jack Jones",
                         PaymentId = payment.Id,
                         Type = ReceiptType.Outgoing,
                     };

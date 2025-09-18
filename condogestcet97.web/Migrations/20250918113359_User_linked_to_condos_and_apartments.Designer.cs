@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using condogestcet97.web.Data;
 
 #nullable disable
 
-namespace condogestcet97.web.Migrations
+namespace condogestcet97.web.Migrations.DataContextUserMigrations
 {
     [DbContext(typeof(DataContextUser))]
-    partial class DataContextUserModelSnapshot : ModelSnapshot
+    [Migration("20250918113359_User_linked_to_condos_and_apartments")]
+    partial class User_linked_to_condos_and_apartments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

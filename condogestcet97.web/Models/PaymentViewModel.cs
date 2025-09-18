@@ -13,7 +13,7 @@ namespace condogestcet97.web.Models
 
         public DateTime PaidDate { get; set; }
 
-        public string? UserId { get; set; }
+        public int? UserId { get; set; }
 
         public string Method { get; set; }
 

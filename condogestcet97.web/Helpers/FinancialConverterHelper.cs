@@ -85,7 +85,7 @@ namespace condogestcet97.web.Helpers
                 IsPaid = model.IsPaid,
                 QuotaId = model.QuotaId,
                 TotalAmount = model.TotalAmount,
-                UserId = model.UserId,
+                UserId = model.UserId.Value,
 
             };
         }
@@ -144,7 +144,7 @@ namespace condogestcet97.web.Helpers
                 Amount = payment.Amount,
                 InvoiceId = payment.InvoiceId,
                 Method = payment.Method,
-                UserId = payment.UserId,
+                UserId = payment.UserId
             };
         }
 
@@ -155,10 +155,11 @@ namespace condogestcet97.web.Helpers
                 Id = isNew ? 0 : model.Id,
                 CondoId = model.CondoId,
                 PaidDate = model.PaidDate,
-                PaymentValue = model.PaymentValue,
                 LateFee = model.LateFee,
                 IsPaid = model.IsPaid,
-                DueDate = model.DueDate
+                DueDate = model.DueDate,
+                ApartmentsCount = model.ApartmentsCount,
+                InvoicesSent = model.InvoicesSent,
             };
         }
 
@@ -169,10 +170,11 @@ namespace condogestcet97.web.Helpers
                 Id = quota.Id,
                 CondoId = quota.CondoId,
                 PaidDate = quota.PaidDate,
-                PaymentValue = quota.PaymentValue,
                 LateFee = quota.LateFee,
                 IsPaid = quota.IsPaid,
-                DueDate = quota.DueDate
+                DueDate = quota.DueDate,
+                ApartmentsCount = quota.ApartmentsCount,
+                InvoicesSent = quota.InvoicesSent,
             };
         }
 

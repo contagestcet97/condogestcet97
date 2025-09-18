@@ -7,9 +7,7 @@ namespace condogestcet97.web.Data.Entities.Financial
     {
         public override InvoiceType Type { get; set; } = InvoiceType.Outgoing;
 
-        [Column(TypeName = "varchar(100)")]
-        [MaxLength(100)]
-        public string? UserId { get; set; }
+        public int UserId { get; set; }
 
         public int? QuotaId { get; set; }
 

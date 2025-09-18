@@ -33,6 +33,16 @@ namespace condogestcet97.web.Data.CondominiumRepositories
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
+        public async Task<int> GetApartmentsCount(int condoId)
+        {
+            return await _context.Apartments
+    .Where(a => a.CondoId == condoId)
+    .CountAsync();
+
+
+        }
+
+
 
 
     }

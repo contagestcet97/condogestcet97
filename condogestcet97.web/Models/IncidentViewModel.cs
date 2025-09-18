@@ -10,7 +10,7 @@ namespace condogestcet97.web.Models
         public int Id { get; set; }
 
         [Display(Name = "Notifier Id")]
-        public string NotifierId { get; set; }
+        public int NotifierId { get; set; }
 
         public string Title { get; set; }
 

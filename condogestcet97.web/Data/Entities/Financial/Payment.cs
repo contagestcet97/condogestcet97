@@ -9,7 +9,7 @@ namespace condogestcet97.web.Data.Entities.Financial
         public decimal Amount { get; set; }
         public DateTime PaidDate { get; set; }
 
-        public string? UserId { get; set; }
+        public int? UserId { get; set; }
 
         [Column(TypeName = "varchar(50)")]
         [MaxLength(250)]

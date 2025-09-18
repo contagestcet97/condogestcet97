@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using condogestcet97.web.Data;
 
 #nullable disable
 
-namespace condogestcet97.web.Migrations
+namespace condogestcet97.web.Migrations.DataContextCondominiumMigrations
 {
     [DbContext(typeof(DataContextCondominium))]
-    partial class DataContextCondominiumModelSnapshot : ModelSnapshot
+    [Migration("20250918100309_UserIds_changed_to_Int")]
+    partial class UserIds_changed_to_Int
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,6 +1,7 @@
 ﻿using condogestcet97.web.Data.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace condogestcet97.web.Data.Seed
 {
@@ -15,8 +16,10 @@ namespace condogestcet97.web.Data.Seed
             var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
+            await dbContext.Database.EnsureCreatedAsync();
+
             // seed Roles
-            string[] roles = new[] { "Admin", "Employee" };
+            string[] roles = new[] { "Admin", "Employee", "Resident" };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -80,6 +83,29 @@ namespace condogestcet97.web.Data.Seed
                 };
                 await userManager.CreateAsync(employeeUser, "123456Aa!");
                 await userManager.AddToRoleAsync(employeeUser, "Employee");
+            }
+
+            var residentEmail = "jackjones@yopmail.com"; 
+            var residentUser = await userManager.FindByEmailAsync(residentEmail);
+
+            if (residentUser == null)
+            {
+
+                residentUser = new User
+                {
+                    UserName = residentEmail, // Need to use the email as the username for Identity to login
+                    Email = residentEmail,
+                    Name = "Jack Jones",
+                    EmailConfirmed = true,
+                    TwoFAEnabled = false,
+                    CondoId = 1,
+                    ApartmentId = 1,
+                    Address = "Rua do Olival 100",
+                    PhoneNumber = "888888888",
+                    FiscalNumber = "888888888"
+                };
+                await userManager.CreateAsync(residentUser, "123456Aa!");
+                await userManager.AddToRoleAsync(residentUser, "Employee");
             }
         }
     }

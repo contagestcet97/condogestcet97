@@ -7,7 +7,7 @@ namespace condogestcet97.web.Data.Entities.Financial
     {
         public int Id { get; set; }
 
-        public int? CondoId { get; set; }
+        public int CondoId { get; set; }
 
         [Column(TypeName = "varchar(250)")]
         [MaxLength(250)]

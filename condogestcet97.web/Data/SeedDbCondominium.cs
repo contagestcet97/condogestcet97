@@ -56,10 +56,10 @@ namespace condogestcet97.web.Data
                 {
                     Incident incident = new Incident
                     {
-                          NotifierId = "fakeUser",
+                          NotifierId = 3,
                           Title = "Burst water pipe",
                           Description = "Water pipe in the corridor on floor 4 burst and flooded. Water entered several flats.",
-                          Condo = condo,
+                          CondoId = condo.Id,
                           Date = DateTime.Now.Date.AddDays(-10).AddHours(15),
                           IsResolved = false,
                     };

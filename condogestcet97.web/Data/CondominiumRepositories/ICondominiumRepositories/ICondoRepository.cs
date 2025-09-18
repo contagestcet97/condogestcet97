@@ -8,5 +8,6 @@ namespace condogestcet97.web.Data.Repositories.IRepositories
         Task<Condo> GetByIdTrackedAsync(int id);
 
         IEnumerable<SelectListItem> GetComboCondos();
+
     }
 }

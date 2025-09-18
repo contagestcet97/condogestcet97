@@ -72,6 +72,10 @@ namespace condogestcet97.web.Data.Repositories.UserRepositories.Implementations
                 .Select(ucm => ucm.Company)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<User>> GetUsersByCondo(int condoId)
+        {
+            return await _context.Users.Where(u => u.CondoId == condoId).ToListAsync();
+        }
 
 
     }

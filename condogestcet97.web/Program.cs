@@ -18,6 +18,7 @@ using condogestcet97.web.Data.Repositories.IRepositories;
 using condogestcet97.web.Helpers;
 using condogestcet97.web.Helpers.IHelpers;
 using Microsoft.EntityFrameworkCore;
+using condogestcet97.web.Services.FinancialServices;
 
 namespace condogestcet97.web
 {
@@ -101,6 +102,7 @@ namespace condogestcet97.web
 
             builder.Services.AddTransient<SeedDbFinancial>();
             builder.Services.AddScoped<IQuotaRepository, QuotaRepository>();
+            builder.Services.AddScoped<IQuotaService,  QuotaService>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();

@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using condogestcet97.web.Data;
 
 #nullable disable
 
-namespace condogestcet97.web.Migrations
+namespace condogestcet97.web.Migrations.DataContextFinancialMigrations
 {
     [DbContext(typeof(DataContextFinancial))]
-    partial class DataContextFinancialModelSnapshot : ModelSnapshot
+    [Migration("20250918171732_Quota_Changes")]
+    partial class Quota_Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,9 +174,6 @@ namespace condogestcet97.web.Migrations
 
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("InvoicesSent")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");

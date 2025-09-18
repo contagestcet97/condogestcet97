@@ -8,9 +8,7 @@ namespace condogestcet97.web.Data.Entities.Condominium
         [Display(Name = "Incident ID")]
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar(250)")]
-        [MaxLength(250)]
-        public string NotifierId { get; set; }
+        public int NotifierId { get; set; }
 
         [Column(TypeName = "varchar(250)")]
         [MaxLength(25)]

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using condogestcet97.web.Data.Entities.Condominium;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace condogestcet97.web.Data.Entities.Users
@@ -18,6 +19,10 @@ namespace condogestcet97.web.Data.Entities.Users
         [Required(ErrorMessage = "Fiscal number is required for tax purposes.")]
         [MaxLength(18, ErrorMessage = "Fiscal number cannot exceed 18 characters.")]
         public string? FiscalNumber { get; set; }
+
+        public int? CondoId { get; set;  }
+
+        public int? ApartmentId { get; set; }
 
         public ICollection<UserCompany> UserCompanies { get; set; } = new List<UserCompany>(); // Many-to-many relationship with Company
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>(); // Many-to-many relationship with Role

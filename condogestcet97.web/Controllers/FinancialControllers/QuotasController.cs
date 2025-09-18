@@ -1,10 +1,12 @@
 ﻿using condogestcet97.web.Data;
+using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
 using condogestcet97.web.Data.Entities.Financial;
 using condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories;
 using condogestcet97.web.Data.Repositories.IRepositories;
 using condogestcet97.web.Helpers;
 using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
+using condogestcet97.web.Services.FinancialServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +22,17 @@ namespace condogestcet97.web.Controllers.FinancialControllers
     {
         private readonly IQuotaRepository _quotaRepository;
         private readonly ICondoRepository _condoRepository;
+        private readonly IApartmentRepository _apartmentRepository;
+        private readonly IQuotaService _quotaService;
         private readonly IFinancialConverterHelper _converterHelper;
 
-        public QuotasController(IQuotaRepository quotaRepository, ICondoRepository condoRepository, IFinancialConverterHelper converterHelper)
+        public QuotasController(IQuotaRepository quotaRepository, ICondoRepository condoRepository, IFinancialConverterHelper converterHelper, IQuotaService quotaService, IApartmentRepository apartmentRepository)
         {
             _quotaRepository = quotaRepository;
             _converterHelper = converterHelper;
             _condoRepository = condoRepository;
+            _apartmentRepository = apartmentRepository;
+            _quotaService = quotaService;
         }
 
         // GET: Quotas
@@ -84,10 +90,13 @@ namespace condogestcet97.web.Controllers.FinancialControllers
         {
             var quota = _converterHelper.ToQuota(model, true);
 
+            quota.ApartmentsCount = await _apartmentRepository.GetApartmentsCount(quota.CondoId);
+
             try
             {
                 await _quotaRepository.CreateAsync(quota);
 
+                //await _quotaService.CreateQuotaInvoices(quota);
 
                 return RedirectToAction(nameof(Index));
 
@@ -211,6 +220,33 @@ namespace condogestcet97.web.Controllers.FinancialControllers
 
             }
         }
+
+        public async Task<IActionResult> GenerateInvoice(int id)
+        {
+            var quota = await _quotaRepository.GetByIdAsync(id);
+
+            quota.ApartmentsCount = await _apartmentRepository.GetApartmentsCount(quota.CondoId);
+
+            try
+            {
+                await _quotaService.CreateQuotaInvoices(quota);
+                await _quotaRepository.UpdateAsync(quota);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await _quotaRepository.ExistAsync(quota.Id))
+                {
+                    return new NotFoundViewResult("QuotaNotFound");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+
 
         public IActionResult QuotaNotFound()
         {

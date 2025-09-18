@@ -30,12 +30,6 @@ namespace condogestcet97.web.Data
                 .Property(p => p.LateFee)
                 .HasColumnType("decimal(18,2)");
 
-
-            modelBuilder.Entity<Quota>()
-               .Property(p => p.PaymentValue)
-               .HasColumnType("decimal(18,2)");
-
-
             modelBuilder.Entity<Expense>()
                .Property(p => p.Amount)
                .HasColumnType("decimal(18,2)");

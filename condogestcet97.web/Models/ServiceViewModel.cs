@@ -7,7 +7,7 @@ namespace condogestcet97.web.Models
     {
         public int Id { get; set; }
 
-        public int? CondoId { get; set; }
+        public int CondoId { get; set; }
         public string Description { get; set; }
 
         public string CompanyName { get; set; }
