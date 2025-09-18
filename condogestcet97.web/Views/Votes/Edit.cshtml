@@ -1,0 +1,60 @@
+﻿@model condogestcet97.web.Models.VoteViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Vote</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsApproved" /> @Html.DisplayNameFor(model => model.IsApproved)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="VotesInFavour" class="control-label"></label>
+                <input asp-for="VotesInFavour" class="form-control" />
+                <span asp-validation-for="VotesInFavour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VotesAgainst" class="control-label"></label>
+                <input asp-for="VotesAgainst" class="form-control" />
+                <span asp-validation-for="VotesAgainst" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VotesAbstained" class="control-label"></label>
+                <input asp-for="VotesAbstained" class="form-control" />
+                <span asp-validation-for="VotesAbstained" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingId" class="control-label">Select meeting</label>
+                <select asp-for="MeetingId" asp-items="Model.Meetings" class="form-control" id="MeetingSelect">
+                    <option value="">Select a meeting</option>
+                </select>
+                <span asp-validation-for="MeetingId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

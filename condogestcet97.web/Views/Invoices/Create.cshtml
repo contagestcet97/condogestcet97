@@ -1,0 +1,107 @@
+﻿@model condogestcet97.web.Models.InvoiceViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Invoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="InvoiceType" class="control-label"></label>
+                <select asp-for="InvoiceType" class="form-control" id="TypeSelect">
+                    <option value="">-- Select Type --</option>
+                    <option value="Incoming">Incoming</option>
+                    <option value="Outgoing">Outgoing</option>
+                </select>
+                <span asp-validation-for="InvoiceType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DueDate" class="control-label"></label>
+                <input asp-for="DueDate" class="form-control" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="Emission" style="display:none;">
+                <label asp-for="EmissionDate" class="control-label"></label>
+                <input asp-for="EmissionDate" class="form-control" readonly/>
+                <span asp-validation-for="EmissionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="SupplierN" style="display:none;">
+                <label asp-for="SupplierName" class="control-label"></label>
+                <input asp-for="SupplierName" class="form-control" />
+                <span asp-validation-for="SupplierName" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="SupplierC" style="display:none;">
+                <label asp-for="SupplierContact" class="control-label"></label>
+                <input asp-for="SupplierContact" class="form-control" />
+                <span asp-validation-for="SupplierContact" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" id="ExpenseGroup" style="display:none;">
+                <label asp-for="ExpenseId" class="control-label"></label>
+                <select asp-for="ExpenseId" asp-items="Model.Expenses" class="form-control"></select>
+                <span asp-validation-for="ExpenseId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group" id="QuotaGroup" style="display:none;">
+                <label asp-for="QuotaId" class="control-label"></label>
+                <select asp-for="QuotaId" asp-items="Model.Quotas" class="form-control"></select>
+                <span asp-validation-for="QuotaId" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="UserGroup" style="display:none;">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" asp-items="Model.Users" class="form-control"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsPaid" /> @Html.DisplayNameFor(model => model.IsPaid)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function toggleDropdown() {
+            var type = document.getElementById("TypeSelect").value;
+            document.getElementById("QuotaGroup").style.display = (type === "Outgoing") ? "block" : "none";
+            document.getElementById("UserGroup").style.display = (type === "Outgoing") ? "block" : "none";
+            document.getElementById("Emission").style.display = (type === "Outgoing") ? "block" : "none";
+
+            document.getElementById("SupplierC").style.display = (type === "Incoming") ? "block" : "none";
+            document.getElementById("SupplierN").style.display = (type === "Incoming") ? "block" : "none";
+            document.getElementById("ExpenseGroup").style.display = (type === "Incoming") ? "block" : "none";
+        }
+
+        document.getElementById("TypeSelect").addEventListener("change", toggleDropdown);
+
+        toggleDropdown();
+    </script>
+}

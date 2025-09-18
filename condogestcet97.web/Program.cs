@@ -2,11 +2,22 @@ using condogestcet97.web.Data;
 using condogestcet97.web.Data.Entities.Users;
 using condogestcet97.web.Data.Repositories.UserRepositories.Implementations;
 using condogestcet97.web.Data.Repositories.UserRepositories.Interfaces;
+using condogestcet97.web.Data.FinancialRepositories;
+using condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories;
 using condogestcet97.web.Data.Seed;
 using condogestcet97.web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
+using condogestcet97.web.Data;
+using condogestcet97.web.Data.CondominiumRepositories;
+using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using condogestcet97.web.Data.Repositories;
+using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Helpers;
+using condogestcet97.web.Helpers.IHelpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web
 {
@@ -27,6 +38,19 @@ namespace condogestcet97.web
             // Configure Entity Framework Core with SQL Server
             builder.Services.AddDbContext<DataContextUser>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddDbContext<DataContextCondominium>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CondominiumConnection"));
+            });
+
+            builder.Services.AddDbContext<DataContextFinancial>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("FinancialConnection"));
+            });
+
+            builder.Services.AddTransient<SeedDbCondominium>();
+            builder.Services.AddTransient<SeedDbFinancial>();
 
             // Register the generic repository for dependency injection for basic CRUD operations
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -65,6 +89,29 @@ namespace condogestcet97.web
             });
 
             // build is used to create the application instance after services are configured
+            builder.Services.AddScoped<ICondoRepository, CondoRepository>();
+            builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+            builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
+            builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
+            builder.Services.AddScoped<IInterventionRepository, InterventionRepository>();
+            builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
+            builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+            builder.Services.AddScoped<ICondominiumsConverterHelper, CondominiumsConverterHelper>();
+
+
+            builder.Services.AddTransient<SeedDbFinancial>();
+            builder.Services.AddScoped<IQuotaRepository, QuotaRepository>();
+            builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
+            builder.Services.AddScoped<IFinancialReportRepository, FinancialReportRepository>();
+            builder.Services.AddScoped<IFinancialConverterHelper, FinancialConverterHelper>();
+
+
+
+
             var app = builder.Build();
 
             #endregion
@@ -80,6 +127,17 @@ namespace condogestcet97.web
             #region Middleware Configuration
 
             // Configure the HTTP request pipeline middleware
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var condoSeeder = services.GetRequiredService<SeedDbCondominium>();
+                await condoSeeder.SeedAsync();
+
+                var financialSeeder = services.GetRequiredService<SeedDbFinancial>();
+                await financialSeeder.SeedAsync();
+            }
+
+            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");

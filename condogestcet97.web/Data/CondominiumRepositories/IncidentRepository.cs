@@ -1,0 +1,42 @@
+﻿using condogestcet97.web.Data.Entities.Condominium;
+using condogestcet97.web.Data.Repositories.IRepositories;
+using condogestcet97.web.Data.Repositories;
+using condogestcet97.web.Data.CondominiumRepositories.ICondominiumRepositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace condogestcet97.web.Data.CondominiumRepositories
+{
+    public class IncidentRepository : ConodominiumsGenericRepository<Incident>, IIncidentRepository
+    {
+
+        private readonly DataContextCondominium _context;
+
+        public IncidentRepository(DataContextCondominium context) : base(context)
+        {
+            _context = context;
+        }
+        public override IQueryable<Incident> GetAll()
+        {
+            return _context.Incidents.Include(i => i.Condo);
+        }
+
+        public override Task<Incident> GetByIdAsync(int id)
+        {
+            return _context.Incidents
+                .Include(i => i.Condo)
+                .Include(i => i.Apartment)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public Task<Incident> GetByIdTrackedAsync(int id)
+        {
+            return _context.Incidents
+                .Include(i => i.Condo)
+                .Include(i => i.Apartment)
+                .FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+
+    }
+}
