@@ -1,6 +1,7 @@
 ﻿using condogestcet97.web.Data;
 using condogestcet97.web.Data.Entities.Financial;
 using condogestcet97.web.Data.FinancialRepositories.IFinancialRepositories;
+using condogestcet97.web.Data.Repositories.IRepositories;
 using condogestcet97.web.Helpers;
 using condogestcet97.web.Helpers.IHelpers;
 using condogestcet97.web.Models;
@@ -18,12 +19,14 @@ namespace condogestcet97.web.Controllers.FinancialControllers
     public class QuotasController : Controller
     {
         private readonly IQuotaRepository _quotaRepository;
+        private readonly ICondoRepository _condoRepository;
         private readonly IFinancialConverterHelper _converterHelper;
 
-        public QuotasController(IQuotaRepository quotaRepository, IFinancialConverterHelper converterHelper)
+        public QuotasController(IQuotaRepository quotaRepository, ICondoRepository condoRepository, IFinancialConverterHelper converterHelper)
         {
             _quotaRepository = quotaRepository;
             _converterHelper = converterHelper;
+            _condoRepository = condoRepository;
         }
 
         // GET: Quotas
@@ -55,7 +58,21 @@ namespace condogestcet97.web.Controllers.FinancialControllers
         // GET: quotas/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new QuotaViewModel
+            {
+                DueDate = DateTime.Now.Date,
+
+                PaidDate = null,
+
+                Condos = _condoRepository.GetAll().Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = $"{c.Address}"
+                })
+            };
+            
+
+            return View(model);
         }
 
         // POST: quotas/Create
@@ -99,6 +116,12 @@ namespace condogestcet97.web.Controllers.FinancialControllers
             }
 
             var model = _converterHelper.ToQuotaViewModel(quota);
+
+            model.Condos = _condoRepository.GetAll().Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = $"{c.Address}"
+            });
 
             return View(model);
         }

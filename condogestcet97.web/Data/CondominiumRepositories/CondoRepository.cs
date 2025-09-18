@@ -18,7 +18,9 @@ namespace condogestcet97.web.Data.Repositories
         public override Task<Condo> GetByIdAsync(int id)
         {
             return _context.Condos
-             //.Include(c => c.Apartments)
+             .Include(c => c.Apartments)
+             .Include(c => c.Meetings)
+             .Include(c => c.Incidents)
              .AsNoTracking()
              .FirstOrDefaultAsync(i => i.Id == id);
         }

@@ -9,16 +9,82 @@
 <div>
     <h4>Condo</h4>
     <hr />
-    <dl class="row">
+@*     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Address)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Address)
         </dd>
+    </dl> *@
+
+    <dl class="row">
+        <dt class="col-sm-2">Address</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Address)</dd>
     </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">Apartments</dt>
+        <dd class="col-sm-10">
+            <select class="form-control">
+                <option value="">-- Select Apartment --</option>
+                @foreach (var apt in Model.Apartments)
+                {
+                    <option value="@apt.Id">@apt.Flat</option>
+                }
+            </select>
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">Incidents</dt>
+        <dd class="col-sm-10">
+            <select class="form-control">
+                <option value="">-- Select Incident --</option>
+                @foreach (var incident in Model.Incidents)
+                {
+                    <option value="@incident.Id">@incident.Description</option>
+                }
+            </select>
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">Meetings</dt>
+        <dd class="col-sm-10">
+            <select class="form-control" id="meetingSelect">
+                <option value="">-- Select Meeting --</option>
+                @foreach (var meet in Model.Meetings)
+                {
+                    <option value="@meet.Id">@meet.Topic</option>
+                }
+            </select>
+
+            <button type="button" class="btn btn-primary mt-2" onclick="goToMeeting()">Go</button>
+        </dd>
+    </dl>
+
+
+
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function goToMeeting() {
+            var meetingId = document.getElementById("meetingSelect").value;
+            if (meetingId) {
+                window.location.href = '/Meetings/Details/' + meetingId;
+            } else {
+                alert("Please select a meeting first.");
+            }
+        }
+    </script>
+}

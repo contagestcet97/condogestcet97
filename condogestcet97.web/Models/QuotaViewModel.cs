@@ -1,4 +1,6 @@
-﻿namespace condogestcet97.web.Models
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace condogestcet97.web.Models
 {
     public class QuotaViewModel
     {
@@ -15,6 +17,8 @@
         public decimal PaymentValue { get; set; }
 
         public int? CondoId { get; set; }
+
+        public IEnumerable<SelectListItem>? Condos { get; set; }
 
     }
 }
