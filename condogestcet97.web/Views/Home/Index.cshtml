@@ -3,12 +3,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to CondoGest</h1>
-	<h4 class="text-secondary">A simple condo management system</h4>
-    <p> Please Use one of the following buttons to get started!</p>
-	<div class="d-flex justify-content-center">
-		<a class="btn btn-primary m-2" asp-area="" asp-controller="Home" asp-action="Dashboard">Login</a>
-		<a class="btn btn-secondary m-2" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
-	</div>
+<div class="textBox">
+    <h2>Welcome to <span>CondoGest</span><br>A Simple and effective way to manage your condo</h2>
+    <p>To proceed, please use the buttons bellow in order to register on our portal and website! Or if you're a member, you can use the login button next to it!</p>
+    <a asp-area="Identity" asp-page="/Account/Register">Register</a>
+    <a asp-area="Identity" asp-page="/Account/Login">Login</a>
+</div>
+<div class="imgBox">
+	<img src="~/images/others/condoblues.png" class="condo">
 </div>

@@ -1,4 +1,5 @@
 using condogestcet97.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,6 +19,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize]
     /// <summary>
     /// Placeholder for the dashboard view.
     /// </summary>
