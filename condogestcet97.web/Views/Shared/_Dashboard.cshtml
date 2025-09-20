@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - CondoGest</title>
 
     <!-- CSS -->
+    <link rel="stylesheet" href="~/css/loader.css" />
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link href="~/css/dashboard.min.css" rel="stylesheet">
@@ -13,7 +14,7 @@
 </head>
 
 <body id="page-top">
-
+    @await Html.PartialAsync("_Loader")
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -23,8 +24,8 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
                 <div class="sidebar-brand-icon">
-                    <img class="fa-image-portrait" src="~/images/brand/condogestbanner.png" alt="CondoGest"
-                    height="75" width="200">
+                    <img class="sidebar-logo-full" src="~/images/brand/condogestbanner.png" alt="CondoGest" height="75" width="200">
+                    <img class="sidebar-logo-mini" src="~/images/brand/condogest.png" alt="CondoGest Mini" height="40" width="40">
                 </div>
             </a>
 
@@ -330,11 +331,17 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item"
+                                       asp-controller="User"
+                                       asp-action="MyProfile"
+                                       asp-route-id="@(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item"
+                                   asp-controller="User"
+                                   asp-action="Edit"
+                                   asp-route-id="@(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value)">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
@@ -410,6 +417,7 @@
 
 
     <!-- Scripts do SB Admin 2 -->
+    <script src="~/js/loader.js"></script>
     <script src="~/vendor/jquery/jquery.min.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>

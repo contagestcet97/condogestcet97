@@ -1,0 +1,37 @@
+﻿@model condogestcet97.web.Data.ViewModels.UserViewModels.UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "My Account";
+    Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+
+<h2 class="mb-4">My Account Information</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Address</dt>
+            <dd class="col-sm-9">@Model.Address</dd>
+
+            <dt class="col-sm-3">Phone Number</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-3">Fiscal Number</dt>
+            <dd class="col-sm-9">@Model.FiscalNumber</dd>
+
+            <dt class="col-sm-3">Two-Factor Enabled</dt>
+            <dd class="col-sm-9">@Model.TwoFAEnabled</dd>
+
+            <dt class="col-sm-3">Email Confirmed</dt>
+            <dd class="col-sm-9">@Model.EmailConfirmed</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit My Info</a>
+        <a asp-controller="Home" asp-action="Dashboard" class="btn btn-secondary ml-2">Back</a>
+    </div>
+</div>

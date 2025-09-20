@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace condogestcet97.web.Controllers.UsersControllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IMapper _mapper;
@@ -35,6 +35,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // GET: User
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var users = await _userRepository.GetAllAsync();
@@ -42,6 +43,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
             return View("~/Views/Users/User/Index.cshtml", vmList);
         }
 
+        [Authorize]
         // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -61,6 +63,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // GET: User/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var model = new UserCreateViewModel
@@ -73,6 +76,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         // POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(UserCreateViewModel model)
         {
             if (ModelState.IsValid)
@@ -103,6 +107,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // GET: User/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -125,6 +130,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, UserEditViewModel vm)
         {
             if (id != vm.Id)
@@ -163,6 +169,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
 
         // GET: User/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -181,6 +188,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // POST: User/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -203,6 +211,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
 
 
         // GET: User/AssignCompanies/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignCompanies(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
@@ -224,6 +233,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         // POST: User/AssignCompanies/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignCompanies(UserCompanyAssignmentViewModel vm)
         {
             await _userRepository.AssignCompaniesAsync(vm.UserId, vm.SelectedCompanyIds);
@@ -231,6 +241,7 @@ namespace condogestcet97.web.Controllers.UsersControllers
         }
 
         // GET: User/AssignManagedCompanies/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignManagedCompanies(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
@@ -252,17 +263,29 @@ namespace condogestcet97.web.Controllers.UsersControllers
         // POST: User/AssignManagedCompanies/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AssignManagedCompanies(UserManagedCompanyAssignmentViewModel vm)
         {
             await _userRepository.AssignManagedCompaniesAsync(vm.UserId, vm.SelectedManagedCompanyIds);
             return RedirectToAction(nameof(Index));
         }
 
-
+        [Authorize(Roles = "Admin")]
         private async Task<bool> UserExists(int id)
         {
             var users = await _userRepository.GetAllAsync();
             return users.Any(u => u.Id == id);
+        }
+
+        [Authorize]
+        public IActionResult MyProfile()
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                return Unauthorized();
+            }
+            return RedirectToAction("Details", new { id = userId });
         }
     }
 }

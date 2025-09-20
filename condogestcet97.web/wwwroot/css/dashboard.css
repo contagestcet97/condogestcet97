@@ -10141,6 +10141,22 @@ a:focus {
   display: none;
 }
 
+/* Hide mini logo by default, show when sidebar is collapsed */
+.sidebar-logo-mini {
+    display: none !important;
+}
+
+/* When sidebar is toggled, hide the full logo and show the mini logo */
+.sidebar.toggled .sidebar-logo-full {
+    display: none !important;
+}
+
+.sidebar.toggled .sidebar-logo-mini {
+    display: inline !important;
+}
+
+
+
 .sidebar .nav-item.dropdown .dropdown-toggle::after,
 .topbar .nav-item.dropdown .dropdown-toggle::after {
   width: 1rem;
